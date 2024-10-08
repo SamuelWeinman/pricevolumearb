@@ -45,7 +45,7 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L,bSensat
   
   #CALCULATE S-SCORE (NEGATIVE PREDICTION)
   S = numeric(nrow(Returns))
-  index = Coefficients$MeanReversion==1 #mean reversion 
+  index = Coefficients$MeanReversion == 1 #mean reversion 
   S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index])  
   
   #RETURN

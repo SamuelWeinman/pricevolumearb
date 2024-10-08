@@ -32,7 +32,7 @@ DatesToRemove <- function(Returns, PropStocksZero) {
   ###ALL BELOW IS AS FUNCTION OF DAYS###
   
   #CALCULATE PROPORTION OF STOCKS WITH ZERO GROWTH
-  PropWithNoGrowth = apply(Returns, 2, function(column) { mean(column==0)})
+  PropWithNoGrowth = apply(Returns, 2, function(column) { mean(column == 0)})
   
   #COLUMNS WITH LITTLE GROWTH (TO BE DELETED)
   ColumnsWithLittleGrowth = which(PropWithNoGrowth > PropStocksZero)
@@ -60,7 +60,7 @@ StocksToRemove <- function(Returns, PropDaysZero, PropDaysUpperGrowth, UpperBoun
   ###ALL BELOW IS AS FUNCTION OF STOCKS###
   
   #PROPORTION OF DAYS WITH ZERO GROWTH
-  PropWithNoGrowth = apply(Returns, 1, function(row) { mean(row==0)})
+  PropWithNoGrowth = apply(Returns, 1, function(row) { mean(row == 0)})
   
   #ROWS WHERE THERE WAS NOT ENOUGH GROWTH
   RowsWithLittleGrowth = which(PropWithNoGrowth > PropDaysZero)
@@ -149,9 +149,9 @@ SanityCheck <- function(Volume, Returns, PropStocksZero, PropDaysZero, PropDaysU
 
 ###TO ENSURE WE DON'T DIVIDE BY ZERO, WE REMOVE ALL STOCKS THAT HAD AT LEAST ONE DAY WITH NO VOLUME
 RemoveStockWithZeroVolume <- function(Returns, Volume) {
-  StockWithZeroVolume = which(apply(Volume, 1, function(row) any(row==0)))
+  StockWithZeroVolume = which(apply(Volume, 1, function(row) any(row == 0)))
   
-  if (length(StockWithZeroVolume)==0) { #No stocks to be deleted
+  if (length(StockWithZeroVolume) == 0) { #No stocks to be deleted
     print("No stocks were deleted")
     return(list(
       Returns = Returns,

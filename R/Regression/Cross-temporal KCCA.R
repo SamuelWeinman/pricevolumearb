@@ -57,7 +57,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L,NrC.R, NrC.V,bSensativ
   
   #GET S-SCORE
   S = numeric(nrow(Returns))
-  index = Coefficients$MeanReversion==1 #mean reversion 
+  index = Coefficients$MeanReversion == 1 #mean reversion 
   S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index])
   
   #RETURN

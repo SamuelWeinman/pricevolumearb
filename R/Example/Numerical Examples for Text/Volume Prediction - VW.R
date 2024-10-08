@@ -2,7 +2,7 @@ d = 20
 t = 4348
 NrGroups = 7
 
-col = which(colnames(Prediction.CS)==t)
+col = which(colnames(Prediction.CS) == t)
 
 
 Pred.VW.CS = unlist(Predictions.CS.VW.Divide[[1]][,col])

@@ -8,7 +8,7 @@ d = 20
 t = 4348
 H = 252
 NrGroups = 10
-col = which(colnames(Prediction.CS)==t)
+col = which(colnames(Prediction.CS) == t)
 NrPC.V = 25
 
 preds = Prediction.CS.Overtraded[,col]

@@ -3,7 +3,7 @@ t = 4348
 NrGroups = 7
 
 
-col = which(colnames(Prediction.CS)==t)
+col = which(colnames(Prediction.CS) == t)
 
 Pred.CS = unlist(Prediction.CS[,col])
 Pred.CT = unlist(Prediction.CT[,col])

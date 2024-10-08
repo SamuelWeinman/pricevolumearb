@@ -41,7 +41,7 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
       rep(labels[i],8*t)
     })
     method <- as.character(method)
-    method[base_line==1] <- "AA"
+    method[base_line == 1] <- "AA"
   } else{
   #method AS VECTOR
   method <- sapply(1:r, function(i){
@@ -85,11 +85,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   
   #CHOOSE PALETTE ACCORDINGLY
-    if (type=="CS") {
+    if (type == "CS") {
       p = brewer.pal(11, "PiYG")[c(1:3,9:11)]
     }
     
-    if (type=="CT") {
+    if (type == "CT") {
       p = brewer.pal(11, "BrBG")[c(1:3,9:11)]
     }
     
@@ -134,7 +134,7 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
 # labels: NAME OF methodS USE (E.G. C("CROSS-SECTIONAL", "CROSS-TEMPORAL"))
 # base_models: INDICATES WHICH OF THE scores BELONG TO A BASE MODEL. E.G. IF base_models = C(1,2), THE FIRST TWO ARE BASE MODELS AND THE OTHERS NOT
 # TYPE: ONE OF "CS", "CT" OR "BASE" (ONE CS, ONE CT)
-#IF TYPE=="BASE", MUST GIVE CS BEFORE CT!
+#IF TYPE == "BASE", MUST GIVE CS BEFORE CT!
 createSharpePPTPlot = function(scores, labels, title, base_models, type, legendTitle) {
 
   #NR OF methodS
@@ -199,7 +199,7 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   
   #CHOOSE PALETTE DEPENDING ON TYPE
-  if (type=="CS") {
+  if (type == "CS") {
     p = brewer.pal(11, "PiYG")[c(1:3,9:11)]
     if (length(scores) == 7) {
       p = brewer.pal(11, "PiYG")[c(1:4,9:11)]
@@ -210,7 +210,7 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
     }
   }
   
-  if (type=="CT") {
+  if (type == "CT") {
     p = brewer.pal(11, "BrBG")[c(1:3,9:11)]
     if (length(scores) == 8) {
       p = brewer.pal(11, "BrBG")[c(1:5,9:11)]

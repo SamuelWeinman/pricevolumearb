@@ -13,7 +13,7 @@ ConstructWeightedReturn = function(Returns, Volume,H,d,divide) {
   #WEIGHT RETURNS
   #EITHER MULTIPLY OR DIVIDE
   #NOTE THAT FOR DAYCROSSREGRESSION, THE INPUT CAN EITHER BE THE LAST H DAYS, OR MORE THAN THAT. IN THIS CASE, WE USE THE FULL HISTORY.
-  if (divide==TRUE) {
+  if (divide == TRUE) {
     WeigthedReturn = Returns *  RollMeanVolume / Volume
   } #DIVIDE
   

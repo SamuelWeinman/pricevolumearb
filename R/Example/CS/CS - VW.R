@@ -93,7 +93,7 @@ ggsave(filename = "SharpePPT.CS.VW.Divide.png",
 
 ############################ Multiply  #################################################
 
-# Predictions.CS.VW.Multiply<- Outside_CrossSectionRegression.VW(Returns, 
+# Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns, 
 #                                                               Volume, 
 #                                                               Start = 500, End = ncol(Returns),
 #                                                               H = 252, NrPC=20,d = 20,

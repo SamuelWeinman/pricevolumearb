@@ -3,7 +3,7 @@ t = 4348
 NrGroups = 7
 
 
-col = which(colnames(Prediction.CS)==t)
+col = which(colnames(Prediction.CS) == t)
 
 
 Pred.OT.CS = unlist(Prediction.CS.Overtraded[,col])

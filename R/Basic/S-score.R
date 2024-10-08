@@ -51,14 +51,14 @@ EstimateCoefficeients <- function(Models, bSensativity) {
   Coefficients <- lapply(1:N, function(i){
     X <- cumsum(Models[[i]]$residuals) #cumsum residuals
     XModel <- lm(X[2:L] ~ X[1:(L-1)]) #cumsum model
-    a<-as.numeric(XModel$coefficients[1]) #intercept 
-    b<-as.numeric(XModel$coefficients[2]) #coefficient (on X_{t-1})
+    a <- as.numeric(XModel$coefficients[1]) #intercept 
+    b <- as.numeric(XModel$coefficients[2]) #coefficient (on X_{t-1})
     V <- as.numeric(var(XModel$residuals)) #estimated variance
     
     #ESTIMATES
-    k<--log(b)*252
-    m<- a/(1-b)
-    Sigma.Squared<- V * 2*k / (1-b^2)
+    k <- -log(b)*252
+    m <- a/(1-b)
+    Sigma.Squared <- V * 2*k / (1-b^2)
     SigmaEq.Squared <- V/ (1-b^2)
     
     #DECIDE IF THERE IS MEAN REVERSION
@@ -77,7 +77,7 @@ EstimateCoefficeients <- function(Models, bSensativity) {
 
 ###CALCULATE S-SCORE FOR ALL STOCKS AS IN Marco Avellaneda & Jeong-Hyun Lee (2010)
 ###THAT IS, THE AMOUNT BY WHICH THE STOCKS HAVE HAD TOO MUCH RETURNS
-###IF MEAN-REVERSION==0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
+###IF MEAN-REVERSION == 0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
 #RETURNS MUST BE HISTORY ONLY!
 CalculatingS.Score <- function(Returns, nr_pc,H,L,bSensativity) {
 
@@ -95,7 +95,7 @@ CalculatingS.Score <- function(Returns, nr_pc,H,L,bSensativity) {
   #IF THERE IS NO MEAN-REVERSION, GIVE ZERO.
   #FIRST CREATE ARRAY, THEN GET S-SCORE FOR THOSE STOCKS WHERE THERE IS MEAN REVERSION
   S = numeric(nrow(Returns))
-  index = Coefficients$MeanReversion==1 #mean reversion 
+  index = Coefficients$MeanReversion == 1 #mean reversion 
   S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index]) #CORRESPONDING S-SCORE
   
   #RETURN

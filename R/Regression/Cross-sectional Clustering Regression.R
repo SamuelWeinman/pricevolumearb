@@ -21,7 +21,7 @@ ConstructClusters = function(rho, k, MinSize) {
   k.New = k
   
   #CREATE INFINITE LOOP
-  while(1==1) {
+  while(1 == 1) {
     
     #IF CLUSTER TOO SMALL, UPDATE K.NEW AND CONTINUE
     #IF LARGE ENOUGHT, EXIT LOOP
@@ -35,7 +35,7 @@ ConstructClusters = function(rho, k, MinSize) {
   
   #GET CLUSTERS
   clusters = lapply(1:k.New, function(i) {
-    which(labels==i)
+    which(labels == i)
   })
   
   #RETURN
@@ -75,7 +75,7 @@ DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha)
   #FINALLY, PUT ALL RESIDUALS INTO A SINGLE ARRAY IN APPROPRIATE ORDER
   #IF ALL IS JUST ONE CLUSTER, WE TRANSFORM LIST LIST INTO ARRAY
   #OTHERWISE, WE HAVE TO BE CAREFUL ABOUT THE ORDERING
-  if (k==1) {
+  if (k == 1) {
     Predictions = Predictions.List
   } else {
     Predictions= numeric(nrow(Returns))
