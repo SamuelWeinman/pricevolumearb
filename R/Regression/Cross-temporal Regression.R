@@ -10,8 +10,8 @@ CTRegression <- function(Returns, Start, End, NrPC,H, L, bSensativity) {
   #PREPARE CORES#
 
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("CalculatingS.Score",
-                    "EstimateCoefficeients","Decomposition", "ExtractEigenPortfolio",
+  Globalvarlist = c("calculateSScore",
+                    "estimateCoefficeients","decompose", "ExtractEigenPortfolio",
                     "ConstructEigenPortfolios", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
@@ -28,7 +28,7 @@ CTRegression <- function(Returns, Start, End, NrPC,H, L, bSensativity) {
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   S.Scores = snow::parSapply(cl, Start:End, function(t) {
-    S = CalculatingS.Score(Returns = Returns[, 1:(t-1)], #using only historical data
+    S = calculateSScore(Returns = Returns[, 1:(t-1)], #using only historical data
                            NrPC = NrPC,
                            H = H, L = L,
                            bSensativity = bSensativity)

@@ -10,7 +10,7 @@ X = cumsum(model$residuals)
 
 X.model = lm(X[2:L] ~ X[1:(L-1)])
 
-Coeff = EstimateCoefficeients(list(model), bSensativity = 0.01)
+Coeff = estimateCoefficeients(list(model), bSensativity = 0.01)
 kappa = Coeff$K
 m = Coeff$m
 sigma2 = Coeff$Sigma.Squared

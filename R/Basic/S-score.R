@@ -5,9 +5,9 @@
 #  RETURNS: RETURN MATRIX TO CONSTRUCT RHO (FULL HISTORY UP TO TIME T-1)
 #  h (history): NR OF DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
 #  l: NR OF DAYS TO USE FOR REGRESSION MODEL (NOT NECESSARILY SAME AS NR OF DAYS FOR CONSTRUCTING RHO, I.E. NCOL(returns_short))
-#  nr_pc: AS ABOVE, FOR EIGENDECOMPOSITION.
+#  nr_pc: AS ABOVE, FOR EIGENdecompose.
 
-Decomposition <- function(returns, nr_pc, h, L) {
+decompose <- function(returns, nr_pc, h, L) {
   
   #DIMENSIONS
   n <- nrow(returns) #NR STOCKS
@@ -23,13 +23,13 @@ Decomposition <- function(returns, nr_pc, h, L) {
   #NOTE THAT returns_short AND eigen$EigenReturn HAVE H COLUMNS
   models <- lapply(1:n, function(i) { #loop through all stocks
     y = returns_short[i, (h-l+1):h] #returns last L days
-    X = eigen$EigenReturn[, (h-l+1):h] #eigenreturns last L days
+    X = eigen$return[, (h-l+1):h] #eigenreturns last L days
     model = lm(as.numeric(y)~t(as.matrix(X))) #get lm
     return(model)
   })
   
   #RETURN MODELS
-  print(paste("Variability explained:", eigen$PropExplained ))
+  print(paste("Variability explained:", eigen$prop_explained))
   return(models)
 }
 
@@ -39,39 +39,44 @@ Decomposition <- function(returns, nr_pc, h, L) {
 #FOLLOWS SAME ALGORITHM AS APPENDIX A OF Marco Avellaneda & Jeong-Hyun Lee (2010)
 #IF B CLOSE TOO ONE, THERE IS NO MEAN REVERSION
 #HENCE, REJECT MEAN REVERSION IF b > 1-bSensativity
-EstimateCoefficeients <- function(Models, bSensativity) {
+estimateCoefficeients <- function(models, b_sensitivity) {
   
   #DIMENSIONS
-  N <- length(Models) #NR STOCKS
-  L <- length(Models[[1]]$residuals) #NR DAYS USED FOR MODEL
+  n <- length(models) #NR STOCKS
+  l <- length(models[[1]]$residuals) #NR DAYS USED FOR MODEL
   
   #FOR EACH MODEL, ESTIMATE COEFFICIENTS
   #IN PARTICULAR, WE LOOP THROUGH EACH MODEL AND WITHIN EACH MODEL REGRESS THE CUMSUM OF THE RESIDUALS
   #EACH VECTOR X IS OF LENGTH L
-  Coefficients <- lapply(1:N, function(i){
-    X <- cumsum(Models[[i]]$residuals) #cumsum residuals
-    XModel <- lm(X[2:L] ~ X[1:(L-1)]) #cumsum model
-    a <- as.numeric(XModel$coefficients[1]) #intercept 
-    b <- as.numeric(XModel$coefficients[2]) #coefficient (on X_{t-1})
-    V <- as.numeric(var(XModel$residuals)) #estimated variance
+  coefficients <- lapply(1:n, function(i){
+    return(estimateCoefficeientsNumberI(models, i, b_sensitivity))
+  })
+  
+  #UPON CALCULATING COEFFICIENTS FOR EACH MODEL, PUT IN DATA FRAME
+  coefficients <- ldply(coefficients) #DATA FRAME
+  colnames(coefficients) <- c("k", "m", "sigma_squared", "sigma_eq_squared", "is_mean_reverting")
+  #RETURN
+  return(coefficients)
+}
+
+estimateCoefficeientsNumberI <- <- function(models, i, b_sensitivity) {
+    x <- cumsum(models[[i]]$residuals) #cumsum residuals
+    model <- lm(x[2:l] ~ x[1:(l-1)]) #cumsum model
+    a <- as.numeric(model$coefficients[1]) #intercept 
+    b <- as.numeric(model$coefficients[2]) #coefficient (on X_{t-1})
+    v <- as.numeric(var(model$residuals)) #estimated variance
     
     #ESTIMATES
     k <- -log(b)*252
     m <- a/(1-b)
-    Sigma.Squared <- V * 2*k / (1-b^2)
-    SigmaEq.Squared <- V/ (1-b^2)
+    sigma_squared <- v * 2*k / (1-b^2)
+    sigma_eq_squared <- v/(1-b^2)
     
     #DECIDE IF THERE IS MEAN REVERSION
-    MeanReversion <- I(b< 1-bSensativity)
+    is_mean_reverting <- I(b < 1-b_sensitivity)
     
     #RETURN COEFFICIENTS FOR MODEL
-    return(c(k,m,Sigma.Squared, SigmaEq.Squared, MeanReversion)) })
-  
-  #UPON CALCULATING COEFFICIENTS FOR EACH MODEL, PUT IN DATA FRAME
-  Coefficients <- ldply(Coefficients) #DATA FRAME
-  colnames(Coefficients) <- c("K", "m", "Sigma.Squared", "SigmaEq.Squared", "MeanReversion")
-  #RETURN
-  return(Coefficients)
+    return(c(k, m, sigma_squared, sigma_eq_squared, is_mean_reverting))
 }
 
 
@@ -79,29 +84,30 @@ EstimateCoefficeients <- function(Models, bSensativity) {
 ###THAT IS, THE AMOUNT BY WHICH THE STOCKS HAVE HAD TOO MUCH RETURNS
 ###IF MEAN-REVERSION == 0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
 #RETURNS MUST BE HISTORY ONLY!
-CalculatingS.Score <- function(Returns, nr_pc,H,L, bSensativity) {
+calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
 
   #DECOMPOSE INTO MODELS
-  Models=Decomposition(Returns = Returns,
-                       H = H,
-                       L = L,
-                       nr_pc = nr_pc)
+  models <- decompose(
+    returns = returns,
+    h = h,
+    l = l,
+    nr_pc = nr_pc
+  )
 
-  
   #OBTAIN COEFFICIENTS FROM ABOVE MODELS
-  Coefficients = EstimateCoefficeients(Models, bSensativity = bSensativity)
+  coefficients = estimateCoefficeients(models, b_sensitivity = b_sensitivity)
   
   #GET S-SCORE, USING METHODOLOGY IN APPENDIX
   #IF THERE IS NO MEAN-REVERSION, GIVE ZERO.
   #FIRST CREATE ARRAY, THEN GET S-SCORE FOR THOSE STOCKS WHERE THERE IS MEAN REVERSION
-  S = numeric(nrow(Returns))
-  index = Coefficients$MeanReversion == 1 #mean reversion 
-  S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index]) #CORRESPONDING S-SCORE
+  s = numeric(nrow(Returns))
+  index = coefficients$MeanReversion == 1 #mean reversion 
+  s[index] = -coefficients$m[index]/sqrt(coefficients$sigma_eq_squared[index]) #CORRESPONDING S-SCORE
   
   #RETURN
   return(list(
-  S = S,
-  MeanReversion = Coefficients$MeanReversion))
+  s = s,
+  is_mean_reverting = coefficients$is_mean_reverting))
 }
 
 

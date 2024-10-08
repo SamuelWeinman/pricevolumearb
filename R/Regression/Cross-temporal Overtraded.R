@@ -34,13 +34,13 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L, bSensa
   ###NOW DECOMPOSE RETURNS (CT)####
   
   #REGRESS EACH OF THE STOCKS ON RETURNS OF EIGENPORTFOLIOS
-  Models=Decomposition(Returns = WeightedReturn,
+  Models=decompose(Returns = WeightedReturn,
                        H = H,
                        L = L,
                        NrPC = NrPC)
   
   #ESTIMATE PARAMETERS
-  Coefficients = EstimateCoefficeients(Models, bSensativity)
+  Coefficients = estimateCoefficeients(Models, bSensativity)
   
   
   #CALCULATE S-SCORE (NEGATIVE PREDICTION)
@@ -65,7 +65,7 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, NrPC.V, NrPC,
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   Globalvarlist = c("Day.CT.Overtrade",
-                    "EstimateCoefficeients","Decomposition", "ExtractEigenPortfolio",  
+                    "estimateCoefficeients","decompose", "ExtractEigenPortfolio",  
                     "ConstructEigenPortfolios", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT

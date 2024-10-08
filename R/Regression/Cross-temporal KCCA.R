@@ -53,7 +53,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, bSensat
   
   
   #ESTIMATE COEFFICIENTS FROM ABOVE MODELS
-  Coefficients = EstimateCoefficeients(Models, bSensativity = bSensativity)
+  Coefficients = estimateCoefficeients(Models, bSensativity = bSensativity)
   
   #GET S-SCORE
   S = numeric(nrow(Returns))
@@ -77,7 +77,7 @@ CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d,
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossTemporal.KCCA", "EstimateCoefficeients")
+  Globalvarlist = c("DayCrossTemporal.KCCA", "estimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   Localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","bSensativity", "StandardisedVolume")
