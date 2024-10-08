@@ -11,11 +11,11 @@
                                                #End = ncol(Returns), 
                                                #H = 252,
                                                #NrPC = 20)
-#write.csv(Prediction.CS,"./Results/Predictions/Base/Prediction.CS.csv")
+#write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
 
 Prediction.CS = read.csv("./Results/Predictions/Base/Prediction.CS.csv")
-rownames(Prediction.CS) = Prediction.CS[,1]
-Prediction.CS = Prediction.CS[,-1]
+rownames(Prediction.CS) = Prediction.CS[, 1]
+Prediction.CS = Prediction.CS[, -1]
 colnames(Prediction.CS) = 500:(ncol(Prediction.CS)+499)
 
 #PERFORMANCE MEASURE
@@ -41,8 +41,8 @@ Scores.CS= performFullAnalysis(Returns = Returns,
 # write.csv(Prediction.CT, "./Results/Predictions/Base/Prediction.CT.csv")
 
 Prediction.CT = read.csv("./Results/Predictions/Base/Prediction.CT.csv")
-rownames(Prediction.CT) = Prediction.CT[,1]
-Prediction.CT = Prediction.CT[,-1]
+rownames(Prediction.CT) = Prediction.CT[, 1]
+Prediction.CT = Prediction.CT[, -1]
 colnames(Prediction.CT) = 500:(ncol(Prediction.CT)+499)
 
 

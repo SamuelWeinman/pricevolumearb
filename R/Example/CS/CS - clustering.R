@@ -25,12 +25,12 @@ Predictions.CS.Cluster.Return = list()
 Predictions.CS.Cluster.Return$Predictions = read.csv("./Results/Predictions/Clustering/Predictions.CS.Cluster.Return.csv")
 
 
-rownames(Predictions.CS.Cluster.Return$Predictions) = Predictions.CS.Cluster.Return$Predictions[,1]
-Predictions.CS.Cluster.Return$Predictions = Predictions.CS.Cluster.Return$Predictions[,-1]
+rownames(Predictions.CS.Cluster.Return$Predictions) = Predictions.CS.Cluster.Return$Predictions[, 1]
+Predictions.CS.Cluster.Return$Predictions = Predictions.CS.Cluster.Return$Predictions[, -1]
 colnames(Predictions.CS.Cluster.Return$Predictions) = 500:(ncol(Predictions.CS.Cluster.Return$Predictions)+499)
 
 Predictions.CS.Cluster.Return$k = read.csv("./Results/Predictions/Clustering/NrClusters Predictions.CS.Cluster.Return.csv")
-Predictions.CS.Cluster.Return$k = Predictions.CS.Cluster.Return$k[,-1]
+Predictions.CS.Cluster.Return$k = Predictions.CS.Cluster.Return$k[, -1]
 
 
 
@@ -64,12 +64,12 @@ Scores.CS.Cluster.Return = performFullAnalysis(Returns = Returns,
 Predictions.CS.Cluster.Weighted = list()
 
 Predictions.CS.Cluster.Weighted$Predictions = read.csv("./Results/Predictions/Clustering/Predictions.CS.Cluster.Weighted.csv")
-rownames(Predictions.CS.Cluster.Weighted$Predictions) = Predictions.CS.Cluster.Weighted$Predictions[,1]
-Predictions.CS.Cluster.Weighted$Predictions = Predictions.CS.Cluster.Weighted$Predictions[,-1]
+rownames(Predictions.CS.Cluster.Weighted$Predictions) = Predictions.CS.Cluster.Weighted$Predictions[, 1]
+Predictions.CS.Cluster.Weighted$Predictions = Predictions.CS.Cluster.Weighted$Predictions[, -1]
 colnames(Predictions.CS.Cluster.Weighted$Predictions) = 500:(ncol(Predictions.CS.Cluster.Weighted$Predictions)+499)
 
 Predictions.CS.Cluster.Weighted$k = read.csv("./Results/Predictions/Clustering/NrClusters Predictions.CS.Cluster.Weighted.csv")
-Predictions.CS.Cluster.Weighted$k = Predictions.CS.Cluster.Weighted$k[,-1]
+Predictions.CS.Cluster.Weighted$k = Predictions.CS.Cluster.Weighted$k[, -1]
 
 
 
@@ -102,12 +102,12 @@ Scores.CS.Cluster.Weighted = performFullAnalysis(Returns = Returns,
 Predictions.CS.Cluster.Volume = list()
 
 Predictions.CS.Cluster.Volume$Predictions = read.csv("./Results/Predictions/Clustering/Predictions.CS.Cluster.Volume.csv")
-rownames(Predictions.CS.Cluster.Volume$Predictions) = Predictions.CS.Cluster.Volume$Predictions[,1]
-Predictions.CS.Cluster.Volume$Predictions = Predictions.CS.Cluster.Volume$Predictions[,-1]
+rownames(Predictions.CS.Cluster.Volume$Predictions) = Predictions.CS.Cluster.Volume$Predictions[, 1]
+Predictions.CS.Cluster.Volume$Predictions = Predictions.CS.Cluster.Volume$Predictions[, -1]
 colnames(Predictions.CS.Cluster.Volume$Predictions) = 500:(ncol(Predictions.CS.Cluster.Volume$Predictions)+499)
 
 Predictions.CS.Cluster.Volume$k = read.csv("./Results/Predictions/Clustering/NrClusters Predictions.CS.Cluster.Volume.csv")
-Predictions.CS.Cluster.Volume$k = Predictions.CS.Cluster.Volume$k[,-1]
+Predictions.CS.Cluster.Volume$k = Predictions.CS.Cluster.Volume$k[, -1]
 
 
 
@@ -171,7 +171,7 @@ ggsave(filename = "CumSumPnL.Clustering.png",
 
 Scores.CS.Cluster.Return.ME = performFullAnalysis(Returns = Returns,
                                     Predictions = Predictions.CS.Cluster.Return$Predictions,
-                                    Q = (1:4)/4, r = 30,SubtractSpy = TRUE)
+                                    Q = (1:4)/4, r = 30, SubtractSpy = TRUE)
 
 Scores.CS.Cluster.Weighted.ME = performFullAnalysis(Returns = Returns,
                                       Predictions = Predictions.CS.Cluster.Weighted$Predictions,

@@ -4,7 +4,7 @@ library(parallel)
 ### THIS FUNCTION TRANSFORMS ALL RETURNS BY EITHER MULTIPLYING OR DIVIDING BY THE STANDARDISED VOLUME
 #DIVIDE: IF TRUE, MULTIPLY BY MEAN(VOLUME)/VOLUME, ELSE MULTIPLY
 #D: HOW MANY DAYS TO USE FOR STANDARDISING VOLUME
-ConstructWeightedReturn = function(Returns, Volume,H,d,divide) {
+ConstructWeightedReturn = function(Returns, Volume,H,d, divide) {
 
   #CALCULATE THE ROLLING AVERAGE VOLUME 
   RollMeanVolume = t(roll_mean(t(as.matrix(Volume)), width = d))
@@ -26,24 +26,24 @@ ConstructWeightedReturn = function(Returns, Volume,H,d,divide) {
   return(WeigthedReturn)
 }
 
-#PERFORMS CS VOLUME WEIGHTED IN INTERVAL [START,END], USING HISTORICAL DATA
+#PERFORMS CS VOLUME WEIGHTED IN INTERVAL [START, END], USING HISTORICAL DATA
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
-CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d,divide) {
+CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d, divide) {
   
   #CONSTRUCT WEIGHTED RETURN
-  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H,d = d,
+  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H, d = d,
                                             divide = divide)
   
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossRegression","ConstructWeightedReturn",
+  Globalvarlist = c("DayCrossRegression", "ConstructWeightedReturn",
                     "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("WeightedReturns","H","NrPC")
+  Localvarlist = c("WeightedReturns","H", "NrPC")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -56,7 +56,7 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d,div
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     DayCrossRegression(Returns = WeightedReturns,
-                       t=t,H = H,
+                       t=t, H = H,
                        NrPC = NrPC)
   }) 
   
@@ -74,8 +74,8 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d,div
 
 
 #DOES CrossSectionRegression.VW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING. 
-# MAP.list: A LIST OF FUNCTIONS (F1,F2,...,FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_CrossSectionRegression.VW = function(Returns, Volume, Start, End, H, NrPC,d,divide,MAP.list) {
+# MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
+Outside_CrossSectionRegression.VW = function(Returns, Volume, Start, End, H, NrPC,d,divide, MAP.list) {
 
   #NR OF MAPS
   K = length(MAP.list)

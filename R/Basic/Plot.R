@@ -10,11 +10,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   r <- length(scores)
   
   #NR OF DAYS
-  t <- length(scores[[1]]$regular$pnl_cum_sum[,1])
+  t <- length(scores[[1]]$regular$pnl_cum_sum[, 1])
   
   
   #FIND CORRESPONDING DATES
-  col_nr <- as.integer(names(scores[[1]]$standard$pnl_cum_sum[,1]))
+  col_nr <- as.integer(names(scores[[1]]$standard$pnl_cum_sum[, 1]))
   dates <- colnames(returns)[col_nr]
   dates <- as.Date(dates, format = "%Y%m%d")
   dates <- rep(dates, 8*r)
@@ -32,20 +32,20 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   if (type != "BASE") {
     #base_line AS VECTOR (USED ONLY TO GET method ORDER CORRECT)
     base_line <- rep(0, 8*r*t)
-    base_line[(base_models-1)*8*t + 1:(8*t)] = 1
+    base_line[(base_models-1)*8*t + 1:(8*t)] <- 1
     
     
     #method AS A VECTOR
     #TO GET THE MODELS IN RIGHT ORDER, WE CHANGE THE NAME OF THE BASEMODEL TO "AA" TO ENSURE THAT THIS MODEL COMES OUT FIRST. THE LABEL OF THIS MODEL WILL BE DIFFERENT.
     method <- sapply(1:r, function(i){
-      rep(labels[i],8*t)
+      rep(labels[i], 8*t)
     })
     method <- as.character(method)
     method[base_line == 1] <- "AA"
   } else{
   #method AS VECTOR
   method <- sapply(1:r, function(i){
-    rep(labels[i],8*t)
+    rep(labels[i], 8*t)
   })
   method <- as.factor(method)
   }
@@ -53,11 +53,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   
   #STANDARDISED AS VECTOR
-  standardised <- rep(c(rep("Not Standardised", 4*t), rep("Standardised", 4*t)),r)
+  standardised <- rep(c(rep("Not Standardised", 4*t), rep("Standardised", 4*t)), r)
   
   
   #QUANTILE AS VECTOR
-  quantile <- rep(c(rep(1/4,T), rep(2/4,T), rep(3/4,T), rep(4/4,T)),2*r)
+  quantile <- rep(c(rep(1/4, T), rep(2/4, T), rep(3/4, T), rep(4/4,T)), 2*r)
   
   
   #PUT IN DATA FRAME
@@ -74,7 +74,7 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   
   if (type != "BASE") {
-    data = data[order(method),]
+    data = data[order(method), ]
     labels = labels[order(unique(method))]
   }
   
@@ -86,11 +86,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   #CHOOSE PALETTE ACCORDINGLY
     if (type == "CS") {
-      p = brewer.pal(11, "PiYG")[c(1:3,9:11)]
+      p = brewer.pal(11, "PiYG")[c(1:3, 9:11)]
     }
     
     if (type == "CT") {
-      p = brewer.pal(11, "BrBG")[c(1:3,9:11)]
+      p = brewer.pal(11, "BrBG")[c(1:3, 9:11)]
     }
     
     if (type == "BASE") {
@@ -101,11 +101,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   
   #CREATE PLOT
-  plot = ggplot(data, aes(x = dates, y = CumPnL)) + #x,y axis 
+  plot = ggplot(data, aes(x = dates, y = CumPnL)) + #x, y axis 
     geom_line(aes(colour = method)) + #method as colour
     scale_colour_manual(values = p, labels = labels) + #palette
     scale_x_date(date_breaks = "4 years", date_labels = "%Y") + xlab("")+ #format x-axis
-    ylab("CumSum PnL") + scale_y_continuous(breaks = c(0,500,1000), limits = c(0,max(data$CumPnL*1.1))) + #format y-axis 
+    ylab("CumSum PnL") + scale_y_continuous(breaks = c(0,500, 1000), limits = c(0, max(data$CumPnL*1.1))) + #format y-axis 
     theme_minimal() #theme
   
   
@@ -132,7 +132,7 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
 #INPUTS:
 # scores: LIST OF scores (OUTPUT FROM "ANALYSIS")
 # labels: NAME OF methodS USE (E.G. C("CROSS-SECTIONAL", "CROSS-TEMPORAL"))
-# base_models: INDICATES WHICH OF THE scores BELONG TO A BASE MODEL. E.G. IF base_models = C(1,2), THE FIRST TWO ARE BASE MODELS AND THE OTHERS NOT
+# base_models: INDICATES WHICH OF THE scores BELONG TO A BASE MODEL. E.G. IF base_models = C(1, 2), THE FIRST TWO ARE BASE MODELS AND THE OTHERS NOT
 # TYPE: ONE OF "CS", "CT" OR "BASE" (ONE CS, ONE CT)
 #IF TYPE == "BASE", MUST GIVE CS BEFORE CT!
 createSharpePPTPlot = function(scores, labels, title, base_models, type, legendTitle) {
@@ -149,10 +149,10 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   
   #PPT AS VECTOR
-  PPT = sapply(1:r, function(i){
-    c(scores[[i]]$regular$PPT, scores[[i]]$regular$PPT)
+  ppt = sapply(1:r, function(i){
+    c(scores[[i]]$regular$ppt, scores[[i]]$regular$ppt)
   })
-  PPT = as.numeric(PPT)
+  ppt = as.numeric(ppt)
   
 
   
@@ -166,7 +166,7 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   #method AND LABEL AS VECTORS. IN THE CASE WHEN TYPE = "BASE", THERE IS NO RE-ORDERING SO labels = method
   method = sapply(1:r, function(i) {
-    rep(labels[i],8)
+    rep(labels[i], 8)
   })
   method = as.character(method)
 
@@ -175,10 +175,10 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   #ALSO NEED TO REORDER labels AS THE BARS WILL BE SORTED IN ALPHABETICAL ORDER
   if (type != "BASE") {
     method[base_line == 1] = "AA"
-    labels = c(labels[base_models],sort(labels[-base_models]))
+    labels = c(labels[base_models], sort(labels[-base_models]))
   }
 
-  #FINALLY,CHANGE method TO FACTOR
+  #FINALLY, CHANGE method TO FACTOR
   method = as.factor(method)
   
   
@@ -186,12 +186,12 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   Quantile = rep((1:4)/4, r*2)
   
   #STANDARDISED AS VECTOR
-  Standardised = rep(c(rep("Not Standardised",4),rep("Standardised",4)),r)
+  Standardised = rep(c(rep("Not Standardised",4),rep("Standardised",4)), r)
   
   
   #CREATE DATA FRAME
   data = data.frame(share = share,
-                    PPT = PPT,
+                    ppt = ppt,
                     method = method,
                     base_line = base_line,
                     Quantile= Quantile,
@@ -200,20 +200,20 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   #CHOOSE PALETTE DEPENDING ON TYPE
   if (type == "CS") {
-    p = brewer.pal(11, "PiYG")[c(1:3,9:11)]
+    p = brewer.pal(11, "PiYG")[c(1:3, 9:11)]
     if (length(scores) == 7) {
-      p = brewer.pal(11, "PiYG")[c(1:4,9:11)]
+      p = brewer.pal(11, "PiYG")[c(1:4, 9:11)]
     }
     
     if (length(scores) == 8) {
-      p = brewer.pal(11, "PiYG")[c(1:5,9:11)]
+      p = brewer.pal(11, "PiYG")[c(1:5, 9:11)]
     }
   }
   
   if (type == "CT") {
-    p = brewer.pal(11, "BrBG")[c(1:3,9:11)]
+    p = brewer.pal(11, "BrBG")[c(1:3, 9:11)]
     if (length(scores) == 8) {
-      p = brewer.pal(11, "BrBG")[c(1:5,9:11)]
+      p = brewer.pal(11, "BrBG")[c(1:5, 9:11)]
     }
   }
   
@@ -224,13 +224,13 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
 
   
   #CREATE SHARPE RATIO PLOT
-  bar1 = ggplot(data = data, aes(x = Quantile,y = share, fill = method,width = 0.2,
+  bar1 = ggplot(data = data, aes(x = Quantile, y = share, fill = method, width = 0.2,
                                color = base_line)) + 
     geom_bar(stat = "identity", position = "dodge")+ #create barplot, method as colour
-    scale_fill_manual(values =p, labels = labels) + #palette, labels
+    scale_fill_manual(values = p, labels = labels) + #palette, labels
     scale_x_continuous(breaks = (1:4)/4, labels = c("25%", "50%", "75%", "100%")) +
     #x-axis 
-    ylab("Sharpe Ratio") +scale_y_continuous(limits = c(0,max(data$share+0.5))) + #y-axis label
+    ylab("Sharpe Ratio") +scale_y_continuous(limits = c(0, max(data$share+0.5))) + #y-axis label
     facet_grid(cols = vars(Standardised)) + #subplots
     theme_minimal() + #theme
     guides(col = FALSE) +
@@ -255,12 +255,12 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   
   ###CREATE BARPLOT OVER PPT
-  bar2 = ggplot(data = data, aes(x = Quantile,y = PPT, fill = method,color = base_line, width = 0.2)) +
+  bar2 = ggplot(data = data, aes(x = Quantile, y = PPT, fill = method, color = base_line, width = 0.2)) +
     geom_bar(stat = "identity", position = "dodge")+ #create barplot, method as colour
     scale_fill_manual(values =p) + #palette
     scale_x_continuous(breaks = (1:4)/4, labels = c("25%", "50%", "75%", "100%"))+ 
     #format x-axis
-    scale_y_continuous(breaks = (0:4)*2e-4, labels = seq(0,8,by = 2),limits = c(0,max(data$PPT+0.0002))) + #y-axis
+    scale_y_continuous(breaks = (0:4)*2e-4, labels = seq(0,8, by = 2), limits = c(0, max(data$ppt+0.0002))) + #y-axis
     ylab("PPT (bps)") + #y-axis label
     facet_grid(cols = vars(Standardised)) + #subplots
     theme_minimal() + #theme

@@ -1,25 +1,25 @@
-#CALCULATE PREDICTION OF ALL DAYS IN [START,END], USING HISTORICAL DATA
+#CALCULATE PREDICTION OF ALL DAYS IN [START, END], USING HISTORICAL DATA
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
 #H: DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
 #L: NR OF DAYS TO USE FOR REGRESSION
 #D: HOW MANY DAYS TO USE FOR ROLLING MEAN VOLUME
 #ALL ELSE AS BEFORE
-CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity, d, divide){
+CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H, L, bSensativity, d, divide){
   
   #CONSTRUCT WEIGHTED RETURN
-  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H,d = d,
+  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H, d = d,
                                             divide = divide)
   
   #PREPARE CORES
 
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   Globalvarlist = c("CalculatingS.Score",
-                    "EstimateCoefficeients","Decomposition","ExtractEigenPortfolio",                      
+                    "EstimateCoefficeients","Decomposition", "ExtractEigenPortfolio",                      
                     "ConstructEigenPortfolios", "ConstructRho", "ConstructWeightedReturn")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns", "H", "L","bSensativity", "WeightedReturns")
+  Localvarlist = c("Returns", "H", "L", "bSensativity", "WeightedReturns")
 
   
   #OPEN CORES AND TRANSFER
@@ -31,7 +31,7 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity,
   
   #FOR EACH DAY, FIRST STANDARDISE THE RETURNS AND THEN CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   S.Scores = snow::parSapply(cl, Start:End, function(t) {
-    S = CalculatingS.Score(Returns = WeightedReturns[,1:(t-1)], 
+    S = CalculatingS.Score(Returns = WeightedReturns[, 1:(t-1)], 
                            NrPC = NrPC,
                            H = H, L = L,
                            bSensativity = bSensativity)
@@ -55,8 +55,8 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity,
 }
 
 #DOES CrossSectionRegression.VW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING. 
-# MAP.list: A LIST OF FUNCTIONS (F1,F2,...,FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H,L, bSensativity, d, divide,MAP.list) {
+# MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
+Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H, L, bSensativity, d, divide, MAP.list) {
   
   #NR OF MAPS
   K = length(MAP.list)
@@ -71,7 +71,7 @@ Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H,L, bSensa
     preds=CTRegression.VW(Returns = Returns,  #perform calculations with mapped volume
                           Volume = MappedVolume,
                           Start = Start, End = End, 
-                          NrPC=NrPC,H=H,L = L,
+                          NrPC=NrPC,H=H, L = L,
                           bSensativity = bSensativity,
                           d = d, divide = divide)
     PredictionsList[[k]] = preds #add to list

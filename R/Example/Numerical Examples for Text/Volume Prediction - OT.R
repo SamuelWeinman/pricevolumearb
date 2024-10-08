@@ -6,17 +6,17 @@ NrGroups = 7
 col = which(colnames(Prediction.CS) == t)
 
 
-Pred.OT.CS = unlist(Prediction.CS.Overtraded[,col])
-Pred.OT.CT = unlist(Predictions.CT.OverTraded[,col])
+Pred.OT.CS = unlist(Prediction.CS.Overtraded[, col])
+Pred.OT.CT = unlist(Predictions.CT.OverTraded[, col])
 
 
 #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
 E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
 
 #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
-#HERE Overtraded_{I,T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
+#HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
 
-model = lm(StandardVolume[,H]~E.V$EigenPortfolio)
+model = lm(StandardVolume[, H]~E.V$EigenPortfolio)
 Overtraded = model$residuals
 
 

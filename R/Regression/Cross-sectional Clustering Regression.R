@@ -45,14 +45,14 @@ ConstructClusters = function(rho, k, MinSize) {
 
 #PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
 # ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES) 
-DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha) {
+DayCrossRegression.Cluster <- function(Returns, Volume, t,H,NrPC,k,MinSize, alpha) {
   
   #EXTRACT EIGENPORTFOLIO
-  E = ExtractEigenPortfolio(Returns = Returns[,(t-H):(t-1)], 
+  E = ExtractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
                             NrPC = NrPC) 
   
   #CONSTRUCT WRIGHTED CORRELATION MATRIX
-  rho = alpha* ConstructRho(Returns[,(t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[,(t-H):(t-1)])
+  rho = alpha* ConstructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[, (t-H):(t-1)])
   
   
   #EXTRACT CLUSTERS
@@ -65,8 +65,8 @@ DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha)
   #NEED TO STANDARDISE RESIDUALS TO BE ABLE TO COMPARE ACCROSS MODELS
   Predictions.List = sapply(1:k, function(i){
     index = Clusters[[i]] #EXTRACT I:TH CLUSTER
-    y = Returns[index,t-1] #returns on last day
-    X= E$EigenPortfolio[index,] #the eigenportfolios
+    y = Returns[index, t-1] #returns on last day
+    X= E$EigenPortfolio[index, ] #the eigenportfolios
     model = lm(y~X)
     P = -model$residuals
     P = P / sd(P)
@@ -88,17 +88,17 @@ DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha)
               k = k))
 }
 
-CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,k,MinSize,alpha) {
+CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,k,MinSize, alpha) {
   
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossRegression.Cluster","ConstructClusters",
+  Globalvarlist = c("DayCrossRegression.Cluster", "ConstructClusters",
                     "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","Volume","H","NrPC","k","MinSize", "alpha")
+  Localvarlist = c("Returns","Volume","H","NrPC","k", "MinSize", "alpha")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -111,7 +111,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     DayCrossRegression.Cluster(Returns = Returns,
                                Volume = Volume,
-                               t=t,H = H,
+                               t=t, H = H,
                                NrPC = NrPC,
                                k = k, MinSize = MinSize,
                                alpha = alpha)
@@ -122,8 +122,8 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
   snow::stopCluster(cl)
 
   #EXTRACT PREDICTIONS AND NR OF CLUSTERS
-  k = unlist(Predictions[2,]) #NR OF CLUSTERS
-  Predictions = matrix(unlist(Predictions[1,]), ncol = End-Start+1)
+  k = unlist(Predictions[2, ]) #NR OF CLUSTERS
+  Predictions = matrix(unlist(Predictions[1, ]), ncol = End-Start+1)
   
   #CHANGE COL AND ROWNAMES AS APPROPRIATE.
   colnames(Predictions) = Start:End

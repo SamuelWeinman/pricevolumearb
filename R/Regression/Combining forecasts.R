@@ -42,8 +42,8 @@ CombinePrediction <- function(PredictionStrong, PredictionsWeak, alpha) {
   #LOOP THROUGH EACH COLUMN (DAY)
   #FOR EACH DAY, PERFORM CombinePrediction.Day
   CombinedPrediction = sapply(1:ncol(PredictionStrong), function(i) {
-    CombinePrediction.Day(Prediction1 = PredictionStrong[,i],
-                          Prediction2 = PredictionsWeak[,i], 
+    CombinePrediction.Day(Prediction1 = PredictionStrong[, i],
+                          Prediction2 = PredictionsWeak[, i], 
                           alpha = alpha) 
   })
   

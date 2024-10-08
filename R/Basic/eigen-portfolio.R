@@ -58,7 +58,7 @@ extractEigenPortfolios <- function(returns, nr_pc) {
   #RETURN THE RELEVANT EIGENPORTFOLIOS
   return(list(
     rho = full_eigen_portfolios$rho, 
-    portfolio = full_eigen_portfolios$portfolios[,1:nr_pc], 
+    portfolio = full_eigen_portfolios$portfolios[, 1:nr_pc], 
     return = full_eigen_portfolios$portfolios[1:nr_pc, ], 
     prop_explained = sum(full_eigen_portfolios$values[1:nr_pc] ) / sum(full_eigen_portfolios$values) 
   )) 

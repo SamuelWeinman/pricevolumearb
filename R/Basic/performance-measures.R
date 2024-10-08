@@ -44,7 +44,7 @@ calculateRollingStandardDeviation <- function(predictions, r) {
   sd <- t(roll_sd(t(as.matrix(predictions)), width <- r))
   
   #REMOVE THE FIRST R-1 VALUES AS THESE ARE JUST NA
-  sd <- sd[,-(1:(r-1))] 
+  sd <- sd[, -(1:(r-1))] 
   
   #PUT IN DATA FRAME AND ADD NAMES
   sd <- data.frame(sd <- sd)
@@ -67,8 +67,8 @@ calculatePerformanceMeasures <- function(returns, predictions, q) {
   #THE ROWS OF PNL CORRESPOND TO QUANTILE
   #COLUMNS CORRESPOND TO DATES
   pnl <- sapply(1:ncol(predictions), function(i) {
-    calculatePnL(returns[,start+i-1], #True Return
-                 predictions[,i], #Predicted Return
+    calculatePnL(returns[, start+i-1], #True Return
+                 predictions[, i], #Predicted Return
                  q) #Quantiles
   })
   colnames(pnl) <- start:end
@@ -88,7 +88,7 @@ calculatePerformanceMeasures <- function(returns, predictions, q) {
   #CALCULATE CUMSUM OF PNL
   #THE COLUMNS OF PNL.CUMSUM ARE THE CUMSUMS
   #COLUMNS VARY BY Q
-  pnl_cum_sum <- apply(pnl,1,cumsum)
+  pnl_cum_sum <- apply(pnl,1, cumsum)
   
   #RETURN
   return(list(
@@ -102,13 +102,13 @@ calculatePerformanceMeasures <- function(returns, predictions, q) {
 ###PERFORM FULL ANALYSIS OF PERFORMANCE MEASURES
 #FIRST ON NON-STANDARDISED DATA (REGULAR)
 #THEN ON STANDARDISED DATA (STANDARD)
-#subtract_spy: IF TRUE, COMPARE TO THE returns MINUS THE SPY INDEX,I.E. EXCESS returns ON EACH DAY
+#subtract_spy: IF TRUE, COMPARE TO THE returns MINUS THE SPY INDEX, I.E. EXCESS returns ON EACH DAY
 performFullAnalysis <- function(returns, predictions, q, r, subtract_spy = FALSE) {
   
   #SUBTRACT SPY IF NECESSARY
   if (subtract_spy) {
     returns_minus_spy  <- sapply(1:ncol(returns), function(i) {
-      returns[,i] - returns[1,i] 
+      returns[, i] - returns[1, i] 
     })
     
     colnames(returns_minus_spy) <- colnames(returns)
@@ -118,11 +118,11 @@ performFullAnalysis <- function(returns, predictions, q, r, subtract_spy = FALSE
 
   #ANALYSIS ON NON-STANDARDISED DATA
   #NOTE THAT WE TAKE AWAY THE FIRST R-1 DAYS TO ENSURE SAME FORMAT AS WHEN STANDARDISED
-  regular <- calculatePerformanceMeasures(returns, predictions[,-(1:(r-1))], q)
+  regular <- calculatePerformanceMeasures(returns, predictions[, -(1:(r-1))], q)
   
   #STANDARDISED 
   #WE REMOVE THE FIRST R-1 COLUMNS AS THERE IS NOT ENOUGH DATA TO STANDARDISE
-  pred_standard <- calculateRollingStandardDeviation[,-(1:(r-1))] / RollingSD(predictions, r)
+  pred_standard <- calculateRollingStandardDeviation[, -(1:(r-1))] / RollingSD(predictions, r)
   
   #PERFORMANCE AFTER STANDARDISATION
   standard <- calculatePerformanceMeasures(returns, pred_standard, Q) 

@@ -25,8 +25,8 @@ Kpar.List = list(list(sigma = 0.2), #rbfdor
 #   kernel = Kernel.List[i]
 #   kpar = Kpar.List[[i]]
 #   
-#   Preds = CrossSectionRegression.KPCA(Returns = Returns, Start=500,End = ncol(Returns), 
-#                                       H=252,NrPC = 20,
+#   Preds = CrossSectionRegression.KPCA(Returns = Returns, Start=500, End = ncol(Returns), 
+#                                       H=252, NrPC = 20,
 #                                       kernel = kernel, kpar = kpar)
 #   
 #   
@@ -50,11 +50,11 @@ S = list()
 for (i in 1:5) {
   
 
-  colname = paste("Regular.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Regular.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(Scores.CS.KPCA) == colname)
-  SharpeRegular = unique(Scores.CS.KPCA[,col])
-  PPTRegular = unique(Scores.CS.KPCA[,col+1])
-  CumSumRegular = Scores.CS.KPCA[,(col+2):(col+5)]
+  SharpeRegular = unique(Scores.CS.KPCA[, col])
+  PPTRegular = unique(Scores.CS.KPCA[, col+1])
+  CumSumRegular = Scores.CS.KPCA[, (col+2):(col+5)]
   
   RegularList = list(PnL = numeric(0),
                      Sharpe = SharpeRegular,
@@ -63,11 +63,11 @@ for (i in 1:5) {
   
   
   
-  colname = paste("Standard.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Standard.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(Scores.CS.KPCA) == colname)
-  SharpeStandard = unique(Scores.CS.KPCA[,col])
-  PPTstandard = unique(Scores.CS.KPCA[,col+1])
-  CumSumStandard = Scores.CS.KPCA[,(col+2):(col+5)]
+  SharpeStandard = unique(Scores.CS.KPCA[, col])
+  PPTstandard = unique(Scores.CS.KPCA[, col+1])
+  CumSumStandard = Scores.CS.KPCA[, (col+2):(col+5)]
   
   StandardList = list(PnL = numeric(0),
                      Sharpe = SharpeStandard,
@@ -83,7 +83,7 @@ for (i in 1:5) {
 
 
 Scores.CS.full = c(list(Scores.CS), S)
-Labels = c("Linear", "Gaussian", "Polynomial","Hyperbolic Tangent","Laplacian","Anova")
+Labels = c("Linear", "Gaussian", "Polynomial", "Hyperbolic Tangent","Laplacian", "Anova")
 
 
 

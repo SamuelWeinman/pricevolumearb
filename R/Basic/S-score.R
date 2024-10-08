@@ -22,8 +22,8 @@ Decomposition <- function(returns, nr_pc, h, L) {
   #THE i:TH ENTRY IN MODELS IS THE REGRESSION OF THE i:TH STOCK ON THE EIGENPORTFOLIOS
   #NOTE THAT returns_short AND eigen$EigenReturn HAVE H COLUMNS
   models <- lapply(1:n, function(i) { #loop through all stocks
-    y = returns_short[i,(h-l+1):h] #returns last L days
-    X = eigen$EigenReturn[,(h-l+1):h] #eigenreturns last L days
+    y = returns_short[i, (h-l+1):h] #returns last L days
+    X = eigen$EigenReturn[, (h-l+1):h] #eigenreturns last L days
     model = lm(as.numeric(y)~t(as.matrix(X))) #get lm
     return(model)
   })
@@ -65,7 +65,7 @@ EstimateCoefficeients <- function(Models, bSensativity) {
     MeanReversion <- I(b< 1-bSensativity)
     
     #RETURN COEFFICIENTS FOR MODEL
-    return(c(k,m,Sigma.Squared,SigmaEq.Squared, MeanReversion)) })
+    return(c(k,m,Sigma.Squared, SigmaEq.Squared, MeanReversion)) })
   
   #UPON CALCULATING COEFFICIENTS FOR EACH MODEL, PUT IN DATA FRAME
   Coefficients <- ldply(Coefficients) #DATA FRAME
@@ -79,7 +79,7 @@ EstimateCoefficeients <- function(Models, bSensativity) {
 ###THAT IS, THE AMOUNT BY WHICH THE STOCKS HAVE HAD TOO MUCH RETURNS
 ###IF MEAN-REVERSION == 0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
 #RETURNS MUST BE HISTORY ONLY!
-CalculatingS.Score <- function(Returns, nr_pc,H,L,bSensativity) {
+CalculatingS.Score <- function(Returns, nr_pc,H,L, bSensativity) {
 
   #DECOMPOSE INTO MODELS
   Models=Decomposition(Returns = Returns,

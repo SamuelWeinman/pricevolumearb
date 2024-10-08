@@ -1,4 +1,4 @@
-Alpha.Candidates = seq(40,250,by = 15)
+Alpha.Candidates = seq(40,250, by = 15)
 
 # Scores = lapply(1:length(Alpha.Candidates), function(i){
 #   print(i)
@@ -7,7 +7,7 @@ Alpha.Candidates = seq(40,250,by = 15)
 #                                                               Volume, Returns,
 #                                                               H = 252, NrPC.V = 25,
 #                                                               alpha = A, NrPC = 20)
-#   S = Analysis(Returns,Preds, r = 30, Q = (1:4)/4)
+#   S = Analysis(Returns, Preds, r = 30, Q = (1:4)/4)
 #   return(S)
 # })
 # 
@@ -58,8 +58,8 @@ Plot.Sharpe = ggplot(data, aes(x = alpha, y = Mean/sd * sqrt(252)))+ geom_point(
 
 
 
-Layout = matrix(c(1,3,2,3), nrow = 2)
-Plot = grid.arrange(Plot.Mean, Plot.Sd,Plot.Sharpe, layout_matrix = Layout)
+Layout = matrix(c(1,3,2, 3), nrow = 2)
+Plot = grid.arrange(Plot.Mean, Plot.Sd, Plot.Sharpe, layout_matrix = Layout)
 
 
 
@@ -81,11 +81,11 @@ S = list()
 for (i in 1:15) {
   
   
-  colname = paste("Regular.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Regular.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(Scores) == colname)
-  SharpeRegular = unique(Scores[,col])
-  PPTRegular = unique(Scores[,col+1])
-  CumSumRegular = Scores[,(col+2):(col+5)]
+  SharpeRegular = unique(Scores[, col])
+  PPTRegular = unique(Scores[, col+1])
+  CumSumRegular = Scores[, (col+2):(col+5)]
   
   RegularList = list(PnL = numeric(0),
                      Sharpe = SharpeRegular,
@@ -94,11 +94,11 @@ for (i in 1:15) {
   
   
   
-  colname = paste("Standard.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Standard.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(Scores) == colname)
-  SharpeStandard = unique(Scores[,col])
-  PPTstandard = unique(Scores[,col+1])
-  CumSumStandard = Scores[,(col+2):(col+5)]
+  SharpeStandard = unique(Scores[, col])
+  PPTstandard = unique(Scores[, col+1])
+  CumSumStandard = Scores[, (col+2):(col+5)]
   
   StandardList = list(PnL = numeric(0),
                       Sharpe = SharpeStandard,
@@ -112,10 +112,10 @@ for (i in 1:15) {
   S = append(S, list(MethodList))
 }
 
-S.small = S[seq(1,15,by = 2)]
+S.small = S[seq(1,15, by = 2)]
 
-SharpePPT.OT.CS.OverAlpha = createSharpePPTPlot(Scores=S[seq(1,15,by = 2)],
-                                       Labels=Alpha.Candidates[seq(1,15,by = 2)],
+SharpePPT.OT.CS.OverAlpha = createSharpePPTPlot(Scores=S[seq(1,15, by = 2)],
+                                       Labels=Alpha.Candidates[seq(1,15, by = 2)],
                                        Type = "CS",
                                        BaseModels = 1)
 

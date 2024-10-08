@@ -5,7 +5,7 @@
                                       #End = ncol(Returns), 
                                       #H = 252,
                                       #NrPC = 20)
-#write.csv(Prediction.CS,"./Results/Predictions/Base/Prediction.CS.csv")
+#write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
 
 
 
@@ -33,7 +33,7 @@
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20,d = 20,
+#                                                               H = 252, NrPC=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
 # 
@@ -44,7 +44,7 @@
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20,d = 20,
+#                                                               H = 252, NrPC=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)
 # 
@@ -59,7 +59,7 @@
 
 # Predictions.CS.CCA=CrossSectionRegression.CCA(Returns = Returns, Volume = Volume,
 #                                    Start = 500, End = ncol(Returns),
-#                                    H=100,HV = 100,
+#                                    H=100, HV = 100,
 #                                    NrC.R = 15, NrC.V = 5,
 #                                    d = 20)
 # 
@@ -69,7 +69,7 @@
 
 # Predictions.CS.KCCA=CrossSectionRegression.KCCA(Returns = Returns, Volume = Volume,
 #                                       Start = 500, End = ncol(Returns),
-#                                       H=100,HV = 100,
+#                                       H=100, HV = 100,
 #                                       NrC.R = 15, NrC.V = 5,
 #                                       d = 20)
 # 

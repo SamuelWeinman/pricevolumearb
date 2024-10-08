@@ -13,31 +13,31 @@ library(kernlab)
 # NRC.V: HOW MANY FEAURES OF VOLUME EMBEDDINGS TO USE
 # bSensativity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
 
-DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L,NrC.R, NrC.V,bSensativity) {
+DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, bSensativity) {
   
   #EXTRACT LAST H DAYS OF RETURN HISTORY, GIVING X
-  X = as.matrix(Returns[,(t-H):(t-1)])
+  X = as.matrix(Returns[, (t-H):(t-1)])
   
   #EXTEACT VOLUME
-  Y = as.matrix(Volume[,(t-HV):(t-1)])
+  Y = as.matrix(Volume[, (t-HV):(t-1)])
 
   #PERFORM KCCA
-  C = kcca(X,Y, ncomps = max(c(NrC.R,NrC.V)))
+  C = kcca(X, Y, ncomps = max(c(NrC.R, NrC.V)))
   
   #EMBEDDING OF X AND Y IN NEW SPACE
   X = C@xcoef
   Y= C@ycoef
   
   #EXTRACT MOST IMPORTANT COMPONENTS
-  X = X[,1:NrC.R]
-  Y = Y[,1:NrC.V]
+  X = X[, 1:NrC.R]
+  Y = Y[, 1:NrC.V]
   
   #DIVIDE EACH COLUMN BY THE STANDARD DEVIATION OF THE ROW 
-  X = X / apply(as.matrix(Returns[,(t-H):(t-1)]),1,sd)
-  Y = Y / apply(as.matrix(Returns[,(t-H):(t-1)]),1,sd)
+  X = X / apply(as.matrix(Returns[,(t-H):(t-1)]),1, sd)
+  Y = Y / apply(as.matrix(Returns[,(t-H):(t-1)]),1, sd)
 
   #CONSTRUCT "EIGEN"-PORTFOLIO
-  Portfolios = cbind(X,Y)
+  Portfolios = cbind(X, Y)
   
   #CALCULATE RETURN ON EACH OF THE PORTFOLIOS
   PortfolioReturns = t(Returns[(t-L):(t-1)]) %*% Portfolios
@@ -46,7 +46,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L,NrC.R, NrC.V,bSensativ
   #THE i:TH ENTRY IN MODELS IS THE REGRESSION OF THE i:TH STOCK ON THE RETURNS OF THE "EIGEN"-PORTFOLIO
   N = nrow(Returns)
   Models <- lapply(1:N, function(i) { #loop through all stocks
-    y = unlist(Returns[i,(t-L):(t-1)]) #returns last L days
+    y = unlist(Returns[i, (t-L):(t-1)]) #returns last L days
     model = lm(as.numeric(y)~PortfolioReturns) #get lm
     return(model)
   })
@@ -68,7 +68,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L,NrC.R, NrC.V,bSensativ
 
 #PERFORMS CT KCCA ON [START, END]
 #D: HOW MANY DAYS TO STANDARDISE VOLUME OVER
-CTRegression.KCCA = function(Returns, Volume,Start, End,H,HV,L,NrC.R, NrC.V,d,bSensativity) {
+CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, bSensativity) {
 
   #STANDRDISE VOLUME
   #HERE, WE DIVIDE VOLUME BY THE AVERAGE VOLUME DURING THE LAST D DAYS (INCLUDING TODAY)
@@ -77,10 +77,10 @@ CTRegression.KCCA = function(Returns, Volume,Start, End,H,HV,L,NrC.R, NrC.V,d,bS
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossTemporal.KCCA","EstimateCoefficeients")
+  Globalvarlist = c("DayCrossTemporal.KCCA", "EstimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H","HV","L","NrC.R", "NrC.V","bSensativity","StandardisedVolume")
+  Localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","bSensativity", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -92,8 +92,8 @@ CTRegression.KCCA = function(Returns, Volume,Start, End,H,HV,L,NrC.R, NrC.V,d,bS
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     S = DayCrossTemporal.KCCA(Returns = Returns, Volume = StandardisedVolume,
-                             t=t,H=H,HV = HV,
-                             L=L,NrC.R = NrC.R, NrC.V = NrC.V,
+                             t=t,H=H, HV = HV,
+                             L=L, NrC.R = NrC.R, NrC.V = NrC.V,
                              bSensativity = bSensativity) #S-score for the day (accross stocks)
     P = -S$S #prediction is negative s-score
     return(P)

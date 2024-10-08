@@ -15,7 +15,7 @@ MAP.list = list(f = function(x) x,
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20,d = 20,
+#                                                               H = 252, NrPC=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
 # 
@@ -24,13 +24,13 @@ MAP.list = list(f = function(x) x,
 
 
 Predictions.CS.VW.Divide = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Divide.csv", header = T)
-rownames(Predictions.CS.VW.Divide) = Predictions.CS.VW.Divide[,1]
-Predictions.CS.VW.Divide = Predictions.CS.VW.Divide[,-1]
-colnames(Predictions.CS.VW.Divide) = rep(500:4932,4)
-Predictions.CS.VW.Divide = list(Predictions.CS.VW.Divide[,1:4433],
-                                Predictions.CS.VW.Divide[,4433+(1:4433)],
-                                Predictions.CS.VW.Divide[,2*4433+(1:4433)],
-                                Predictions.CS.VW.Divide[,3*4433+(1:4433)])
+rownames(Predictions.CS.VW.Divide) = Predictions.CS.VW.Divide[, 1]
+Predictions.CS.VW.Divide = Predictions.CS.VW.Divide[, -1]
+colnames(Predictions.CS.VW.Divide) = rep(500:4932, 4)
+Predictions.CS.VW.Divide = list(Predictions.CS.VW.Divide[, 1:4433],
+                                Predictions.CS.VW.Divide[, 4433+(1:4433)],
+                                Predictions.CS.VW.Divide[, 2*4433+(1:4433)],
+                                Predictions.CS.VW.Divide[, 3*4433+(1:4433)])
 
 
 
@@ -43,7 +43,7 @@ Scores.CS.VW.Divide = performFullAnalysisFromList(Returns, Predictions.List = Pr
 
 
 
-Scores.CS.VW.Divide.Combined = append(list(Scores.CS),Scores.CS.VW.Divide)
+Scores.CS.VW.Divide.Combined = append(list(Scores.CS), Scores.CS.VW.Divide)
 names(Scores.CS.VW.Divide.Combined) = c("Not weighted", "x", "log(x)",
                                         "x^1/3", "sqrt(x)")
 
@@ -96,20 +96,20 @@ ggsave(filename = "SharpePPT.CS.VW.Divide.png",
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns, 
 #                                                               Volume, 
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20,d = 20,
+#                                                               H = 252, NrPC=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)
 
 
 
 Predictions.CS.VW.Multiply = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Multiply.csv", header = T)
-rownames(Predictions.CS.VW.Multiply) = Predictions.CS.VW.Multiply[,1]
-Predictions.CS.VW.Multiply = Predictions.CS.VW.Multiply[,-1]
-colnames(Predictions.CS.VW.Multiply) = rep(500:4932,4)
-Predictions.CS.VW.Multiply = list(Predictions.CS.VW.Multiply[,1:4433],
-                                   Predictions.CS.VW.Multiply[,4433+(1:4433)],
-                                   Predictions.CS.VW.Multiply[,2*4433+(1:4433)],
-                                   Predictions.CS.VW.Multiply[,3*4433+(1:4433)])
+rownames(Predictions.CS.VW.Multiply) = Predictions.CS.VW.Multiply[, 1]
+Predictions.CS.VW.Multiply = Predictions.CS.VW.Multiply[, -1]
+colnames(Predictions.CS.VW.Multiply) = rep(500:4932, 4)
+Predictions.CS.VW.Multiply = list(Predictions.CS.VW.Multiply[, 1:4433],
+                                   Predictions.CS.VW.Multiply[, 4433+(1:4433)],
+                                   Predictions.CS.VW.Multiply[, 2*4433+(1:4433)],
+                                   Predictions.CS.VW.Multiply[, 3*4433+(1:4433)])
 
 
 
@@ -119,7 +119,7 @@ Predictions.CS.VW.Multiply = list(Predictions.CS.VW.Multiply[,1:4433],
 
 Scores.CS.VW.Multiply = performFullAnalysisFromList(Returns, Predictions.List = Predictions.CS.VW.Multiply,
                                     Q = (1:4/4), r = 30)
-Scores.CS.VW.Multiply.Combined = append(list(Scores.CS),Scores.CS.VW.Multiply)
+Scores.CS.VW.Multiply.Combined = append(list(Scores.CS), Scores.CS.VW.Multiply)
 names(Scores.CS.VW.Multiply.Combined) = c("Not weighted", "x", "log(x)",
                                         "x^1/3", "sqrt(x)")
 

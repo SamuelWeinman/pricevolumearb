@@ -8,17 +8,17 @@ library(parallel)
 
 
 Prediction.CS.Overtraded = read.csv("./Results/Predictions/CS OverTrading/Prediction.CS.Overtraded.csv", header = T)
-rownames(Prediction.CS.Overtraded) = Prediction.CS.Overtraded[,1]
-Prediction.CS.Overtraded = Prediction.CS.Overtraded[,-1]
+rownames(Prediction.CS.Overtraded) = Prediction.CS.Overtraded[, 1]
+Prediction.CS.Overtraded = Prediction.CS.Overtraded[, -1]
 colnames(Prediction.CS.Overtraded) = 500:4932
 
 
 Scores.CS.Overtraded = performFullAnalysis(Returns = Returns,
                          Predictions = Prediction.CS.Overtraded,
-                         Q=(1:4)/4,r = 30)
+                         Q=(1:4)/4, r = 30)
 
 
-SharpePPT.CS.Overtraded = createSharpePPTPlot(Scores =list(Scores.CS,Scores.CS.Overtraded),
+SharpePPT.CS.Overtraded = createSharpePPTPlot(Scores =list(Scores.CS, Scores.CS.Overtraded),
                                          Labels = c("CS", "CS Decomposed Volume"),
                                          BaseModels = 1,
                                          Type = "CS")
@@ -30,7 +30,7 @@ ggsave(filename = "SharpePPT.CS.Overtraded.png",
        width = 5, height = 5)
 
 
-CumSum.CS.Overtraded = createCumSumPnLPlot(Scores =list(Scores.CS,Scores.CS.Overtraded),
+CumSum.CS.Overtraded = createCumSumPnLPlot(Scores =list(Scores.CS, Scores.CS.Overtraded),
                                             Labels = c("CS", "CS Decomposed Volume"),
                                             BaseModels = 1,
                                             Type = "CS")

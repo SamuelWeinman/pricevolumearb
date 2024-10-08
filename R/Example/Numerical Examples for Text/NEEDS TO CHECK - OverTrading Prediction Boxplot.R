@@ -11,17 +11,17 @@ NrGroups = 10
 col = which(colnames(Prediction.CS) == t)
 NrPC.V = 25
 
-preds = Prediction.CS.Overtraded[,col]
+preds = Prediction.CS.Overtraded[, col]
 
 
-StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1,sum)
+StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
 E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
-Model = lm(StandardVolume[,H] ~ E.V$EigenPortfolio)
+Model = lm(StandardVolume[, H] ~ E.V$EigenPortfolio)
 Overtraded = Model$residuals
 
 
 Group.OT = as.factor(ceiling(order(Overtraded) / ceiling(659/NrGroups)))
-Group.V = as.factor(ceiling(order(StandardVolume[,H]) / ceiling(659/NrGroups)))
+Group.V = as.factor(ceiling(order(StandardVolume[, H]) / ceiling(659/NrGroups)))
 data = data.frame(preds = preds, Group.OT = Group.OT, Group.V = Group.V)
 
 

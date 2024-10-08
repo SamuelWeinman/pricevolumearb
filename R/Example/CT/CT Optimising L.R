@@ -1,6 +1,6 @@
 #RETURNS THE SCORES (IN A LIST) FOR EACH VALUE OF L IN L.CANDIDATES
 # L.CANDIDATES: ARRAY WITH CANDIDATES OF L, NEED L > NRPC
-OptimiseL = function(Returns, Start, End, NrPC,H,L.Candidates, bSensativity,Q,r) {
+OptimiseL = function(Returns, Start, End, NrPC,H, L.Candidates, bSensativity,Q, r) {
   
   #CREATE LIST FOR STORING SCORES
   Scores = list()
@@ -8,8 +8,8 @@ OptimiseL = function(Returns, Start, End, NrPC,H,L.Candidates, bSensativity,Q,r)
   
   #LOOP THROUGH EACH CANDIDATE OF L, CAN CALCULATE CORRESPONDING SCORE
   for (Lcand in L.Candidates) {
-    Pred = CTRegression(Returns, Start, End, NrPC,H,L = Lcand, bSensativity)
-    Score = performFullAnalysis(Returns = Returns, Predictions = Pred, Q,r)
+    Pred = CTRegression(Returns, Start, End, NrPC,H, L = Lcand, bSensativity)
+    Score = performFullAnalysis(Returns = Returns, Predictions = Pred, Q, r)
     Scores = append(Scores, list(Score))
   }
   
@@ -22,9 +22,9 @@ OptimiseL = function(Returns, Start, End, NrPC,H,L.Candidates, bSensativity,Q,r)
 
 # CT.Scores.OverL = OptimiseL(Returns = Returns, 
 #                             Start = 500, End = ncol(Returns), 
-#                             NrPC=20,H = 252,
-#                             L.Candidates=seq(25,60,by = 5), bSensativity = 0.01,
-#                             Q=(1:4)/4,r = 30)
+#                             NrPC=20, H = 252,
+#                             L.Candidates=seq(25,60, by = 5), bSensativity = 0.01,
+#                             Q=(1:4)/4, r = 30)
 # 
 # write.csv(CT.Scores.OverL, "./Results/Predictions/Base/CT.Scores.OverL.csv")
 
@@ -39,11 +39,11 @@ S = list()
 for (i in 1:8) {
   
   
-  colname = paste("Regular.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Regular.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(CT.Scores.OverL) == colname)
-  SharpeRegular = unique(CT.Scores.OverL[,col])
-  PPTRegular = unique(CT.Scores.OverL[,col+1])
-  CumSumRegular = CT.Scores.OverL[,(col+2):(col+5)]
+  SharpeRegular = unique(CT.Scores.OverL[, col])
+  PPTRegular = unique(CT.Scores.OverL[, col+1])
+  CumSumRegular = CT.Scores.OverL[, (col+2):(col+5)]
   
   RegularList = list(PnL = numeric(0),
                      Sharpe = SharpeRegular,
@@ -52,11 +52,11 @@ for (i in 1:8) {
   
   
   
-  colname = paste("Standard.Sharpe.", toString(i-1),sep = "")
+  colname = paste("Standard.Sharpe.", toString(i-1), sep = "")
   col = which(colnames(CT.Scores.OverL) == colname)
-  SharpeStandard = unique(CT.Scores.OverL[,col])
-  PPTstandard = unique(CT.Scores.OverL[,col+1])
-  CumSumStandard = CT.Scores.OverL[,(col+2):(col+5)]
+  SharpeStandard = unique(CT.Scores.OverL[, col])
+  PPTstandard = unique(CT.Scores.OverL[, col+1])
+  CumSumStandard = CT.Scores.OverL[, (col+2):(col+5)]
   
   StandardList = list(PnL = numeric(0),
                       Sharpe = SharpeStandard,
@@ -76,7 +76,7 @@ for (i in 1:8) {
 
 
 SharpePPT.OverL = createSharpePPTPlot(Scores = S,
-                                       Labels=seq(25,60,by = 5),
+                                       Labels=seq(25,60, by = 5),
                                        Type = "CT",
                                        BaseModels = 1)
 
@@ -90,7 +90,7 @@ ggsave(filename = "SharpePPT.OverL.png",
 
 
 CumSum.OverL = createCumSumPnLPlot(Scores = CT.Scores.OverL,
-                                       Labels=seq(25,60,by = 5))
+                                       Labels=seq(25,60, by = 5))
 
 ggsave(filename = "CumSum.OverL.png", 
        path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",

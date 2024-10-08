@@ -4,7 +4,7 @@ SharpePPT.CT.Final = createSharpePPTPlot(Scores = list(Scores.CT,
                                                         Scores.CT.VW.Divide[[1]],
                                                         Scores.CT.KCCA,
                                                         Scores.CT.OverTraded),
-                                          Labels = c("CT", "CT Combined","CT KPCA", "CT VW","CT KCCA", "CT Decomposed Volume"),
+                                          Labels = c("CT", "CT Combined", "CT KPCA", "CT VW", "CT KCCA", "CT Decomposed Volume"),
                                           Type = "CT",
                                           BaseModels = 1)
 

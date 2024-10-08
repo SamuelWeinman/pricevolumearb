@@ -4,22 +4,22 @@
 #THEN PROCEEDS AS NORMAL WITH CS REGRESSION.
 
 #NrPC.V: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS", 
-#I.E. WHENS STUDYING IF (STOCK,DAY) IS OVERTRADED.
+#I.E. WHENS STUDYING IF (STOCK, DAY) IS OVERTRADED.
 # ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
 
 Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
 
   #STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE! 
   #FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.
-  StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1,sum)
+  StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
   E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
-  #HERE Overtraded_{I,T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
+  #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
   Overtraded = sapply(1:H, function(i) {
-    y = StandardVolume[,i] #standardise volume on the day
+    y = StandardVolume[, i] #standardise volume on the day
     model = lm(y~E.V$EigenPortfolio) #regress on eigenportfolios
     return(model$residuals) #extract residuals
   })
@@ -28,7 +28,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
   Overtraded= exp(alpha*Overtraded)
 
   #CONSTRUCT WEIGHTED RETURN, PENALISING LARGE TRADING DAYS
-  WeightedReturn = Returns[,(t-H):(t-1)]/Overtraded
+  WeightedReturn = Returns[, (t-H):(t-1)]/Overtraded
   
   #NOW, PROCEED AS BEFORE (CS)#
   
@@ -36,7 +36,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
   E = ExtractEigenPortfolio(WeightedReturn, NrPC = NrPC)
   
   #REGRESS WEIGHTED RETURNS ON EIGENPORTFOLIOS
-  y = WeightedReturn[,H]
+  y = WeightedReturn[, H]
   model = lm(y ~ E$EigenPortfolio)
   Prediction = -model$residuals
   
@@ -44,8 +44,8 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
   return(Prediction)
 }
 
-#PERFORMS CS OVERTRADED ON INTERVAL [START,END]
-CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC.V,alpha, NrPC) {
+#PERFORMS CS OVERTRADED ON INTERVAL [START, END]
+CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC.V, alpha, NrPC) {
   
   #PREPARE CORES#
   
@@ -55,7 +55,7 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Volume", "Returns", "H", "NrPC.V","alpha", "NrPC")
+  Localvarlist = c("Volume", "Returns", "H", "NrPC.V", "alpha", "NrPC")
   
   
   #OPEN CORES AND TRANSFER

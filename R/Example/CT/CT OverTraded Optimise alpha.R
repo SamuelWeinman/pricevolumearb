@@ -1,4 +1,4 @@
-Alpha.Candidates = seq(40,250,by = 15)
+Alpha.Candidates = seq(40,250, by = 15)
 
 Scores = list()
 
@@ -9,8 +9,8 @@ for (i in 1:length(Alpha.Candidates)){
                                Start = 500, End = ncol(Returns),
                                H = 252, NrPC.V = 25, NrPC = 20,
                                alpha = A,
-                               L=45,bSensativity = 0.01)
-  S = performFullAnalysis(Returns,Preds, r = 30, Q = (1:4)/4)
+                               L=45, bSensativity = 0.01)
+  S = performFullAnalysis(Returns, Preds, r = 30, Q = (1:4)/4)
   Scores = append(Scores, list(S))
   Sys.time()
 }
@@ -51,8 +51,8 @@ Plot.Sharpe = ggplot(data, aes(x = alpha, y = Mean/sd * sqrt(252)))+ geom_point(
 
 
 
-Layout = matrix(c(1,3,2,3), nrow = 2)
-Plot = grid.arrange(Plot.Mean, Plot.Sd,Plot.Sharpe, layout_matrix = Layout)
+Layout = matrix(c(1,3,2, 3), nrow = 2)
+Plot = grid.arrange(Plot.Mean, Plot.Sd, Plot.Sharpe, layout_matrix = Layout)
 
 
 ggsave(filename = "Performance.OverTrading.CT.png", 
@@ -67,14 +67,14 @@ Scores = read.csv("./Results/Predictions/CT OverTrading/Scores.CT.OverTrading.Ov
 
 Sharpe = list()
 for (i in 1:15) {
-  Sharpe[[2*i -1]] = unique(Scores[,which(str_sub(colnames(Scores),-6,-1)== "Sharpe")[2*i-1]])
-  Sharpe[[2*i]] = unique(Scores[,which(str_sub(colnames(Scores),-6,-1)== "Sharpe")[2*i]])
+  Sharpe[[2*i -1]] = unique(Scores[,which(str_sub(colnames(Scores),-6, -1)== "Sharpe")[2*i-1]])
+  Sharpe[[2*i]] = unique(Scores[,which(str_sub(colnames(Scores),-6, -1)== "Sharpe")[2*i]])
 }
 
 PPT = list()
 for (i in 1:15) {
-  PPT[[2*i -1]] = unique(Scores[,which(str_sub(colnames(Scores),-3,-1)== "PPT")[2*i-1]])
-  PPT[[2*i]] = unique(Scores[,which(str_sub(colnames(Scores),-3,-1)== "PPT")[2*i]])
+  PPT[[2*i -1]] = unique(Scores[,which(str_sub(colnames(Scores),-3, -1)== "PPT")[2*i-1]])
+  PPT[[2*i]] = unique(Scores[,which(str_sub(colnames(Scores),-3, -1)== "PPT")[2*i]])
 }
 
 
@@ -90,8 +90,8 @@ for (i in 1:15) {
 }
 
 
-SharpePPT.OT.CT.OverAlpha = createSharpePPTPlot(Scores=Scores[seq(1,15,by = 2)],
-                     Labels = Alpha.Candidates[seq(1,15,by = 2)],
+SharpePPT.OT.CT.OverAlpha = createSharpePPTPlot(Scores=Scores[seq(1,15, by = 2)],
+                     Labels = Alpha.Candidates[seq(1,15, by = 2)],
                      BaseModels = 1,
                      Type = "CT")
 

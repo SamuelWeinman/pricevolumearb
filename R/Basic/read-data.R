@@ -2,11 +2,11 @@ setwd("~/MSc Statistical Science/Dissertation")
 
 ###READ DATA
 Close = read.csv(file = "Data//CLOSE.csv", header = TRUE)
-Close = as.data.frame(Close[,-1], row.names = as.character(Close[,1]))
+Close = as.data.frame(Close[, -1], row.names = as.character(Close[, 1]))
 colnames(Close) = str_remove(colnames(Close), "X") 
 
 Volume = read.csv("Data//VOLUME.csv", header = TRUE)
-Volume = as.data.frame(Volume[,-1], row.names = as.character(Volume[,1]))
+Volume = as.data.frame(Volume[, -1], row.names = as.character(Volume[, 1]))
 colnames(Volume) = str_remove(colnames(Volume), "X") #remove the X character
 
 
@@ -18,7 +18,7 @@ colnames(Volume) = str_remove(colnames(Volume), "X") #remove the X character
 #LOOKING AT CLOSE-CLOSE PRICES
 ConstructReturnMatrix <- function(CLOSE, h) {
   T = ncol(CLOSE)
-  Returns =( CLOSE[,(h+1):T]-CLOSE[,1:(T-h)] ) / CLOSE[,1:(T-h)] 
+  Returns =( CLOSE[,(h+1):T]-CLOSE[, 1:(T-h)] ) / CLOSE[, 1:(T-h)] 
   return(Returns)
 }
 
@@ -101,7 +101,7 @@ SanityCheck <- function(Volume, Returns, PropStocksZero, PropDaysZero, PropDaysU
   #REMOVE ROWS IF NECESSARY I.E. length(Rows$RowNumbers) > 0
   #PRINT STOCKS THAT WERE REMOVED, OR PRINT THAT NO STOCKS WERE REMOVED.
   if (length(Rows$RowNumbers) > 0) {
-    ReturnsClean = Returns[-Rows$RowNumbers,]
+    ReturnsClean = Returns[-Rows$RowNumbers, ]
     print(paste("The following Stocks were removed:", paste(Rows$Stocks, collapse = " ")))
   } else {
     ReturnsClean = Returns
@@ -111,7 +111,7 @@ SanityCheck <- function(Volume, Returns, PropStocksZero, PropDaysZero, PropDaysU
   
   #REMOVE COLUMNS IF NECESSARY
   if (length(Columns$ColumnNumbers) > 0) {
-    ReturnsClean = ReturnsClean[,-Columns$ColumnNumbers]
+    ReturnsClean = ReturnsClean[, -Columns$ColumnNumbers]
     print(paste("The following dates were removed:", paste(Columns$Dates, collapse = " ")))
   } else {
     print("No Dates Were Removed")
@@ -160,8 +160,8 @@ RemoveStockWithZeroVolume <- function(Returns, Volume) {
   }
   
   
-  ReturnsClean = Returns[-StockWithZeroVolume,]
-  VolumeClean = Volume[-StockWithZeroVolume,]
+  ReturnsClean = Returns[-StockWithZeroVolume, ]
+  VolumeClean = Volume[-StockWithZeroVolume, ]
   
   print(paste("The following stocks were removed:", paste(rownames(Returns)[StockWithZeroVolume], collapse = " ")))
   paste("Totally", paste(length(StockWithZeroVolume)), "stocks removed")

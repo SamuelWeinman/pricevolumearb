@@ -7,7 +7,7 @@ k = 4
 MinSize = 50
 
 #CONSTRUCT WRIGHTED CORRELATION MATRIX
-rho = alpha* ConstructRho(Returns[,(t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[,(t-H):(t-1)])
+rho = alpha* ConstructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[, (t-H):(t-1)])
 
 #CREATE CLUSTERS
 Clusters = ConstructClusters(rho = rho, k = k, MinSize = MinSize)
@@ -20,11 +20,11 @@ Sizes = sapply(1:4, function(i) length(Clusters[[i]]))
 Clusters.Short = data.frame(n = 1)
 for (i in 1:4) {
   Cluster = Clusters[[i]]
-  Index = which(order(Volume[Cluster,t-1])<11)
+  Index = which(order(Volume[Cluster, t-1])<11)
   Companies = rownames(Returns)[Cluster[Index]]
-  Clusters.Short= cbind(Clusters.Short,Companies)
+  Clusters.Short= cbind(Clusters.Short, Companies)
 }
-Clusters.Short = Clusters.Short[,-1]
+Clusters.Short = Clusters.Short[, -1]
 colnames(Clusters.Short) = "1:4"
 
 stargazer(Clusters.Short, summary = FALSE)

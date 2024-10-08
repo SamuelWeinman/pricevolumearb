@@ -10,7 +10,7 @@ L = 45
 ###################### PERFORM CALCULATIONS ##################
 
 #LAST H DAYS RETURN
-ReturnsShort = Returns[,(t-H):(t-1)]
+ReturnsShort = Returns[, (t-H):(t-1)]
 
 #CONSTRUCT CORRELATION MATRIX
 Rho = ConstructRho(ReturnsShort)
@@ -19,7 +19,7 @@ Rho = ConstructRho(ReturnsShort)
 E = eigen(Rho)
 
 #CALCULATE THE SD OF THE RETURNS, BASED ON STOCK
-SigmaPerStock = apply(ReturnsShort,1,sd) #the ith entry is the sd of the ith stock
+SigmaPerStock = apply(ReturnsShort,1, sd) #the ith entry is the sd of the ith stock
 
 
 #CONSTRUCT EIGENPORTFOLIOS
@@ -29,7 +29,7 @@ Q = E$vectors / SigmaPerStock
 
 ###################### PLOT OF FIRST AND SECOND EIGENPORTFOLIO ##################
 
-FirstPortfolio = Q[,1]
+FirstPortfolio = Q[, 1]
 mean(FirstPortfolio<0) #almost all negative
 
 
@@ -43,13 +43,13 @@ data.1 = data.frame(Values = Values.1, Stocks = as.factor(Stocks.1))
 EigenPortfolioDistr.1 = ggplot(data.1, aes(x = Stocks, y = Values)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#1B9E77") +
   xlab("Stock") + ylab("Amount invested ($)") +
-  scale_y_continuous(limits = c(-15,15)) +
+  scale_y_continuous(limits = c(-15, 15)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 
 
-SencondPortfolio = Q[,2]
+SencondPortfolio = Q[, 2]
 
 
 Order.2 = order(abs(SencondPortfolio), decreasing = T)
@@ -62,7 +62,7 @@ data.2 = data.frame(Values = Values.2, Stocks = as.factor(Stocks.2))
 EigenPortfolioDistr.2 = ggplot(data.2, aes(x = Stocks, y = Values)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#D95F02") +
   xlab("Stock") + ylab("Amount invested ($)") +
-  scale_y_continuous(limits = c(-15,15)) + 
+  scale_y_continuous(limits = c(-15, 15)) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
       
@@ -79,12 +79,12 @@ F= t(Q) %*% as.matrix(ReturnsShort)
 EigenReturns = F
 
 
-CumReturn = apply(EigenReturns,1,cumsum)
+CumReturn = apply(EigenReturns,1, cumsum)
 
 
-data = data.frame(Value = as.numeric(CumReturn[,1:2]),
-                  EigenPortfolio = as.factor(as.numeric(sapply(1:2, function(i) rep(i,H)))),
-                  Dates = rep(as.Date(colnames(Returns)[(t-H):(t-1)],format = "%Y%m%d"),2))
+data = data.frame(Value = as.numeric(CumReturn[, 1:2]),
+                  EigenPortfolio = as.factor(as.numeric(sapply(1:2, function(i) rep(i, H)))),
+                  Dates = rep(as.Date(colnames(Returns)[(t-H):(t-1)], format = "%Y%m%d"), 2))
 
 
 plot.EigenReturn = ggplot(data = data, aes(x = Dates, y = Value)) +
@@ -98,7 +98,7 @@ plot.EigenReturn = ggplot(data = data, aes(x = Dates, y = Value)) +
 
 
 
-layout = matrix(c(1,3,2,3), nrow = 2)
+layout = matrix(c(1,3,2, 3), nrow = 2)
 EigenExample.plot = grid.arrange(EigenPortfolioDistr.1, EigenPortfolioDistr.2, plot.EigenReturn, 
              layout_matrix = layout)
 

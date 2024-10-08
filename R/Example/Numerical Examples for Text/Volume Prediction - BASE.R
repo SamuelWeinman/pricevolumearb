@@ -5,8 +5,8 @@ NrGroups = 7
 
 col = which(colnames(Prediction.CS) == t)
 
-Pred.CS = unlist(Prediction.CS[,col])
-Pred.CT = unlist(Prediction.CT[,col])
+Pred.CS = unlist(Prediction.CS[, col])
+Pred.CT = unlist(Prediction.CT[, col])
 
 
 
@@ -14,7 +14,7 @@ Pred.CT = unlist(Prediction.CT[,col])
 
 
 
-StandardVolume = unlist(Volume[,t-1] / apply(Volume[,(t-d):(t-1)],1,mean))
+StandardVolume = unlist(Volume[, t-1] / apply(Volume[,(t-d):(t-1)],1, mean))
 
 
 
