@@ -37,7 +37,7 @@ Kpar.List = list(list(sigma = 0.2), #rbfdor
 # 
 # 
 # 
-# write.csv(Scores.CS.KPCA,  file= "./Results/Predictions/Scores.CS.KPCA.OverKernel.csv")
+# write.csv(Scores.CS.KPCA, file= "./Results/Predictions/Scores.CS.KPCA.OverKernel.csv")
 
 
 

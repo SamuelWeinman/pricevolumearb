@@ -3,10 +3,10 @@
 constructRho <- function(returns) {
   
   #STANDARDISE
-  y = apply(returns, 1, scale)
+  y <- apply(returns, 1, scale)
   
   #CONSTRUCT CORRELATION MATRIX
-  rho = cor(y)
+  rho <- cor(y)
   
   #RETURN
   return(rho)

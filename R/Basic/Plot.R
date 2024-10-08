@@ -42,12 +42,11 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
     })
     method <- as.character(method)
     method[base_line == 1] <- "AA"
-  } else{
-  #method AS VECTOR
-  method <- sapply(1:r, function(i){
-    rep(labels[i], 8*t)
-  })
-  method <- as.factor(method)
+  } else {
+    method <- sapply(1:r, function(i){
+      rep(labels[i], 8*t)
+    })
+    method <- as.factor(method)
   }
   
   
@@ -71,37 +70,26 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   #IF TYPE IS NOT "BASE", WE RE-ORDER THE ROWS OF THE DATA FRAME TO MAKE SURE THAT THE COLOURS MATCH SHARPE PPT PLOT.
   #IE WHEN USING SIDE-BY-SIDE IN BARPLOT, IT WILL SORT THE COLOURS IN ALPHABETICAL ORDER. NEED TO MAKE SURE IT DOES THE SAME HERE!
-  
-  
   if (type != "BASE") {
-    data = data[order(method), ]
-    labels = labels[order(unique(method))]
+    data <- data[order(method), ]
+    labels <- labels[order(unique(method))]
   }
-  
-  
-  
-  
-  
-  
   
   #CHOOSE PALETTE ACCORDINGLY
     if (type == "CS") {
-      p = brewer.pal(11, "PiYG")[c(1:3, 9:11)]
+      p <- brewer.pal(11, "PiYG")[c(1:3, 9:11)]
     }
     
     if (type == "CT") {
-      p = brewer.pal(11, "BrBG")[c(1:3, 9:11)]
+      p <- brewer.pal(11, "BrBG")[c(1:3, 9:11)]
     }
     
     if (type == "BASE") {
-      p = c(brewer.pal(11, "PiYG")[1], brewer.pal(11, "BrBG")[1])
+      p <- c(brewer.pal(11, "PiYG")[1], brewer.pal(11, "BrBG")[1])
     }
-    
-  
-  
   
   #CREATE PLOT
-  plot = ggplot(data, aes(x = dates, y = CumPnL)) + #x, y axis 
+  plot <- ggplot(data, aes(x = dates, y = CumPnL)) + #x, y axis 
     geom_line(aes(colour = method)) + #method as colour
     scale_colour_manual(values = p, labels = labels) + #palette
     scale_x_date(date_breaks = "4 years", date_labels = "%Y") + xlab("")+ #format x-axis
@@ -110,13 +98,13 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
   
   
   #SPLIT ON SUBPLOTS
-  plot = plot + facet_grid(rows = vars(Quantile), cols = vars(Standardised)) + #sub-plots
-    theme(legend.position = "top",  legend.title = element_blank()) #format legend
+  plot <- plot + facet_grid(rows = vars(Quantile), cols = vars(Standardised)) + #sub-plots
+    theme(legend.position = "top", legend.title = element_blank()) #format legend
   
   
   #ADD TITLE IF IN THE INPUTR
   if (!missing(title)) {
-    plot = plot + ggtitle(title)
+    plot <- plot + ggtitle(title)
   }
   
   #RETURN
@@ -138,59 +126,52 @@ createCumSumPnLPlot = function(scores, labels, title, type, base_models) {
 createSharpePPTPlot = function(scores, labels, title, base_models, type, legendTitle) {
 
   #NR OF methodS
-  r = length(scores) 
+  r <- length(scores) 
   
   
   #SHARPE RATIO AS VECTOR
-  share = sapply(1:r, function(i){
-    c(scores[[i]]$regular$share, scores[[i]]$regular$share)
+  sharp <- sapply(1:r, function(i){
+    c(scores[[i]]$regular$sharp, scores[[i]]$regular$sharp)
   })
-  share = as.numeric(share)
+  sharp <- as.numeric(sharp)
   
   
   #PPT AS VECTOR
-  ppt = sapply(1:r, function(i){
+  ppt <- sapply(1:r, function(i){
     c(scores[[i]]$regular$ppt, scores[[i]]$regular$ppt)
   })
-  ppt = as.numeric(ppt)
-  
-
-  
+  ppt <- as.numeric(ppt)
   
   #base_line
-  base_line = sapply(1:r, function(i) {
+  base_line <- sapply(1:r, function(i) {
     rep(i %in% base_models ,8)
   })
-  base_line = as.numeric(base_line)
-  
-  
+  base_line <- as.numeric(base_line)
+
   #method AND LABEL AS VECTORS. IN THE CASE WHEN TYPE = "BASE", THERE IS NO RE-ORDERING SO labels = method
-  method = sapply(1:r, function(i) {
+  method <- sapply(1:r, function(i) {
     rep(labels[i], 8)
   })
-  method = as.character(method)
-
+  method <- as.character(method)
   
   #IF TYPE = "CS" OR "CW", THE base_line method IS GIVEN NAME "AA" TO ENSURE THAT IT SHOWS UP IN THE LEFTERMOST OF THE GRAPH. THE NAME ON THE LABEL IS STILL THE SAME AS WHAT IS GIVEN IN THE INPUT "LAVELS".
   #ALSO NEED TO REORDER labels AS THE BARS WILL BE SORTED IN ALPHABETICAL ORDER
   if (type != "BASE") {
-    method[base_line == 1] = "AA"
-    labels = c(labels[base_models], sort(labels[-base_models]))
+    method[base_line == 1] <- "AA"
+    labels <- c(labels[base_models], sort(labels[-base_models]))
   }
 
   #FINALLY, CHANGE method TO FACTOR
-  method = as.factor(method)
-  
+  method <- as.factor(method)
   
   #QUANTILE AS VECTOR
-  Quantile = rep((1:4)/4, r*2)
+  Quantile <- rep((1:4)/4, r*2)
   
   #STANDARDISED AS VECTOR
-  Standardised = rep(c(rep("Not Standardised",4),rep("Standardised",4)), r)
-  
+  Standardised <- rep(c(rep("Not Standardised",4),rep("Standardised",4)), r)
   
   #CREATE DATA FRAME
-  data = data.frame(share = share,
+  data <- data.frame(sharp = sharp,
                     ppt = ppt,
                     method = method,
                     base_line = base_line,
@@ -200,58 +181,53 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
   
   #CHOOSE PALETTE DEPENDING ON TYPE
   if (type == "CS") {
-    p = brewer.pal(11, "PiYG")[c(1:3, 9:11)]
+    p <- brewer.pal(11, "PiYG")[c(1:3, 9:11)]
     if (length(scores) == 7) {
-      p = brewer.pal(11, "PiYG")[c(1:4, 9:11)]
+      p <- brewer.pal(11, "PiYG")[c(1:4, 9:11)]
     }
     
     if (length(scores) == 8) {
-      p = brewer.pal(11, "PiYG")[c(1:5, 9:11)]
+      p <- brewer.pal(11, "PiYG")[c(1:5, 9:11)]
     }
   }
   
   if (type == "CT") {
-    p = brewer.pal(11, "BrBG")[c(1:3, 9:11)]
+    p <- brewer.pal(11, "BrBG")[c(1:3, 9:11)]
     if (length(scores) == 8) {
-      p = brewer.pal(11, "BrBG")[c(1:5, 9:11)]
+      p <- brewer.pal(11, "BrBG")[c(1:5, 9:11)]
     }
   }
   
   
   if (type == "BASE") {
-    p = c(brewer.pal(11, "PiYG")[1], brewer.pal(11, "BrBG")[1])
+    p <- c(brewer.pal(11, "PiYG")[1], brewer.pal(11, "BrBG")[1])
   }
 
   
   #CREATE SHARPE RATIO PLOT
-  bar1 = ggplot(data = data, aes(x = Quantile, y = share, fill = method, width = 0.2,
+  bar1 <- ggplot(data = data, aes(x = Quantile, y = sharp, fill = method, width = 0.2,
                                color = base_line)) + 
     geom_bar(stat = "identity", position = "dodge")+ #create barplot, method as colour
     scale_fill_manual(values = p, labels = labels) + #palette, labels
     scale_x_continuous(breaks = (1:4)/4, labels = c("25%", "50%", "75%", "100%")) +
     #x-axis 
-    ylab("Sharpe Ratio") +scale_y_continuous(limits = c(0, max(data$share+0.5))) + #y-axis label
+    ylab("Sharpe Ratio") +scale_y_continuous(limits = c(0, max(data$sharp+0.5))) + #y-axis label
     facet_grid(cols = vars(Standardised)) + #subplots
     theme_minimal() + #theme
     guides(col = FALSE) +
     theme(legend.position = "top") 
   
   if (missing(legendTitle)) {
-    bar1 = bar1 + theme(legend.title =  element_blank()) #legend
+    bar1 <- bar1 + theme(legend.title =  element_blank()) #legend
   } else {
-    bar1 = bar1 + guides(fill = guide_legend(title = legendTitle))
+    bar1 <- bar1 + guides(fill = guide_legend(title = legendTitle))
   }
   
   
   #ADD TITLE ABOVE SHARPE RATIO IF IN THE INPUT
   if (!missing(Title)) {
-    bar1 = bar1 + ggtitle(Title)
+    bar1 <- bar1 + ggtitle(Title)
   }
-  
-  
-
-  
-  
   
   
   ###CREATE BARPLOT OVER PPT
@@ -266,7 +242,6 @@ createSharpePPTPlot = function(scores, labels, title, base_models, type, legendT
     theme_minimal() + #theme
     theme(legend.position = "none") #legend 
     
-  
   #MERGE
   barplot = grid.arrange(bar1, bar2, nrow = 2)
   

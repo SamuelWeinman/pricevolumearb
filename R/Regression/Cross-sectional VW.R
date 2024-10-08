@@ -87,7 +87,7 @@ Outside_CrossSectionRegression.VW = function(Returns, Volume, Start, End, H, NrP
   for (k in 1:K) {
     map = MAP.list[[k]] #extract map
     MappedVolume = map(Volume) #map volume
-    preds=CrossSectionRegression.VW(Returns = Returns,  #perform calculations with mapped volume
+    preds=CrossSectionRegression.VW(Returns = Returns, #perform calculations with mapped volume
                                   Volume = MappedVolume,
                                   Start = Start, End = End, 
                                   H = H,

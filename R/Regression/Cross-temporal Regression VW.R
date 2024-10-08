@@ -68,7 +68,7 @@ Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H, L, bSens
   for (k in 1:K) { #loop through mappings
     map = MAP.list[[k]] #extract map
     MappedVolume = map(Volume) #map volumes
-    preds=CTRegression.VW(Returns = Returns,  #perform calculations with mapped volume
+    preds=CTRegression.VW(Returns = Returns, #perform calculations with mapped volume
                           Volume = MappedVolume,
                           Start = Start, End = End, 
                           NrPC=NrPC,H=H, L = L,
