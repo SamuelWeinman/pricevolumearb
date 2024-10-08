@@ -1,11 +1,9 @@
-library(roll)
-
 ###CALCULATE PnL ON PARTICULAR DAY
 #P: PREDICTION
 #ReturnVector: returns ON THE FOLLOWING DAY (IE DAY OF INTEREST)
 #Q: (quantile) LOOK AT TOP k% STRONGEST predictions. 
-#  E.G Q=0.25 means only look at top 25% strongest.
-#  TO LOOK AT ALL, USE Quantile=100
+#  E.G Q = 0.25 means only look at top 25% strongest.
+#  TO LOOK AT ALL, USE Quantile = 100
 #  CAN BE VECTOR, IN WHICH CASE WILL RETURN SEVERAL VALUES
 calculatePnL <- function(returns, p, q) {
   
@@ -26,7 +24,7 @@ calculatePnL <- function(returns, p, q) {
     
     #CALCULATE PnL 
     #LOOK AT SIGN OF PREDICTION AND NOT THE PREDICTION ITSELF
-    PnL[i] <- as.numeric(sign(p[index]) %*% log(1+returns[Index])) #evaluated against next days true return i
+    res[i] <- as.numeric(sign(p[index]) %*% log(1+returns[index])) #evaluated against next days true return i
   } 
   
   #RETURN
@@ -120,14 +118,14 @@ performFullAnalysis <- function(returns, predictions, q, r, subtract_spy = FALSE
 
   #ANALYSIS ON NON-STANDARDISED DATA
   #NOTE THAT WE TAKE AWAY THE FIRST R-1 DAYS TO ENSURE SAME FORMAT AS WHEN STANDARDISED
-  regular = calculatePerformanceMeasures(returns, predictions[,-(1:(r-1))], q)
+  regular <- calculatePerformanceMeasures(returns, predictions[,-(1:(r-1))], q)
   
   #STANDARDISED 
   #WE REMOVE THE FIRST R-1 COLUMNS AS THERE IS NOT ENOUGH DATA TO STANDARDISE
-  PredStandard <- calculateRollingStandardDeviation[,-(1:(r-1))] / RollingSD(predictions, r)
+  pred_standard <- calculateRollingStandardDeviation[,-(1:(r-1))] / RollingSD(predictions, r)
   
   #PERFORMANCE AFTER STANDARDISATION
-  Standard <- calculatePerformanceMeasures(returns, PredStandard, Q) 
+  standard <- calculatePerformanceMeasures(returns, pred_standard, Q) 
   
   #RETURN
   return(list(
@@ -139,26 +137,26 @@ performFullAnalysis <- function(returns, predictions, q, r, subtract_spy = FALSE
 
 #AS ABOVE, BUT TAKES A LIST OF predictions
 #FOR EXAMPLE, THIS CAN BE L DIFFERENT N x T MATRICES WHERE EACH MATRIX CORRESPONDS TO A PARTICULAR METHOD.
-Analysis.List <- function(returns, predictions.List, Q, r, subtract_spy=FALSE) {
+performFullAnalysisFromList <- function(returns, predictions_list, q, r, subtract_spy = FALSE) {
   
   #NR OF METHODS
-  L= length(predictions.List)
+  l <- length(predictions.List)
   
   #CREATE LIST FOR STORING RESULTS
-  ScoresList <- list()
+  scores_list <- list()
   
   #LOOP THROUGH ALL predictions, AND FOR EACH PREDICTION GIVE A SEPARATE SCORE.
-  for (l in 1:L) {
-    predictions <- predictions.List[[l]] #extract prediction
-    Score <- Analysis(returns=returns, 
-                     predictions=predictions, 
-                     Q=Q, r=r,
-                     subtract_spy=subtract_spy) #calculate corresponding results
-    ScoresList[[l]] <- Score #add to list
+  for (l_i in 1:l) {
+    predictions <- predictions.List[[l_i]] #extract prediction
+    score <- performFullAnalysis(returns = returns, 
+                     predictions = predictions, 
+                     Q = Q, r = r,
+                     subtract_spy = subtract_spy) #calculate corresponding results
+    scores_list[[l_i]] <- score #add to list
   }
   
   #returns
-  return(ScoresList)
+  return(scores_list)
 }
 
 

@@ -2,9 +2,9 @@
 #"CLEAN"
 
 MAP.list = list(f = function(x) x,
-                g=log,
+                g = log,
                 h= function(x) x^(1/3),
-                i=sqrt)
+                i = sqrt)
 
 
 
@@ -14,16 +14,16 @@ MAP.list = list(f = function(x) x,
 
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
-#                                                               Start=500, End=ncol(Returns),
-#                                                               H=252, NrPC=20,d=20,
-#                                                               divide=TRUE,
+#                                                               Start = 500, End = ncol(Returns),
+#                                                               H = 252, NrPC=20,d = 20,
+#                                                               divide = TRUE,
 #                                                               MAP.list)
 # 
 
 
 
 
-Predictions.CS.VW.Divide = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Divide.csv", header=T)
+Predictions.CS.VW.Divide = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Divide.csv", header = T)
 rownames(Predictions.CS.VW.Divide) = Predictions.CS.VW.Divide[,1]
 Predictions.CS.VW.Divide = Predictions.CS.VW.Divide[,-1]
 colnames(Predictions.CS.VW.Divide) = rep(500:4932,4)
@@ -37,8 +37,8 @@ Predictions.CS.VW.Divide = list(Predictions.CS.VW.Divide[,1:4433],
 
 
    
-Scores.CS.VW.Divide = Analysis.List(Returns, Predictions.List=Predictions.CS.VW.Divide,
-                                    Q=(1:4/4), r=30)
+Scores.CS.VW.Divide = performFullAnalysisFromList(Returns, Predictions.List = Predictions.CS.VW.Divide,
+                                    Q = (1:4/4), r = 30)
 
 
 
@@ -48,7 +48,7 @@ names(Scores.CS.VW.Divide.Combined) = c("Not weighted", "x", "log(x)",
                                         "x^1/3", "sqrt(x)")
 
 
-CumSum.CS.VW.Divide= CreatePlot.CumSumPnL(Scores = Scores.CS.VW.Divide.Combined, 
+CumSum.CS.VW.Divide= createCumSumPnLPlot(Scores = Scores.CS.VW.Divide.Combined, 
                                           Labels = c("Not Weighted (Baseline)",
                                                      "V",
                                                      "log(V)",
@@ -62,7 +62,7 @@ CumSum.CS.VW.Divide= CreatePlot.CumSumPnL(Scores = Scores.CS.VW.Divide.Combined,
 
 
 
-SharpePPT.CS.VW.Divide= CreatePlot.SharpePPT(Scores = Scores.CS.VW.Divide.Combined,
+SharpePPT.CS.VW.Divide= createSharpePPTPlot(Scores = Scores.CS.VW.Divide.Combined,
                                              Labels = c("Not Weighted (Baseline)",
                                                         "V",
                                                         "log(V)",
@@ -95,14 +95,14 @@ ggsave(filename = "SharpePPT.CS.VW.Divide.png",
 
 # Predictions.CS.VW.Multiply<- Outside_CrossSectionRegression.VW(Returns, 
 #                                                               Volume, 
-#                                                               Start=500, End=ncol(Returns),
-#                                                               H=252, NrPC=20,d=20,
-#                                                               divide=FALSE,
+#                                                               Start = 500, End = ncol(Returns),
+#                                                               H = 252, NrPC=20,d = 20,
+#                                                               divide = FALSE,
 #                                                               MAP.list)
 
 
 
-Predictions.CS.VW.Multiply = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Multiply.csv", header=T)
+Predictions.CS.VW.Multiply = read.csv("./Results/Predictions/CS VW/Predictions.CS.VW.Multiply.csv", header = T)
 rownames(Predictions.CS.VW.Multiply) = Predictions.CS.VW.Multiply[,1]
 Predictions.CS.VW.Multiply = Predictions.CS.VW.Multiply[,-1]
 colnames(Predictions.CS.VW.Multiply) = rep(500:4932,4)
@@ -117,8 +117,8 @@ Predictions.CS.VW.Multiply = list(Predictions.CS.VW.Multiply[,1:4433],
 
 
 
-Scores.CS.VW.Multiply = Analysis.List(Returns, Predictions.List=Predictions.CS.VW.Multiply,
-                                    Q=(1:4/4), r=30)
+Scores.CS.VW.Multiply = performFullAnalysisFromList(Returns, Predictions.List = Predictions.CS.VW.Multiply,
+                                    Q = (1:4/4), r = 30)
 Scores.CS.VW.Multiply.Combined = append(list(Scores.CS),Scores.CS.VW.Multiply)
 names(Scores.CS.VW.Multiply.Combined) = c("Not weighted", "x", "log(x)",
                                         "x^1/3", "sqrt(x)")
@@ -126,7 +126,7 @@ names(Scores.CS.VW.Multiply.Combined) = c("Not weighted", "x", "log(x)",
 
 
 
-CumSum.CS.VW.Multiply= CreatePlot.CumSumPnL(Scores =Scores.CS.VW.Multiply.Combined, 
+CumSum.CS.VW.Multiply= createCumSumPnLPlot(Scores =Scores.CS.VW.Multiply.Combined, 
                                             Labels = c("Not Weighted (Baseline)",
                                                        "V",
                                                        "log(V)",
@@ -140,7 +140,7 @@ CumSum.CS.VW.Multiply= CreatePlot.CumSumPnL(Scores =Scores.CS.VW.Multiply.Combin
 
 
 
-SharpePPT.CS.VW.Multiply = CreatePlot.SharpePPT(Scores =Scores.CS.VW.Multiply.Combined, 
+SharpePPT.CS.VW.Multiply = createSharpePPTPlot(Scores =Scores.CS.VW.Multiply.Combined, 
                                                 Labels = c("Not Weighted (Baseline)",
                                                            "V",
                                                            "log(V)",

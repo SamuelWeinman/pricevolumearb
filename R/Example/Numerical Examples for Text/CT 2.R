@@ -28,9 +28,9 @@ true = Returns[i,t]
 estimate = as.numeric(model$coefficients) %*% c(1,as.numeric( t(Q[,1:20]) %*% as.matrix(Returns[,t]) ) )
 
 
-residual=true-estimate
+residual = true-estimate
 
-pvalue = 2* pnorm(residual - m, sd=sqrt(sigma2.eq), lower.tail = FALSE)
+pvalue = 2* pnorm(residual - m, sd = sqrt(sigma2.eq), lower.tail = FALSE)
 
 ################# TOMORROWS RETURN DISTRIBUTION ############################
 
@@ -40,17 +40,17 @@ pvalue = 2* pnorm(residual - m, sd=sqrt(sigma2.eq), lower.tail = FALSE)
 
 
 x = seq(m-3*sqrt(sigma2.eq),m+3*sqrt(sigma2.eq), length.out = 10^5)
-y = dnorm(x-m, sd=sqrt(sigma2.eq))
+y = dnorm(x-m, sd = sqrt(sigma2.eq))
 
 
-data = data.frame(x=x, y=y, 
+data = data.frame(x = x, y = y, 
                   pointx = c(residual, rep(100, length(x)-1)),
-                  pointy = c(dnorm(residual-m, sd=sqrt(sigma2.eq)), rep(100, length(x)-1)))
+                  pointy = c(dnorm(residual-m, sd = sqrt(sigma2.eq)), rep(100, length(x)-1)))
 
 
-plot = ggplot(data, aes(x=x, y=y)) +
-        geom_line(col="red") +
-        geom_point(x=data$pointx, y=data$pointy, col="blue", size=3) +
+plot = ggplot(data, aes(x = x, y = y)) +
+        geom_line(col = "red") +
+        geom_point(x = data$pointx, y = data$pointy, col = "blue", size = 3) +
         ylab("Estimated density") + xlab("Residual on September 1, 2017")
 
 

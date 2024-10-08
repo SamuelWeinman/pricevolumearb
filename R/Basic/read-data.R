@@ -1,11 +1,11 @@
 setwd("~/MSc Statistical Science/Dissertation")
 
 ###READ DATA
-Close = read.csv(file="Data//CLOSE.csv", header = TRUE)
+Close = read.csv(file = "Data//CLOSE.csv", header = TRUE)
 Close = as.data.frame(Close[,-1], row.names = as.character(Close[,1]))
 colnames(Close) = str_remove(colnames(Close), "X") 
 
-Volume = read.csv("Data//VOLUME.csv", header=TRUE)
+Volume = read.csv("Data//VOLUME.csv", header = TRUE)
 Volume = as.data.frame(Volume[,-1], row.names = as.character(Volume[,1]))
 colnames(Volume) = str_remove(colnames(Volume), "X") #remove the X character
 
@@ -14,7 +14,7 @@ colnames(Volume) = str_remove(colnames(Volume), "X") #remove the X character
 ###CONSTRUCT RETURN MATRIX
 #INPUTS AS FOLLOWS:
 #  CLOSE: MATRIX OF CLOSING PRICES (AS ABOVE)
-#  H: NUMBER OF DAYS TO GET RETURN ON, E.G. h=1 CORRESPONDS TO ONE DAY RETURNS
+#  H: NUMBER OF DAYS TO GET RETURN ON, E.G. h = 1 CORRESPONDS TO ONE DAY RETURNS
 #LOOKING AT CLOSE-CLOSE PRICES
 ConstructReturnMatrix <- function(CLOSE, h) {
   T = ncol(CLOSE)
@@ -129,8 +129,8 @@ SanityCheck <- function(Volume, Returns, PropStocksZero, PropDaysZero, PropDaysU
     stop("Row or Column names don't match")
   }
 
-  return(list(ReturnsClean=ReturnsClean,
-              VolumesClean=VolumeClean))
+  return(list(ReturnsClean = ReturnsClean,
+              VolumesClean = VolumeClean))
   
 }
 
@@ -154,8 +154,8 @@ RemoveStockWithZeroVolume <- function(Returns, Volume) {
   if (length(StockWithZeroVolume)==0) { #No stocks to be deleted
     print("No stocks were deleted")
     return(list(
-      Returns=Returns,
-      Volume=Volume
+      Returns = Returns,
+      Volume = Volume
     ))
   }
   
@@ -169,7 +169,7 @@ RemoveStockWithZeroVolume <- function(Returns, Volume) {
   
   return(list(
     Returns = ReturnsClean,
-    Volume=VolumeClean
+    Volume = VolumeClean
   ))
 }
   
@@ -184,12 +184,12 @@ Returns = ConstructReturnMatrix(Close, 1)
 
 #CLEAN DATA
 CleanData = SanityCheck(
-  Volume=Volume,
-  Returns=Returns,
+  Volume = Volume,
+  Returns = Returns,
   PropStocksZero = 0.1,
   PropDaysZero = 0.5,
   PropDaysUpperGrowth = 0.1,
-  UpperBoundGrowth=1)
+  UpperBoundGrowth = 1)
 
 
 Returns = CleanData$ReturnsClean

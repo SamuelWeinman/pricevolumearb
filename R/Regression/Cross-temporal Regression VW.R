@@ -8,8 +8,8 @@
 CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity, d, divide){
   
   #CONSTRUCT WEIGHTED RETURN
-  WeightedReturns = ConstructWeightedReturn(Returns=Returns, Volume=Volume,H=H,d=d,
-                                            divide=divide)
+  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H,d = d,
+                                            divide = divide)
   
   #PREPARE CORES
 
@@ -31,10 +31,10 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity,
   
   #FOR EACH DAY, FIRST STANDARDISE THE RETURNS AND THEN CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   S.Scores = snow::parSapply(cl, Start:End, function(t) {
-    S = CalculatingS.Score(Returns=WeightedReturns[,1:(t-1)], 
-                           NrPC=NrPC,
-                           H=H, L=L,
-                           bSensativity=bSensativity)
+    S = CalculatingS.Score(Returns = WeightedReturns[,1:(t-1)], 
+                           NrPC = NrPC,
+                           H = H, L = L,
+                           bSensativity = bSensativity)
     
     #RETURN THE S-SCORE
     return(S$S)
@@ -46,7 +46,7 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H,L, bSensativity,
   #GET FORECASTS (BASED ON HISTORICAL DATA)
   #THE ROW NAMES WILL THE STOCK TICKERS
   #THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
-  P=-S.Scores
+  P = -S.Scores
   rownames(P) = rownames(Returns)
   colnames(P) = Start:End
   
@@ -68,13 +68,13 @@ Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H,L, bSensa
   for (k in 1:K) { #loop through mappings
     map = MAP.list[[k]] #extract map
     MappedVolume = map(Volume) #map volumes
-    preds=CTRegression.VW(Returns=Returns,  #perform calculations with mapped volume
-                          Volume=MappedVolume,
-                          Start=Start, End=End, 
-                          NrPC=NrPC,H=H,L=L,
-                          bSensativity=bSensativity,
-                          d=d, divide=divide)
-    PredictionsList[[k]]=preds #add to list
+    preds=CTRegression.VW(Returns = Returns,  #perform calculations with mapped volume
+                          Volume = MappedVolume,
+                          Start = Start, End = End, 
+                          NrPC=NrPC,H=H,L = L,
+                          bSensativity = bSensativity,
+                          d = d, divide = divide)
+    PredictionsList[[k]] = preds #add to list
   }
   #RETURN
   return(PredictionsList)

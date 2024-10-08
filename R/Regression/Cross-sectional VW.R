@@ -32,8 +32,8 @@ ConstructWeightedReturn = function(Returns, Volume,H,d,divide) {
 CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d,divide) {
   
   #CONSTRUCT WEIGHTED RETURN
-  WeightedReturns = ConstructWeightedReturn(Returns=Returns, Volume=Volume,H=H,d=d,
-                                            divide=divide)
+  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H,d = d,
+                                            divide = divide)
   
   #PREPARE CORES#
   
@@ -54,10 +54,10 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, NrPC,d,div
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    DayCrossRegression(Returns=WeightedReturns,
-                       t=t,H=H,
-                       NrPC=NrPC)
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    DayCrossRegression(Returns = WeightedReturns,
+                       t=t,H = H,
+                       NrPC = NrPC)
   }) 
   
   #CLOSE CLUSTERS
@@ -87,14 +87,14 @@ Outside_CrossSectionRegression.VW = function(Returns, Volume, Start, End, H, NrP
   for (k in 1:K) {
     map = MAP.list[[k]] #extract map
     MappedVolume = map(Volume) #map volume
-    preds=CrossSectionRegression.VW(Returns=Returns,  #perform calculations with mapped volume
-                                  Volume=MappedVolume,
-                                  Start=Start, End=End, 
-                                  H=H,
-                                  NrPC=NrPC,
-                                  d=d,
-                                  divide=divide)
-    PredictionsList[[k]]=preds #add to list
+    preds=CrossSectionRegression.VW(Returns = Returns,  #perform calculations with mapped volume
+                                  Volume = MappedVolume,
+                                  Start = Start, End = End, 
+                                  H = H,
+                                  NrPC = NrPC,
+                                  d = d,
+                                  divide = divide)
+    PredictionsList[[k]] = preds #add to list
   }
   
   #RETURN

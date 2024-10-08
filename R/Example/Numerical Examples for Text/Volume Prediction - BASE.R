@@ -1,5 +1,5 @@
-d=20
-t=4348
+d = 20
+t = 4348
 NrGroups = 7
 
 
@@ -34,18 +34,18 @@ data = data.frame(Group = 1:7,
 ############# BASE CASE ###########################
 
 
-plotCS = ggplot(data, aes(x=Group, y=Magnitude.CS)) +
-  geom_point(col="red") +
-  scale_x_continuous(breaks = 1:7, labels=1:7) +
+plotCS = ggplot(data, aes(x = Group, y = Magnitude.CS)) +
+  geom_point(col = "red") +
+  scale_x_continuous(breaks = 1:7, labels = 1:7) +
   xlab("Group") + ylab("Average Magnitude") +
   ggtitle("Cross-Sectional Regression")
 
 
 
 
-plotCT = ggplot(data, aes(x=Group, y=Magnitude.CT)) +
-  geom_point(col="blue") +
-  scale_x_continuous(breaks = 1:7, labels=1:7) +
+plotCT = ggplot(data, aes(x = Group, y = Magnitude.CT)) +
+  geom_point(col = "blue") +
+  scale_x_continuous(breaks = 1:7, labels = 1:7) +
   xlab("Group") + ylab("Average Magnitude") +
   ggtitle("Cross-Temporal Regression")
 

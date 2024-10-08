@@ -28,10 +28,10 @@ CTRegression <- function(Returns, Start, End, NrPC,H,L, bSensativity) {
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   S.Scores = snow::parSapply(cl, Start:End, function(t) {
-    S = CalculatingS.Score(Returns=Returns[,1:(t-1)], #using only historical data
-                           NrPC=NrPC,
-                           H=H, L=L,
-                           bSensativity=bSensativity)
+    S = CalculatingS.Score(Returns = Returns[,1:(t-1)], #using only historical data
+                           NrPC = NrPC,
+                           H = H, L = L,
+                           bSensativity = bSensativity)
     
     #RETURN THE S-SCORE
     return(S$S)
@@ -43,7 +43,7 @@ CTRegression <- function(Returns, Start, End, NrPC,H,L, bSensativity) {
   #GET FORECASTS (BASED ON HISTORICAL DATA)
   #THE ROW NAMES WILL THE STOCK TICKERS
   #THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
-  P=-S.Scores
+  P = -S.Scores
   rownames(P) = rownames(Returns)
   colnames(P) = Start:End
   

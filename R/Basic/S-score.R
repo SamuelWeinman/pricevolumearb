@@ -77,15 +77,15 @@ EstimateCoefficeients <- function(Models, bSensativity) {
 
 ###CALCULATE S-SCORE FOR ALL STOCKS AS IN Marco Avellaneda & Jeong-Hyun Lee (2010)
 ###THAT IS, THE AMOUNT BY WHICH THE STOCKS HAVE HAD TOO MUCH RETURNS
-###IF MEAN-REVERSION==0, WE GIVE S=0 AS THERE IS NO MEAN REVERSION.
+###IF MEAN-REVERSION==0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
 #RETURNS MUST BE HISTORY ONLY!
 CalculatingS.Score <- function(Returns, nr_pc,H,L,bSensativity) {
 
   #DECOMPOSE INTO MODELS
-  Models=Decomposition(Returns=Returns,
-                       H=H,
-                       L=L,
-                       nr_pc=nr_pc)
+  Models=Decomposition(Returns = Returns,
+                       H = H,
+                       L = L,
+                       nr_pc = nr_pc)
 
   
   #OBTAIN COEFFICIENTS FROM ABOVE MODELS

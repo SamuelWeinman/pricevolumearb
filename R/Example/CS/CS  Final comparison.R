@@ -1,4 +1,4 @@
-SharpePPT.CS.Final = CreatePlot.SharpePPT(Scores = list(Scores.CS,
+SharpePPT.CS.Final = createSharpePPTPlot(Scores = list(Scores.CS,
                                                         Scores.CS.Combined,
                                                         Scores.CS.full[[6]],
                                                         Scores.CS.Cluster.Weighted,
@@ -7,7 +7,7 @@ SharpePPT.CS.Final = CreatePlot.SharpePPT(Scores = list(Scores.CS,
                                                         Scores.CS.Overtraded),
                                           Labels = c("CS", "CS Combined","CS KPCA","CS Weighted Clustering",
                                                      "CS VW","CS KCCA", "CS Decomposed Volume"),
-                                          Type="CS",
+                                          Type = "CS",
                                           BaseModels = 1)
 
 

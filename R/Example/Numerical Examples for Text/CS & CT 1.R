@@ -1,11 +1,11 @@
 #################### SET PARAMETERS ##########################
 
-t=4096 +252
+t = 4096 +252
 colnames(Returns)[t] 
 
-H=252
-NrPC=20
-L=45
+H = 252
+NrPC = 20
+L = 45
 
 ###################### PERFORM CALCULATIONS ##################
 
@@ -37,14 +37,14 @@ Order.1 = order(abs(FirstPortfolio), decreasing = T)
 Values.1 = FirstPortfolio[Order.1] [1:20] #20 STRONGEST VALUES
 Stocks.1 = rownames(Returns)[Order.1][1:20] #CORRESPONDING NAMES
 Stocks.1 = factor(Stocks.1, levels = Stocks.1) #REORDER
-data.1 = data.frame(Values=Values.1, Stocks=as.factor(Stocks.1))
+data.1 = data.frame(Values = Values.1, Stocks = as.factor(Stocks.1))
 
 #CREATE FIRST PLOT
-EigenPortfolioDistr.1 = ggplot(data.1, aes(x=Stocks, y=Values)) +
-  geom_bar(stat="identity", position="dodge", fill = "#1B9E77") +
+EigenPortfolioDistr.1 = ggplot(data.1, aes(x = Stocks, y = Values)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1B9E77") +
   xlab("Stock") + ylab("Amount invested ($)") +
   scale_y_continuous(limits = c(-15,15)) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 
@@ -56,14 +56,14 @@ Order.2 = order(abs(SencondPortfolio), decreasing = T)
 Values.2 = SencondPortfolio[Order.2] [1:20] #20 STRONGEST VALUES
 Stocks.2 = rownames(Returns)[Order.2][1:20] #CORRESPONDING NAMES
 Stocks.2 = factor(Stocks.2, levels = Stocks.2) #REORDER
-data.2 = data.frame(Values=Values.2, Stocks=as.factor(Stocks.2))
+data.2 = data.frame(Values = Values.2, Stocks = as.factor(Stocks.2))
 
 #CREATE FIRST PLOT
-EigenPortfolioDistr.2 = ggplot(data.2, aes(x=Stocks, y=Values)) +
-  geom_bar(stat="identity", position="dodge", fill = "#D95F02") +
+EigenPortfolioDistr.2 = ggplot(data.2, aes(x = Stocks, y = Values)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#D95F02") +
   xlab("Stock") + ylab("Amount invested ($)") +
   scale_y_continuous(limits = c(-15,15)) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
       
 
@@ -76,7 +76,7 @@ EigenPortfolioDistr.2 = ggplot(data.2, aes(x=Stocks, y=Values)) +
 F= t(Q) %*% as.matrix(ReturnsShort) 
 
 #EXTRACT FIRST 20 EIGENPORTFOLIOS
-EigenReturns=F
+EigenReturns = F
 
 
 CumReturn = apply(EigenReturns,1,cumsum)
@@ -87,10 +87,10 @@ data = data.frame(Value = as.numeric(CumReturn[,1:2]),
                   Dates = rep(as.Date(colnames(Returns)[(t-H):(t-1)],format = "%Y%m%d"),2))
 
 
-plot.EigenReturn = ggplot(data = data, aes(x=Dates, y=Value)) +
+plot.EigenReturn = ggplot(data = data, aes(x = Dates, y = Value)) +
   ylab("Profit ($)") + xlab("Date") +
-  geom_line(aes(colour=EigenPortfolio)) + #EigenPortfolio as colour
-  scale_colour_brewer(palette="Dark2") + #palette
+  geom_line(aes(colour = EigenPortfolio)) + #EigenPortfolio as colour
+  scale_colour_brewer(palette = "Dark2") + #palette
   theme(legend.position = "top") +
   labs(colour= "Eigenportfolio")
 
@@ -98,9 +98,9 @@ plot.EigenReturn = ggplot(data = data, aes(x=Dates, y=Value)) +
 
 
 
-layout = matrix(c(1,3,2,3), nrow=2)
+layout = matrix(c(1,3,2,3), nrow = 2)
 EigenExample.plot = grid.arrange(EigenPortfolioDistr.1, EigenPortfolioDistr.2, plot.EigenReturn, 
-             layout_matrix=layout)
+             layout_matrix = layout)
 
 ggsave(filename = "EigenExample.plot.png", 
        path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
@@ -113,8 +113,8 @@ ggsave(filename = "EigenExample.plot.png",
 data = data.frame(PropExplain = E$values[1:50]/sum(E$values),
                   Nr = 1:50)
 
-EigenPlot = ggplot(data, aes(x=Nr, y=PropExplain)) +
-  geom_bar(stat="identity", position="dodge", fill="red") +
+EigenPlot = ggplot(data, aes(x = Nr, y = PropExplain)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "red") +
   ylab("Proportion variability explained (%)") + xlab("Ordered Component")
 
 

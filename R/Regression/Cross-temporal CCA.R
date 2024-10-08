@@ -61,7 +61,7 @@ DayCrossTemporal.CCA = function(Returns, StandardVolume,t,H,HV,L,NrC.R, NrC.V,bS
   
   #RETURN
   return(list(
-    S=S,
+    S = S,
     MeanReversion = Coefficients$MeanReversion))
 }
 
@@ -91,10 +91,10 @@ CTRegression.CCA = function(Returns, Volume,Start, End,H,HV,L,NrC.R, NrC.V,d,bSe
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   Predictions = snow::parSapply(cl, Start:End, function(t) {
-    S = DayCrossTemporal.CCA(Returns=Returns, StandardVolume=StandardisedVolume,
-                              t=t,H=H,HV=HV,
-                              L=L,NrC.R=NrC.R, NrC.V=NrC.V,
-                              bSensativity=bSensativity)#s-score for the day (accross stocks)
+    S = DayCrossTemporal.CCA(Returns = Returns, StandardVolume = StandardisedVolume,
+                              t=t,H=H,HV = HV,
+                              L=L,NrC.R = NrC.R, NrC.V = NrC.V,
+                              bSensativity = bSensativity)#s-score for the day (accross stocks)
     P = -S$S #predictions is negative s-score
     return(P)
   })

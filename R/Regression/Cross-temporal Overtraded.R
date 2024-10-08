@@ -15,7 +15,7 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L,bSensat
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1,sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V=ExtractEigenPortfolio(StandardVolume, NrPC.V)
+  E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I,T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -34,10 +34,10 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L,bSensat
   ###NOW DECOMPOSE RETURNS (CT)####
   
   #REGRESS EACH OF THE STOCKS ON RETURNS OF EIGENPORTFOLIOS
-  Models=Decomposition(Returns=WeightedReturn,
-                       H=H,
-                       L=L,
-                       NrPC=NrPC)
+  Models=Decomposition(Returns = WeightedReturn,
+                       H = H,
+                       L = L,
+                       NrPC = NrPC)
   
   #ESTIMATE PARAMETERS
   Coefficients = EstimateCoefficeients(Models, bSensativity)
@@ -84,9 +84,9 @@ CTRegression.Overtrade <- function(Volume, Returns,Start, End, H, NrPC.V, NrPC, 
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   Predictions = snow::parSapply(cl, Start:End, function(t) {
-    S = Day.CT.Overtrade(Volume=Volume, Returns=Returns, t=t,
-                         H=H, NrPC.V=NrPC.V, NrPC=NrPC,
-                         alpha=alpha,L=L,bSensativity=bSensativity) # S-SCORE
+    S = Day.CT.Overtrade(Volume = Volume, Returns = Returns, t = t,
+                         H = H, NrPC.V = NrPC.V, NrPC = NrPC,
+                         alpha=alpha,L=L,bSensativity = bSensativity) # S-SCORE
     
     P = -S$S #PREDICTION IS NEGATIVE S-SCORE
     return(P)

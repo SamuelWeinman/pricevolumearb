@@ -14,7 +14,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1,sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V=ExtractEigenPortfolio(StandardVolume, NrPC.V)
+  E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I,T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -67,11 +67,11 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    Day.CS.Overtrade(Volume=Volume, Returns=Returns,
-                     t=t, H=H,
-                     NrPC.V=NrPC.V, NrPC=NrPC,
-                     alpha=alpha)
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    Day.CS.Overtrade(Volume = Volume, Returns = Returns,
+                     t = t, H = H,
+                     NrPC.V = NrPC.V, NrPC = NrPC,
+                     alpha = alpha)
   }) 
   
   #CLOSE CLUSTERS

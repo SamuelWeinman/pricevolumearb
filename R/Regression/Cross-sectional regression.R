@@ -12,8 +12,8 @@ DayCrossRegression <- function(Returns,t,H,NrPC) {
   
   #EXTRACT EIGENPORTFOLIO USING STANDARD PCS
   #USE H DAYS OF HISTORY UP TO TIME t
-  E = ExtractEigenPortfolio(Returns=Returns[,(t-H):(t-1)], 
-                              NrPC=NrPC) 
+  E = ExtractEigenPortfolio(Returns = Returns[,(t-H):(t-1)], 
+                              NrPC = NrPC) 
   
   #PERFORM REGRESSION AND EXTRACT PREDICTION
   y = Returns[,t-1] #returns on last day
@@ -50,10 +50,10 @@ CrossSectionRegression <- function(Returns, Start, End, H, NrPC) {
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    DayCrossRegression(Returns=Returns,
-                       t=t,H=H,
-                       NrPC=NrPC)
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    DayCrossRegression(Returns = Returns,
+                       t=t,H = H,
+                       NrPC = NrPC)
   }) 
   
   #CLOSE CLUSTERS

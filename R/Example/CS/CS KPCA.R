@@ -6,8 +6,8 @@ Kernel.List = c("rbfdot", "polydot", "tanhdot", "laplacedot", "anovadot")
 
 
 Kpar.List = list(list(sigma = 0.2), #rbfdor
-              list(degree=8, scale=2, offset=1), #polydot
-              list(scale=2, offset=1), #tanhdot
+              list(degree = 8, scale = 2, offset = 1), #polydot
+              list(scale = 2, offset = 1), #tanhdot
               list(sigma = 0.2), #laplace
               list(sigma = 0.2, degree =5)) #anovadot
                         
@@ -25,12 +25,12 @@ Kpar.List = list(list(sigma = 0.2), #rbfdor
 #   kernel = Kernel.List[i]
 #   kpar = Kpar.List[[i]]
 #   
-#   Preds = CrossSectionRegression.KPCA(Returns=Returns, Start=500,End=ncol(Returns), 
-#                                       H=252,NrPC=20,
-#                                       kernel=kernel, kpar=kpar)
+#   Preds = CrossSectionRegression.KPCA(Returns = Returns, Start=500,End = ncol(Returns), 
+#                                       H=252,NrPC = 20,
+#                                       kernel = kernel, kpar = kpar)
 #   
 #   
-#   Score = Analysis(Returns, Preds, Q=(1:4)/4, r=30)
+#   Score = Analysis(Returns, Preds, Q = (1:4)/4, r = 30)
 #   
 #   Scores.CS.KPCA = append(Scores.CS.KPCA, list(Score))
 # }
@@ -87,25 +87,25 @@ Labels = c("Linear", "Gaussian", "Polynomial","Hyperbolic Tangent","Laplacian","
 
 
 
-plotSharpePPT = CreatePlot.SharpePPT(Scores.CS.full, 
-                            Labels=Labels,
-                            Type="CS",
+plotSharpePPT = createSharpePPTPlot(Scores.CS.full, 
+                            Labels = Labels,
+                            Type = "CS",
                             BaseModels = 1,
-                            LegendTitle="Kernel:")
+                            LegendTitle = "Kernel:")
 
 ggsave(filename = "SharpePPT.CS.KPCA.png", 
        path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
        plot = plotSharpePPT,
-       width=5, height=5)
+       width = 5, height = 5)
 
 
-plotCumSum = CreatePlot.CumSumPnL(Scores.CS.full, 
-                                  Labels=Labels,
-                                  Type="CS",
+plotCumSum = createCumSumPnLPlot(Scores.CS.full, 
+                                  Labels = Labels,
+                                  Type = "CS",
                                   BaseModels = 1)
 
 
 ggsave(filename = "CumSum.CS.KPCA.png", 
        path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
        plot = plotCumSum,
-       width=5, height=6)
+       width = 5, height = 6)

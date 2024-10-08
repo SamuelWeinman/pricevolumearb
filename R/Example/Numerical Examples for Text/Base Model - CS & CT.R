@@ -6,23 +6,23 @@
 ###############################
 
 #PREDICTION
-#Prediction.CS= CrossSectionRegression(Returns=Returns,
-                                               #Start=500, 
-                                               #End=ncol(Returns), 
-                                               #H=252,
-                                               #NrPC=20)
+#Prediction.CS= CrossSectionRegression(Returns = Returns,
+                                               #Start = 500, 
+                                               #End = ncol(Returns), 
+                                               #H = 252,
+                                               #NrPC = 20)
 #write.csv(Prediction.CS,"./Results/Predictions/Base/Prediction.CS.csv")
 
-Prediction.CS=read.csv("./Results/Predictions/Base/Prediction.CS.csv")
+Prediction.CS = read.csv("./Results/Predictions/Base/Prediction.CS.csv")
 rownames(Prediction.CS) = Prediction.CS[,1]
 Prediction.CS = Prediction.CS[,-1]
 colnames(Prediction.CS) = 500:(ncol(Prediction.CS)+499)
 
 #PERFORMANCE MEASURE
-Scores.CS= Analysis(Returns=Returns,
+Scores.CS= performFullAnalysis(Returns = Returns,
                     Predictions = Prediction.CS, 
-                    Q=(1:4)/4,
-                    r=30)
+                    Q = (1:4)/4,
+                    r = 30)
 
 
 #############################
@@ -31,36 +31,36 @@ Scores.CS= Analysis(Returns=Returns,
 
 #PREDICTION
 # Prediction.CT = CTRegression(Returns = Returns,
-#                             Start=500,
-#                             End=ncol(Returns),
-#                             NrPC=20,
-#                             H=252,
-#                             L=45,
-#                             bSensativity=0.01)
+#                             Start = 500,
+#                             End = ncol(Returns),
+#                             NrPC = 20,
+#                             H = 252,
+#                             L = 45,
+#                             bSensativity = 0.01)
 # 
 # write.csv(Prediction.CT, "./Results/Predictions/Base/Prediction.CT.csv")
 
-Prediction.CT=read.csv("./Results/Predictions/Base/Prediction.CT.csv")
+Prediction.CT = read.csv("./Results/Predictions/Base/Prediction.CT.csv")
 rownames(Prediction.CT) = Prediction.CT[,1]
 Prediction.CT = Prediction.CT[,-1]
 colnames(Prediction.CT) = 500:(ncol(Prediction.CT)+499)
 
 
 #PERFORMANCE MEASURES
-Scores.CT = Analysis(Returns, Prediction.CT, Q=(1:4)/4, r=30)
+Scores.CT = performFullAnalysis(Returns, Prediction.CT, Q = (1:4)/4, r = 30)
 
 
 
 
-CumSum.Base= CreatePlot.CumSumPnL(Scores = list(Scores.CS, Scores.CT),
+CumSum.Base= createCumSumPnLPlot(Scores = list(Scores.CS, Scores.CT),
                                   Labels = c("Cross-Sectional", "Cross-Temporal"),
-                                  Type="BASE")
+                                  Type = "BASE")
 
 
-SharpePPT.Base = CreatePlot.SharpePPT(Scores = list(Scores.CS, Scores.CT), 
-                                      BaseModels=1:2,
+SharpePPT.Base = createSharpePPTPlot(Scores = list(Scores.CS, Scores.CT), 
+                                      BaseModels = 1:2,
                                       Labels = c("Cross-Sectional", "Cross-Temporal"),
-                                      Type="BASE")
+                                      Type = "BASE")
 
 
 
@@ -84,14 +84,14 @@ ggsave(filename = "SharpePPT.Base.png",
 
 
 ####### MARKET EXCESS
-Scores.CS.ME = Analysis(Returns, Prediction.CS, Q=(1:4)/4, r=30, SubtractSpy = TRUE)
-Scores.CT.ME = Analysis(Returns, Prediction.CT, Q=(1:4)/4, r=30, SubtractSpy = TRUE)
+Scores.CS.ME = performFullAnalysis(Returns, Prediction.CS, Q = (1:4)/4, r = 30, SubtractSpy = TRUE)
+Scores.CT.ME = performFullAnalysis(Returns, Prediction.CT, Q = (1:4)/4, r = 30, SubtractSpy = TRUE)
 
-CumSum.Base.ME= CreatePlot.SharpePPT(Scores = list(Scores.CS.ME, Scores.CT.ME),
+CumSum.Base.ME= createSharpePPTPlot(Scores = list(Scores.CS.ME, Scores.CT.ME),
                                   Labels = c("CS", "CT"),
                                   BaseModels = 1:2,
-                                  Type="BASE",
-                                  Title="Market Excess")
+                                  Type = "BASE",
+                                  Title = "Market Excess")
 
 
 ggsave(filename = "CumSum.Base.ME.png", 

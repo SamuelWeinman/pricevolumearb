@@ -1,18 +1,18 @@
 Predictions.CS.Combined = CombinePrediction(PredictionStrong= Predictions.CS.Cluster.Weighted$Predictions,
                                             PredictionsWeak = Predictions.CS.VW.Divide[[1]], 
-                                            alpha=0.75)
+                                            alpha = 0.75)
 
 
 
-Scores.CS.Combined = Analysis(Returns=Returns,
-                              Predictions=Predictions.CS.Combined,
-                              Q=(1:4)/4, r=30)
+Scores.CS.Combined = performFullAnalysis(Returns = Returns,
+                              Predictions = Predictions.CS.Combined,
+                              Q = (1:4)/4, r = 30)
 
 
 
 
 
-SharpePPT.Combined = CreatePlot.SharpePPT(Scores = list(Scores.CS,
+SharpePPT.Combined = createSharpePPTPlot(Scores = list(Scores.CS,
                                                         Scores.CS.Cluster.Weighted,
                                                         Scores.CS.VW.Divide[[1]],
                                                         Scores.CS.Combined),
@@ -20,7 +20,7 @@ SharpePPT.Combined = CreatePlot.SharpePPT(Scores = list(Scores.CS,
                                                        "CS Clustering (returns & volumes)", 
                                                        "CS Volume Weighting",
                                                        "CS Combined"),
-                                            Type="CS",
+                                            Type = "CS",
                                             BaseModels = 1)
 
 
@@ -33,7 +33,7 @@ ggsave(filename = "SharpePPT.Combined.png",
 
 
 
-CumSum.Combined = CreatePlot.CumSumPnL(Scores = list(Scores.CS,
+CumSum.Combined = createCumSumPnLPlot(Scores = list(Scores.CS,
                                                         Scores.CS.Cluster.Weighted,
                                                         Scores.CS.VW.Divide[[1]],
                                                         Scores.CS.Combined),
@@ -41,7 +41,7 @@ CumSum.Combined = CreatePlot.CumSumPnL(Scores = list(Scores.CS,
                                                      "CS Cluster", 
                                                      "CS VW",
                                                      "CS Combined"),
-                                          Type="CS",
+                                          Type = "CS",
                                           BaseModels = 1)
 
 

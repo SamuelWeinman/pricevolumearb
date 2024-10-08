@@ -1,5 +1,5 @@
-H=252
-t=4348
+H = 252
+t = 4348
 NrGroups = 7
 
 
@@ -11,7 +11,7 @@ Pred.OT.CT = unlist(Predictions.CT.OverTraded[,col])
 
 
 #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-E.V=ExtractEigenPortfolio(StandardVolume, NrPC.V)
+E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
 
 #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
 #HERE Overtraded_{I,T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -31,16 +31,16 @@ data = data.frame(Group = 1:7,
 
 
 
-plot1 = ggplot(data, aes(x=Group, y=Magnitude.OT.CS)) +
-  geom_point(col="red") +
-  scale_x_continuous(breaks = 1:7, labels=1:7) +
+plot1 = ggplot(data, aes(x = Group, y = Magnitude.OT.CS)) +
+  geom_point(col = "red") +
+  scale_x_continuous(breaks = 1:7, labels = 1:7) +
   xlab("Group") + ylab("Average Magnitude") +
   ggtitle("Cross-Sectional Regression")
 
 
-plot2 = ggplot(data, aes(x=Group, y=Magnitude.OT.CT)) +
-  geom_point(col="blue") +
-  scale_x_continuous(breaks = 1:7, labels=1:7) +
+plot2 = ggplot(data, aes(x = Group, y = Magnitude.OT.CT)) +
+  geom_point(col = "blue") +
+  scale_x_continuous(breaks = 1:7, labels = 1:7) +
   xlab("Group") + ylab("Average Magnitude") +
   ggtitle("Cross-Temporal Regression")
 

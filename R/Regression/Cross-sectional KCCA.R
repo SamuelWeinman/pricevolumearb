@@ -17,7 +17,7 @@ DayCrossRegression.KCCA <- function(Returns,Volume, t,H,HV,NrC.R, NrC.V) {
   Y = as.matrix(Volume[,(t-HV):(t-1)])
 
   #PERFORM KCCA
-  C = kcca(X,Y, ncomps=max(c(NrC.R,NrC.V)))
+  C = kcca(X,Y, ncomps = max(c(NrC.R,NrC.V)))
   
   #EMBEDDING OF X AND Y IN NEW SPACE
   X = C@xcoef
@@ -70,12 +70,12 @@ CrossSectionRegression.KCCA <- function(Returns,Volume, Start, End, H,d,HV,NrC.R
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    DayCrossRegression.KCCA(Returns=Returns,
-                           Volume=StandardisedVolume, 
-                           t=t,
-                           H=H,HV=HV,
-                           NrC.R=NrC.R, NrC.V = NrC.V)
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    DayCrossRegression.KCCA(Returns = Returns,
+                           Volume = StandardisedVolume, 
+                           t = t,
+                           H=H,HV = HV,
+                           NrC.R = NrC.R, NrC.V = NrC.V)
   }) 
   
   #CLOSE CLUSTERS

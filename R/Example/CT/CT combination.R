@@ -1,17 +1,17 @@
 Predictions.CT.Combined = CombinePrediction(PredictionStrong= Prediction.CT.KPCA,
                                             PredictionsWeak = Predictions.CT.OverTraded,
-                                            alpha=0.4)
+                                            alpha = 0.4)
 
 
-Scores.CT.Combined = Analysis(Returns,
+Scores.CT.Combined = performFullAnalysis(Returns,
                               Predictions = Predictions.CT.Combined,
-                              r=30, Q=(1:4)/4)
+                              r = 30, Q = (1:4)/4)
 
 
-SharpePPT.CT.Combined = CreatePlot.SharpePPT(Scores = list(Scores.CT, Scores.CT.KPCA, Scores.CT.OverTraded, Scores.CT.Combined),
+SharpePPT.CT.Combined = createSharpePPTPlot(Scores = list(Scores.CT, Scores.CT.KPCA, Scores.CT.OverTraded, Scores.CT.Combined),
                                              Labels = c("CT", "CT KPCA (Laplacian)", "CT Decomposed Volume", "CT Combined"),
                                              BaseModels = 1,
-                                             Type="CT")
+                                             Type = "CT")
 
 
 

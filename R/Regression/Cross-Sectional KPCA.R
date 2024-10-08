@@ -15,8 +15,8 @@ CrossSectional.KPCA.day = function(Returns, t, H,NrPC, kernel, kpar) {
   Returns = apply(Returns,2,scale)
 
   #PERFORM KPCA
-  S=kpca(Returns, features=NrPC, 
-         kernel = kernel, kpar=kpar)
+  S = kpca(Returns, features = NrPC, 
+         kernel = kernel, kpar = kpar)
   
   #EXTRACT PROJECTED DATA
   X = S@rotated
@@ -56,10 +56,10 @@ CrossSectionRegression.KPCA = function(Returns, Start,End, H,NrPC, kernel, kpar)
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    CrossSectional.KPCA.day (Returns=Returns,
-                             t=t,
-                             H=H,NrPC=NrPC,
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    CrossSectional.KPCA.day (Returns = Returns,
+                             t = t,
+                             H=H,NrPC = NrPC,
                              kernel = kernel, kpar = kpar)
   }) 
   #CLOSE CLUSTERS

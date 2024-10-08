@@ -15,7 +15,7 @@ ConstructClusters = function(rho, k, MinSize) {
   tree = hclust(d)
 
   #EXTRACT LABELS
-  labels = as.numeric(cutree(tree, k=k))
+  labels = as.numeric(cutree(tree, k = k))
 
   #ENSURE ARE CLUSTERS ARE LARGE ENOUGH, OR ELSE USE ONE FEWER CLUSTER
   k.New = k
@@ -27,7 +27,7 @@ ConstructClusters = function(rho, k, MinSize) {
     #IF LARGE ENOUGHT, EXIT LOOP
     if (min(table(labels)) < MinSize) {
       k.New = k.New - 1
-      labels = as.numeric(cutree(tree, k=k.New))
+      labels = as.numeric(cutree(tree, k = k.New))
     } else {
       break
     }
@@ -48,15 +48,15 @@ ConstructClusters = function(rho, k, MinSize) {
 DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha) {
   
   #EXTRACT EIGENPORTFOLIO
-  E = ExtractEigenPortfolio(Returns=Returns[,(t-H):(t-1)], 
-                            NrPC=NrPC) 
+  E = ExtractEigenPortfolio(Returns = Returns[,(t-H):(t-1)], 
+                            NrPC = NrPC) 
   
   #CONSTRUCT WRIGHTED CORRELATION MATRIX
   rho = alpha* ConstructRho(Returns[,(t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[,(t-H):(t-1)])
   
   
   #EXTRACT CLUSTERS
-  Clusters = ConstructClusters(rho=rho, k=k, MinSize=MinSize)
+  Clusters = ConstructClusters(rho = rho, k = k, MinSize = MinSize)
   
   #TRUE NR OF CLUSTERS, WHICH MIGHT BE DIFFERENT FROM ORIGINAL K IF CLUSTERS TOO SMALL
   k = length(Clusters)
@@ -84,8 +84,8 @@ DayCrossRegression.Cluster <- function(Returns,Volume, t,H,NrPC,k,MinSize,alpha)
     }
   }
   #RETURN
-  return(list(Predictions=Predictions,
-              k=k))
+  return(list(Predictions = Predictions,
+              k = k))
 }
 
 CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,k,MinSize,alpha) {
@@ -108,12 +108,12 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions=snow::parSapply(cl, Start:End, function(t) {
-    DayCrossRegression.Cluster(Returns=Returns,
-                               Volume=Volume,
-                               t=t,H=H,
-                               NrPC=NrPC,
-                               k=k, MinSize = MinSize,
+  Predictions = snow::parSapply(cl, Start:End, function(t) {
+    DayCrossRegression.Cluster(Returns = Returns,
+                               Volume = Volume,
+                               t=t,H = H,
+                               NrPC = NrPC,
+                               k = k, MinSize = MinSize,
                                alpha = alpha)
     
   }) 
@@ -123,15 +123,15 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
 
   #EXTRACT PREDICTIONS AND NR OF CLUSTERS
   k = unlist(Predictions[2,]) #NR OF CLUSTERS
-  Predictions = matrix(unlist(Predictions[1,]), ncol=End-Start+1)
+  Predictions = matrix(unlist(Predictions[1,]), ncol = End-Start+1)
   
   #CHANGE COL AND ROWNAMES AS APPROPRIATE.
   colnames(Predictions) = Start:End
   rownames(Predictions) = rownames(Returns)
   
   #RETURN
-  return(list(Predictions=Predictions,
-              k=k)) 
+  return(list(Predictions = Predictions,
+              k = k)) 
 }
 
 

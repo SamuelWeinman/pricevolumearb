@@ -22,7 +22,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L,NrC.R, NrC.V,bSensativ
   Y = as.matrix(Volume[,(t-HV):(t-1)])
 
   #PERFORM KCCA
-  C = kcca(X,Y, ncomps=max(c(NrC.R,NrC.V)))
+  C = kcca(X,Y, ncomps = max(c(NrC.R,NrC.V)))
   
   #EMBEDDING OF X AND Y IN NEW SPACE
   X = C@xcoef
@@ -91,10 +91,10 @@ CTRegression.KCCA = function(Returns, Volume,Start, End,H,HV,L,NrC.R, NrC.V,d,bS
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   Predictions = snow::parSapply(cl, Start:End, function(t) {
-    S = DayCrossTemporal.KCCA(Returns=Returns, Volume=StandardisedVolume,
-                             t=t,H=H,HV=HV,
-                             L=L,NrC.R=NrC.R, NrC.V=NrC.V,
-                             bSensativity=bSensativity) #S-score for the day (accross stocks)
+    S = DayCrossTemporal.KCCA(Returns = Returns, Volume = StandardisedVolume,
+                             t=t,H=H,HV = HV,
+                             L=L,NrC.R = NrC.R, NrC.V = NrC.V,
+                             bSensativity = bSensativity) #S-score for the day (accross stocks)
     P = -S$S #prediction is negative s-score
     return(P)
   })

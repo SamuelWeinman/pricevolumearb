@@ -1,7 +1,7 @@
 MAP.list = list(f = function(x) x,
-                g=log,
+                g = log,
                 h= function(x) x^(1/3),
-                i=sqrt)
+                i = sqrt)
 
 
 
@@ -9,19 +9,19 @@ MAP.list = list(f = function(x) x,
 
 ############################ DIVIDE #################################################
 
-# Predictions.CT.VW.Divide <- Outside_CTRegression.VW(Returns=Returns,
-#                                                     Volume=Volume,
-#                                                     Start=500, End=ncol(Returns),
-#                                                     H=252, NrPC=20, L=45,
-#                                                     bSensativity = 0.01, d=20,
-#                                                     divide=TRUE, MAP.list=MAP.list)
+# Predictions.CT.VW.Divide <- Outside_CTRegression.VW(Returns = Returns,
+#                                                     Volume = Volume,
+#                                                     Start = 500, End = ncol(Returns),
+#                                                     H = 252, NrPC = 20, L = 45,
+#                                                     bSensativity = 0.01, d = 20,
+#                                                     divide = TRUE, MAP.list = MAP.list)
 # 
 # write.csv(Predictions.CT.VW.Divide, "./Results/Predictions/CT VW/Predictions.CT.VW.Divide.csv")
 
 
 
 
-Predictions.CT.VW.Divide = read.csv("./Results/Predictions/CT VW/Predictions.CT.VW.Divide.csv", header=T)
+Predictions.CT.VW.Divide = read.csv("./Results/Predictions/CT VW/Predictions.CT.VW.Divide.csv", header = T)
 rownames(Predictions.CT.VW.Divide) = Predictions.CT.VW.Divide[,1]
 Predictions.CT.VW.Divide = Predictions.CT.VW.Divide[,-1]
 colnames(Predictions.CT.VW.Divide) = rep(500:4932,4)
@@ -33,15 +33,15 @@ Predictions.CT.VW.Divide = list(Predictions.CT.VW.Divide[,1:4433],
 
 
 
-Scores.CT.VW.Divide = Analysis.List(Returns, Predictions.List=Predictions.CT.VW.Divide,
-                                    Q=(1:4/4), r=30)
+Scores.CT.VW.Divide = performFullAnalysisFromList(Returns, Predictions.List = Predictions.CT.VW.Divide,
+                                    Q = (1:4/4), r = 30)
 
 Scores.CT.VW.Divide.Combined = append(list(Scores.CT),Scores.CT.VW.Divide)
 names(Scores.CT.VW.Divide.Combined) = c("Not weighted", "x", "log(x)",
                                         "x^1/3", "sqrt(x)")
 
 
-CumSum.CT.VW.Divide= CreatePlot.CumSumPnL(Scores = Scores.CT.VW.Divide.Combined, 
+CumSum.CT.VW.Divide= createCumSumPnLPlot(Scores = Scores.CT.VW.Divide.Combined, 
                                           Labels = c("Not Weighted (Baseline)",
                                                      "V",
                                                      "log(V)",
@@ -54,7 +54,7 @@ CumSum.CT.VW.Divide= CreatePlot.CumSumPnL(Scores = Scores.CT.VW.Divide.Combined,
 
 
 
-SharpePPT.CT.VW.Divide= CreatePlot.SharpePPT(Scores = Scores.CT.VW.Divide.Combined, 
+SharpePPT.CT.VW.Divide= createSharpePPTPlot(Scores = Scores.CT.VW.Divide.Combined, 
                                              Labels = c("Not Weighted (Baseline)",
                                                         "V",
                                                         "log(V)",
@@ -87,17 +87,17 @@ ggsave(filename = "SharpePPT.CT.VW.Divide.png",
 
 ############################ Multiply  #################################################
 
-# Predictions.CT.VW.Multiply <- Outside_CTRegression.VW(Returns=Returns,
-#                                                       Volume=Volume,
-#                                                       Start=500, End=ncol(Returns),
-#                                                       H=252, NrPC=20, L=45,
-#                                                       bSensativity = 0.01, d=20,
-#                                                       divide=FALSE, MAP.list=MAP.list)
+# Predictions.CT.VW.Multiply <- Outside_CTRegression.VW(Returns = Returns,
+#                                                       Volume = Volume,
+#                                                       Start = 500, End = ncol(Returns),
+#                                                       H = 252, NrPC = 20, L = 45,
+#                                                       bSensativity = 0.01, d = 20,
+#                                                       divide = FALSE, MAP.list = MAP.list)
 
 #write.csv(Predictions.CT.VW.Multiply, "./Results/Predictions/CT VW/Predictions.CT.VW.Multiply.csv")
 
 
-Predictions.CT.VW.Multiply = read.csv("./Results/Predictions/CT VW/Predictions.CT.VW.Multiply.csv", header=T)
+Predictions.CT.VW.Multiply = read.csv("./Results/Predictions/CT VW/Predictions.CT.VW.Multiply.csv", header = T)
 rownames(Predictions.CT.VW.Multiply) = Predictions.CT.VW.Multiply[,1]
 Predictions.CT.VW.Multiply = Predictions.CT.VW.Multiply[,-1]
 colnames(Predictions.CT.VW.Multiply) = rep(500:4932,4)
@@ -109,8 +109,8 @@ Predictions.CT.VW.Multiply = list(Predictions.CT.VW.Multiply[,1:4433],
 
 
 
-Scores.CT.VW.Multiply = Analysis.List(Returns, Predictions.List=Predictions.CT.VW.Multiply,
-                                      Q=(1:4/4), r=30)
+Scores.CT.VW.Multiply = performFullAnalysisFromList(Returns, Predictions.List = Predictions.CT.VW.Multiply,
+                                      Q = (1:4/4), r = 30)
 
 
 
@@ -126,7 +126,7 @@ names(Scores.CT.VW.Multiply.Combined) = c("Not weighted", "x", "log(x)",
 
 
 
-CumSum.CT.VW.Multiply= CreatePlot.CumSumPnL(Scores = Scores.CT.VW.Multiply.Combined, 
+CumSum.CT.VW.Multiply= createCumSumPnLPlot(Scores = Scores.CT.VW.Multiply.Combined, 
                                             Labels = c("Not Weighted (Baseline)",
                                                        "V",
                                                        "log(V)",
@@ -139,7 +139,7 @@ CumSum.CT.VW.Multiply= CreatePlot.CumSumPnL(Scores = Scores.CT.VW.Multiply.Combi
 
 
 
-SharpePPT.CT.VW.Multiply= CreatePlot.SharpePPT(Scores = Scores.CT.VW.Multiply.Combined, 
+SharpePPT.CT.VW.Multiply= createSharpePPTPlot(Scores = Scores.CT.VW.Multiply.Combined, 
                                                Labels = c("Not Weighted (Baseline)",
                                                           "V",
                                                           "log(V)",

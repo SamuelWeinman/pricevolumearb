@@ -8,8 +8,8 @@ OptimiseL = function(Returns, Start, End, NrPC,H,L.Candidates, bSensativity,Q,r)
   
   #LOOP THROUGH EACH CANDIDATE OF L, CAN CALCULATE CORRESPONDING SCORE
   for (Lcand in L.Candidates) {
-    Pred = CTRegression(Returns, Start, End, NrPC,H,L=Lcand, bSensativity)
-    Score = Analysis(Returns = Returns, Predictions = Pred, Q,r)
+    Pred = CTRegression(Returns, Start, End, NrPC,H,L = Lcand, bSensativity)
+    Score = performFullAnalysis(Returns = Returns, Predictions = Pred, Q,r)
     Scores = append(Scores, list(Score))
   }
   
@@ -20,16 +20,16 @@ OptimiseL = function(Returns, Start, End, NrPC,H,L.Candidates, bSensativity,Q,r)
 
 
 
-# CT.Scores.OverL = OptimiseL(Returns=Returns, 
-#                             Start=500, End=ncol(Returns), 
-#                             NrPC=20,H=252,
-#                             L.Candidates=seq(25,60,by=5), bSensativity=0.01,
-#                             Q=(1:4)/4,r=30)
+# CT.Scores.OverL = OptimiseL(Returns = Returns, 
+#                             Start = 500, End = ncol(Returns), 
+#                             NrPC=20,H = 252,
+#                             L.Candidates=seq(25,60,by = 5), bSensativity = 0.01,
+#                             Q=(1:4)/4,r = 30)
 # 
 # write.csv(CT.Scores.OverL, "./Results/Predictions/Base/CT.Scores.OverL.csv")
 
 
-CT.Scores.OverL = read.csv("./Results/Predictions/Base/CT.Scores.OverL.csv", header=T)
+CT.Scores.OverL = read.csv("./Results/Predictions/Base/CT.Scores.OverL.csv", header = T)
 colnames(CT.Scores.OverL)[which(colnames(CT.Scores.OverL) == "Regular.Sharpe")] = "Regular.Sharpe.0"
 colnames(CT.Scores.OverL)[which(colnames(CT.Scores.OverL) == "Standard.Sharpe")] = "Standard.Sharpe.0"
 
@@ -75,9 +75,9 @@ for (i in 1:8) {
 
 
 
-SharpePPT.OverL = CreatePlot.SharpePPT(Scores=S,
-                                       Labels=seq(25,60,by=5),
-                                       Type="CT",
+SharpePPT.OverL = createSharpePPTPlot(Scores = S,
+                                       Labels=seq(25,60,by = 5),
+                                       Type = "CT",
                                        BaseModels = 1)
 
 
@@ -89,8 +89,8 @@ ggsave(filename = "SharpePPT.OverL.png",
        height = 5, width = 5)
 
 
-CumSum.OverL = CreatePlot.CumSumPnL(Scores=CT.Scores.OverL,
-                                       Labels=seq(25,60,by=5))
+CumSum.OverL = createCumSumPnLPlot(Scores = CT.Scores.OverL,
+                                       Labels=seq(25,60,by = 5))
 
 ggsave(filename = "CumSum.OverL.png", 
        path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",

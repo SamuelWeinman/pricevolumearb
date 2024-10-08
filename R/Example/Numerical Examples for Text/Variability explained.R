@@ -51,9 +51,9 @@ VarExplained.TS = function(Returns, Volume, Start, End, H, NrPC.cand,d) {
   
   
   
-  Prop=snow::parSapply(cl,Start:End, function(t){
-    VarExplianed.Day(Returns=Returns, StandardisedVolume=StandardisedVolume,
-                     t=t, H=H, NrPC.cand=NrPC.cand)
+  Prop = snow::parSapply(cl,Start:End, function(t){
+    VarExplianed.Day(Returns = Returns, StandardisedVolume = StandardisedVolume,
+                     t = t, H = H, NrPC.cand = NrPC.cand)
   })
   
   snow::stopCluster(cl)
@@ -75,8 +75,8 @@ End = ncol(Returns)
 
 # 
 # P = VarExplained.TS(Returns, Volume,
-#                  Start=500, End=ncol(Returns), H=252,
-#                  NrPC.cand=c(15,20,25),d=20)
+#                  Start = 500, End = ncol(Returns), H = 252,
+#                  NrPC.cand=c(15,20,25),d = 20)
 
 # 
 # 
@@ -98,25 +98,25 @@ NrPC = c(rep(15,dim(as.matrix(P$Prop.R))[1]), rep(20,dim(as.matrix(P$Prop.R))[1]
 VarExplained.R = as.numeric(as.matrix(P$Prop.R))
 VarExplained.V = as.numeric(as.matrix(P$Prop.V))         
 
-data = data.frame(dates=dates,
-                  NrPC=as.factor(NrPC),
+data = data.frame(dates = dates,
+                  NrPC = as.factor(NrPC),
                   VarExplained.R =VarExplained.R,
                   VarExplained.V = VarExplained.V)
 
 
 
-plot.R = ggplot(data, aes(x=dates, y=VarExplained.R)) +
-  geom_line(aes(colour=NrPC)) + ylim(0.25,0.8) +
+plot.R = ggplot(data, aes(x = dates, y = VarExplained.R)) +
+  geom_line(aes(colour = NrPC)) + ylim(0.25,0.8) +
   xlab("Date") + ylab("Variability (return)") + 
   theme(legend.position = "top")  +
-  labs(colour="Number Principal Components")
+  labs(colour = "Number Principal Components")
 
-plot.V = ggplot(data, aes(x=dates, y=VarExplained.V)) +
-  geom_line(aes(colour=NrPC)) +  ylim(0.25,0.8) +
+plot.V = ggplot(data, aes(x = dates, y = VarExplained.V)) +
+  geom_line(aes(colour = NrPC)) +  ylim(0.25,0.8) +
   xlab("Date") + ylab("Variability (volume)") +
   theme(legend.position = "none") #legend 
 
-plot = grid.arrange(plot.R, plot.V, nrow=2)
+plot = grid.arrange(plot.R, plot.V, nrow = 2)
 
 
 
