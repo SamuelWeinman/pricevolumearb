@@ -1,1 +1,12 @@
+import(plyr)
+import(SharpeR)
+import(plyr)
+import(ggplot2)
+import(gridExtra)
+import(RColorBrewer)
+import(roll)
+
+
+
+
 export(add)

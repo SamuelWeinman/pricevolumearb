@@ -1,14 +1,12 @@
-library(plyr)
-
 ###CONSTRUCT CORRELATION MATRIX
 #RETURNS: MATRIX OF RETURNS (LAST H DAYS)
-ConstructRho <- function(Returns) {
+constructRho <- function(returns) {
   
   #STANDARDISE
-  Y = apply(Returns, 1, scale)
+  y = apply(returns, 1, scale)
   
   #CONSTRUCT CORRELATION MATRIX
-  rho = cor(Y)
+  rho = cor(y)
   
   #RETURN
   return(rho)
@@ -16,29 +14,29 @@ ConstructRho <- function(Returns) {
 
 ###CONSTRUCT EIGENPORTFOLIOS BASED ON RHO MATRIX
 #THIS FUNCTION WILL GIVE ALL (N) EIGENPORTFOLIOS
-ConstructEigenPortfolios <- function(Returns) {
+constructEigenPortfolios <- function(returns) {
   
   #CONSTRUCT RHO
-  rho = ConstructRho(Returns) 
+  rho <- constructRho(returns) 
   
   #GET EIGENVALUES AND VECTORS FROM RHO
-  E=eigen(rho) 
+  e <- eigen(rho) 
   
   #CALCULATE THE SD OF THE RETURNS, BASED ON STOCK
-  SigmaPerStock = apply(Returns,1,sd) #the ith entry is the sd of the ith stock
+  sigma_per_stock <- apply(returns, 1, sd) #the ith entry is the sd of the ith stock
   
   #CONSTRUCT EIGENPORTFOLIOS
-  Q = E$vectors / SigmaPerStock 
+  q <- e$vectors / sigma_per_stock 
   
   #CALCULATE THE RETURN OF THE EIGENPORTFOLIOS
-  F= t(Q) %*% as.matrix(Returns) 
+  f <- t(q) %*% as.matrix(returns) 
   
   #RETURN
   return(list(
-    rho=rho,
-    EigenPortfolio = Q,
-    EigenReturn = F,
-    EigenValues = E$values
+    rho = rho,
+    portfolios = q,
+    returns = f,
+    values = e$values
   ))
 }
 #THE COLUMNS OF Q ARE THE EIGENPORTFOLIOS
@@ -47,22 +45,22 @@ ConstructEigenPortfolios <- function(Returns) {
 
 ###GET EIGENPORTFOLIOS, BUT ONLY THE MOST RELEVANT ONES
 #  RETURNS: RETURNS MATRIX 
-#  NRPC: THE NR OF PC TO USE, I.E. NR OF EIGENPORTFOLIOS TO USE FOR ANALYSIS
-ExtractEigenPortfolio <- function(Returns, NrPC) {
+#  nr_pc: THE NR OF PC TO USE, I.E. NR OF EIGENPORTFOLIOS TO USE FOR ANALYSIS
+extractEigenPortfolios <- function(returns, nr_pc) {
   
   #GET FULL EIGEN PORTFOLIO
-  EigenPortfolio.Full = ConstructEigenPortfolios(Returns)
+  full_eigen_portfolios <- constructEigenPortfolios(returns)
 
   #CALCULATE PROPORTION VARIABILITY EXPLAINED
-  PropExplained = sum( EigenPortfolio.Full$EigenValues[1:NrPC] ) / sum(EigenPortfolio.Full$EigenValues) 
+  prop_explained <- sum(full_eigen_portfolios$values[1:nr_pc]) / sum(full_eigen_portfolios$values) 
   
   
   #RETURN THE RELEVANT EIGENPORTFOLIOS
   return(list(
-    rho = EigenPortfolio.Full$rho, 
-    EigenPortfolio = EigenPortfolio.Full$EigenPortfolio[,1:NrPC], 
-    EigenReturn = EigenPortfolio.Full$EigenReturn[1:NrPC, ], 
-    PropExplained = sum( EigenPortfolio.Full$EigenValues[1:NrPC] ) / sum(EigenPortfolio.Full$EigenValues) 
+    rho = full_eigen_portfolios$rho, 
+    portfolio = full_eigen_portfolios$portfolios[,1:nr_pc], 
+    return = full_eigen_portfolios$portfolios[1:nr_pc, ], 
+    prop_explained = sum(full_eigen_portfolios$values[1:nr_pc] ) / sum(full_eigen_portfolios$values) 
   )) 
 }
   

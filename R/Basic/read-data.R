@@ -1,5 +1,3 @@
-library(stringr)
-
 setwd("~/MSc Statistical Science/Dissertation")
 
 ###READ DATA

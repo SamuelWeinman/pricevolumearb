@@ -1,5 +1,3 @@
-library(SharpeR)
-
 PnL1 = Scores.CT.CCA$Regular$PnL[4,]
 PnL2 = Scores.CT.CCA$Regular$PnL[3,]
 PnL3 = Scores.CT.CCA$Regular$PnL[2,]
