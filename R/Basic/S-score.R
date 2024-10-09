@@ -9,13 +9,8 @@
 
 decompose <- function(returns, nr_pc, h, L) {
   
-  #DIMENSIONS
-  n <- nrow(returns) #NR STOCKS
-  
-  #CONSTRUCT SHORT RETURN MATRIX USING ONLY LAST H DAYS
+  n <- nrow(returns) 
   returns_short <- returns[ ,(ncol(returns)-h+1) : ncol(returns)] #use last H days
-  
-  #EXTRACT EIGENPORTFOLIO ON SHORTER MATRIX
   eigen <- extractEigenPortfolio(returns_short, nr_pc) 
   
   #PERFORM REGRESSION

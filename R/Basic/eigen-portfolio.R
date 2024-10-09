@@ -13,12 +13,12 @@ constructEigenPortfolios <- function(returns) {
   rho <- constructRho(returns) 
   e <- eigen(rho) 
   sigma_per_stock <- apply(returns, 1, sd)
-  q <- e$vectors / sigma_per_stock 
-  f <- t(q) %*% as.matrix(returns) 
+  eigen_portfolios <- e$vectors / sigma_per_stock 
+  eigen_returns <- t(eigen_portfolios) %*% as.matrix(returns) 
   return(list(
     rho = rho,
-    portfolios = q,
-    returns = f,
+    portfolios = eigen_portfoliosq,
+    returns = eigen_returns,
     values = e$values
   ))
 }
