@@ -9,7 +9,7 @@ MAP.list = list(f = function(x) x,
 
 ############################ DIVIDE #################################################
 
-# Predictions.CT.VW.Divide <- Outside_CTRegression.VW(Returns = Returns,
+# Predictions.CT.VW.Divide <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                     Volume = Volume,
 #                                                     Start = 500, End = ncol(Returns),
 #                                                     H = 252, nr_pc = 20, L = 45,
@@ -87,7 +87,7 @@ ggsave(filename = "SharpePPT.CT.VW.Divide.png",
 
 ############################ Multiply  #################################################
 
-# Predictions.CT.VW.Multiply <- Outside_CTRegression.VW(Returns = Returns,
+# Predictions.CT.VW.Multiply <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                       Volume = Volume,
 #                                                       Start = 500, End = ncol(Returns),
 #                                                       H = 252, nr_pc = 20, L = 45,

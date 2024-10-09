@@ -4,7 +4,7 @@ library(parallel)
 ### THIS FUNCTION TRANSFORMS ALL RETURNS BY EITHER MULTIPLYING OR DIVIDING BY THE STANDARDISED VOLUME
 #DIVIDE: IF TRUE, MULTIPLY BY MEAN(VOLUME)/VOLUME, ELSE MULTIPLY
 #D: HOW MANY DAYS TO USE FOR STANDARDISING VOLUME
-ConstructWeightedReturn = function(Returns, Volume,H,d, divide) {
+constructWeightedReturn = function(Returns, Volume,H,d, divide) {
 
   #CALCULATE THE ROLLING AVERAGE VOLUME 
   RollMeanVolume = t(roll_mean(t(as.matrix(Volume)), width = d))
@@ -32,13 +32,13 @@ ConstructWeightedReturn = function(Returns, Volume,H,d, divide) {
 CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc,d, divide) {
   
   #CONSTRUCT WEIGHTED RETURN
-  WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H, d = d,
+  WeightedReturns = constructWeightedReturn(Returns = Returns, Volume=Volume,H=H, d = d,
                                             divide = divide)
   
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossRegression", "ConstructWeightedReturn",
+  Globalvarlist = c("DayCrossRegression", "constructWeightedReturn",
                     "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
                     "ConstructRho")
   

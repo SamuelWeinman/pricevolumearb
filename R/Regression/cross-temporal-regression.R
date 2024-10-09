@@ -5,7 +5,7 @@ library(parallel)
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
 #ALL ELSE AS BEFORE
-performCrossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitivity) {
+crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitivity) {
 
   #PREPARE CORES#
 
