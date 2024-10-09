@@ -4,7 +4,7 @@ t = 4096 +252
 colnames(Returns)[t] 
 
 H = 252
-NrPC = 20
+nr_pc = 20
 L = 45
 
 ###################### PERFORM CALCULATIONS ##################

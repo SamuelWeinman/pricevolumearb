@@ -6,7 +6,7 @@ library(parallel)
 #PERFORMS STANDARD CROSS SECTIONAL REGRESSION ON ONE DAY, ALTOUGH THE PCA IS THROUGH A KERNEL
 #KERNEL: THE NAME OF THE KERNEL (MUST BE COMPATIBLE WITH KPCA@KERNLAB)
 #KPAR: PARAMETERS FOR KERNEL (MUST BE IN A LIST, MUST BE COMPATIBLE WITH KPCA@KERNLAB)
-CrossSectional.KPCA.day = function(Returns, t, H, NrPC, kernel, kpar) {
+CrossSectional.KPCA.day = function(Returns, t, H, nr_pc, kernel, kpar) {
 
   #EXTRACT LAST H DAYS OF HISTORY
   Returns = Returns[, (t-H):(t-1)]
@@ -15,7 +15,7 @@ CrossSectional.KPCA.day = function(Returns, t, H, NrPC, kernel, kpar) {
   Returns = apply(Returns,2, scale)
 
   #PERFORM KPCA
-  S = kpca(Returns, features = NrPC, 
+  S = kpca(Returns, features = nr_pc, 
          kernel = kernel, kpar = kpar)
   
   #EXTRACT PROJECTED DATA
@@ -37,13 +37,13 @@ CrossSectional.KPCA.day = function(Returns, t, H, NrPC, kernel, kpar) {
 
 
 #PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
-CrossSectionRegression.KPCA = function(Returns, Start, End, H, NrPC, kernel, kpar) {
+CrossSectionRegression.KPCA = function(Returns, Start, End, H, nr_pc, kernel, kpar) {
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   Globalvarlist = c("CrossSectional.KPCA.day", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H", "NrPC", "kernel", "kpar")
+  Localvarlist = c("Returns","H", "nr_pc", "kernel", "kpar")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -59,7 +59,7 @@ CrossSectionRegression.KPCA = function(Returns, Start, End, H, NrPC, kernel, kpa
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     CrossSectional.KPCA.day (Returns = Returns,
                              t = t,
-                             H=H, NrPC = NrPC,
+                             H=H, nr_pc = nr_pc,
                              kernel = kernel, kpar = kpar)
   }) 
   #CLOSE CLUSTERS

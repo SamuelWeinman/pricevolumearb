@@ -5,36 +5,36 @@ library(parallel)
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
 #ALL ELSE AS BEFORE
-CTRegression <- function(Returns, Start, End, NrPC,H, L, bSensativity) {
+performCrossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitivity) {
 
   #PREPARE CORES#
 
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("calculateSScore",
+  globalvarlist = c("calculateSScore",
                     "estimateCoefficeients","decompose", "ExtractEigenPortfolio",
                     "ConstructEigenPortfolios", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns", "H", "L", "bSensativity", "NrPC")
+  localvarlist = c("returns", "h", "l", "b_sensitivity", "nr_pc")
 
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, Globalvarlist) 
-  snow::clusterExport(cl, Localvarlist, envir = environment()) 
+  snow::clusterExport(cl, globalvarlist) 
+  snow::clusterExport(cl, localvarlist, envir = environment()) 
 
   
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-  S.Scores = snow::parSapply(cl, Start:End, function(t) {
-    S = calculateSScore(Returns = Returns[, 1:(t-1)], #using only historical data
-                           NrPC = NrPC,
-                           H = H, L = L,
-                           bSensativity = bSensativity)
+s_scores = snow::parSapply(cl, start:end, function(t) {
+    scores = calculateSScore(returns = returns[, 1:(t-1)], #using only historical data
+                           nr_pc = nr_pc,
+                           h = h, l = l,
+                           b_sensitivity = b_sensitivity)
     
     #RETURN THE S-SCORE
-    return(S$S)
+    return(scores$s)
   })
 
   #STOP CLUSTERS
@@ -43,11 +43,11 @@ CTRegression <- function(Returns, Start, End, NrPC,H, L, bSensativity) {
   #GET FORECASTS (BASED ON HISTORICAL DATA)
   #THE ROW NAMES WILL THE STOCK TICKERS
   #THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
-  P = -S.Scores
-  rownames(P) = rownames(Returns)
-  colnames(P) = Start:End
+  p = -s_scores
+  rownames(p) = rownames(returns)
+  colnames(p) = start:end
   
   #RETURN
-  return(P)
+  return(p)
 }
   

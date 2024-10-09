@@ -9,13 +9,13 @@ t = 4348
 H = 252
 NrGroups = 10
 col = which(colnames(Prediction.CS) == t)
-NrPC.V = 25
+nr_pc.V = 25
 
 preds = Prediction.CS.Overtraded[, col]
 
 
 StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
-E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
+E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
 Model = lm(StandardVolume[, H] ~ E.V$EigenPortfolio)
 Overtraded = Model$residuals
 

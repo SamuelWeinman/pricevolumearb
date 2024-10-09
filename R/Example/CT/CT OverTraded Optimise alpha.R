@@ -7,9 +7,9 @@ for (i in 1:length(Alpha.Candidates)){
   A = Alpha.Candidates[i]
   Preds = CTRegression.Overtrade(Volume, Returns,
                                Start = 500, End = ncol(Returns),
-                               H = 252, NrPC.V = 25, NrPC = 20,
+                               H = 252, nr_pc.V = 25, nr_pc = 20,
                                alpha = A,
-                               L=45, bSensativity = 0.01)
+                               L=45, b_sensitivity = 0.01)
   S = performFullAnalysis(Returns, Preds, r = 30, Q = (1:4)/4)
   Scores = append(Scores, list(S))
   Sys.time()

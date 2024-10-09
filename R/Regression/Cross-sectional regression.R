@@ -7,13 +7,13 @@ library(parallel)
 #PERFORM CROSS SECTIONAL REGRESSION ON A PARTICULAR DAY
 #  t: column number we are going to trade at
 #  H: NR OF DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
-#  NrPC: NUMBER OF PC'S TO USE FOR THE REGRESSION
-DayCrossRegression <- function(Returns,t,H, NrPC) {
+#  nr_pc: NUMBER OF PC'S TO USE FOR THE REGRESSION
+DayCrossRegression <- function(Returns,t,H, nr_pc) {
   
   #EXTRACT EIGENPORTFOLIO USING STANDARD PCS
   #USE H DAYS OF HISTORY UP TO TIME t
   E = ExtractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
-                              NrPC = NrPC) 
+                              nr_pc = nr_pc) 
   
   #PERFORM REGRESSION AND EXTRACT PREDICTION
   y = Returns[, t-1] #returns on last day
@@ -30,7 +30,7 @@ DayCrossRegression <- function(Returns,t,H, NrPC) {
 #CALCULATE PREDICTION OF ALL DAYS IN [START, END], USING HISTORICAL DATA
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
-CrossSectionRegression <- function(Returns, Start, End, H, NrPC) {
+CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
 
   #PREPARE CORES#
   
@@ -40,7 +40,7 @@ CrossSectionRegression <- function(Returns, Start, End, H, NrPC) {
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H", "NrPC")
+  Localvarlist = c("Returns","H", "nr_pc")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -53,7 +53,7 @@ CrossSectionRegression <- function(Returns, Start, End, H, NrPC) {
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     DayCrossRegression(Returns = Returns,
                        t=t, H = H,
-                       NrPC = NrPC)
+                       nr_pc = nr_pc)
   }) 
   
   #CLOSE CLUSTERS

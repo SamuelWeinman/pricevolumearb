@@ -1,15 +1,15 @@
 library(parallel)
 library(snow)
-NrPC.cand = c(15,20, 25)
+nr_pc.cand = c(15,20, 25)
 
 
-VarExplianed.Day = function(Returns, StandardisedVolume, t, H, NrPC.cand) {
+VarExplianed.Day = function(Returns, StandardisedVolume, t, H, nr_pc.cand) {
   R = Returns[, (t-H):(t-1)]
   rho.R = ConstructRho(R)
   E.R = eigen(rho.R)
 
-  Prop.Explained.R = sapply(1:length(NrPC.cand), function(i){
-    sum(E.R$values [1:NrPC.cand[i]]) / sum(E.R$values)
+  Prop.Explained.R = sapply(1:length(nr_pc.cand), function(i){
+    sum(E.R$values [1:nr_pc.cand[i]]) / sum(E.R$values)
   })
  
   
@@ -18,8 +18,8 @@ VarExplianed.Day = function(Returns, StandardisedVolume, t, H, NrPC.cand) {
   E.V = eigen(rho.V)
   
   
-  Prop.Explained.V = sapply(1:length(NrPC.cand), function(i){
-    sum(E.V$values [1:NrPC.cand[i]]) / sum(E.V$values )
+  Prop.Explained.V = sapply(1:length(nr_pc.cand), function(i){
+    sum(E.V$values [1:nr_pc.cand[i]]) / sum(E.V$values )
   })
   
   return(list(
@@ -33,7 +33,7 @@ VarExplianed.Day = function(Returns, StandardisedVolume, t, H, NrPC.cand) {
 
 
 
-VarExplained.TS = function(Returns, Volume, Start, End, H, NrPC.cand, d) {
+VarExplained.TS = function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
   StandardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
   
   
@@ -42,7 +42,7 @@ VarExplained.TS = function(Returns, Volume, Start, End, H, NrPC.cand, d) {
   Globalvarlist = c("VarExplianed.Day", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H", "NrPC.cand", "StandardisedVolume")
+  Localvarlist = c("Returns","H", "nr_pc.cand", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -53,7 +53,7 @@ VarExplained.TS = function(Returns, Volume, Start, End, H, NrPC.cand, d) {
   
   Prop = snow::parSapply(cl, Start:End, function(t){
     VarExplianed.Day(Returns = Returns, StandardisedVolume = StandardisedVolume,
-                     t = t, H = H, NrPC.cand = NrPC.cand)
+                     t = t, H = H, nr_pc.cand = nr_pc.cand)
   })
   
   snow::stopCluster(cl)
@@ -76,7 +76,7 @@ End = ncol(Returns)
 # 
 # P = VarExplained.TS(Returns, Volume,
 #                  Start = 500, End = ncol(Returns), H = 252,
-#                  NrPC.cand=c(15,20,25), d = 20)
+#                  nr_pc.cand=c(15,20,25), d = 20)
 
 # 
 # 
@@ -93,26 +93,26 @@ dates = rep(dates, 3)
 
 
 
-NrPC = c(rep(15, dim(as.matrix(P$Prop.R))[1]), rep(20, dim(as.matrix(P$Prop.R))[1]), rep(25, dim(as.matrix(P$Prop.R))[1]))
+nr_pc = c(rep(15, dim(as.matrix(P$Prop.R))[1]), rep(20, dim(as.matrix(P$Prop.R))[1]), rep(25, dim(as.matrix(P$Prop.R))[1]))
 
 VarExplained.R = as.numeric(as.matrix(P$Prop.R))
 VarExplained.V = as.numeric(as.matrix(P$Prop.V))         
 
 data = data.frame(dates = dates,
-                  NrPC = as.factor(NrPC),
+                  nr_pc = as.factor(nr_pc),
                   VarExplained.R =VarExplained.R,
                   VarExplained.V = VarExplained.V)
 
 
 
 plot.R = ggplot(data, aes(x = dates, y = VarExplained.R)) +
-  geom_line(aes(colour = NrPC)) + ylim(0.25, 0.8) +
+  geom_line(aes(colour = nr_pc)) + ylim(0.25, 0.8) +
   xlab("Date") + ylab("Variability (return)") + 
   theme(legend.position = "top")  +
   labs(colour = "Number Principal Components")
 
 plot.V = ggplot(data, aes(x = dates, y = VarExplained.V)) +
-  geom_line(aes(colour = NrPC)) +  ylim(0.25, 0.8) +
+  geom_line(aes(colour = nr_pc)) +  ylim(0.25, 0.8) +
   xlab("Date") + ylab("Variability (volume)") +
   theme(legend.position = "none") #legend 
 

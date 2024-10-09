@@ -4,7 +4,7 @@
                                       #Start = 500, 
                                       #End = ncol(Returns), 
                                       #H = 252,
-                                      #NrPC = 20)
+                                      #nr_pc = 20)
 #write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
 
 
@@ -33,7 +33,7 @@
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20, d = 20,
+#                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
 # 
@@ -44,7 +44,7 @@
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20, d = 20,
+#                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)
 # 
@@ -82,8 +82,8 @@
 
 # Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(Start = 500, End = ncol(Returns),
 #                                                             Volume, Returns, 
-#                                                             H = 252, NrPC.V = 25,
-#                                                             alpha = 175, NrPC = 20)
+#                                                             H = 252, nr_pc.V = 25,
+#                                                             alpha = 175, nr_pc = 20)
 # 
 # write.csv(Prediction.CS.Overtraded, "./Results/Predictions/CS OverTrading/Prediction.CS.Overtraded.csv")
 # 

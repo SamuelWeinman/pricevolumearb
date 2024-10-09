@@ -3,18 +3,18 @@
 #RESIDUALS ARE THEN MAPPED BY RESIDUAL -> EXP(ALPHA * RESIDUALS), AND RETURNS ARE THEN DIVIDED BY THIS AMOUNT.
 #THEN PROCEEDS AS NORMAL WITH CS REGRESSION.
 
-#NrPC.V: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS", 
+#nr_pc.V: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS", 
 #I.E. WHENS STUDYING IF (STOCK, DAY) IS OVERTRADED.
 # ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
 
-Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
+Day.CS.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
 
   #STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE! 
   #FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
+  E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -33,7 +33,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
   #NOW, PROCEED AS BEFORE (CS)#
   
   #CONSTRUCT EIGENPORTFOLIOS
-  E = ExtractEigenPortfolio(WeightedReturn, NrPC = NrPC)
+  E = ExtractEigenPortfolio(WeightedReturn, nr_pc = nr_pc)
   
   #REGRESS WEIGHTED RETURNS ON EIGENPORTFOLIOS
   y = WeightedReturn[, H]
@@ -45,7 +45,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha) {
 }
 
 #PERFORMS CS OVERTRADED ON INTERVAL [START, END]
-CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC.V, alpha, NrPC) {
+CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, nr_pc.V, alpha, nr_pc) {
   
   #PREPARE CORES#
   
@@ -55,7 +55,7 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Volume", "Returns", "H", "NrPC.V", "alpha", "NrPC")
+  Localvarlist = c("Volume", "Returns", "H", "nr_pc.V", "alpha", "nr_pc")
   
   
   #OPEN CORES AND TRANSFER
@@ -70,7 +70,7 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, NrPC
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     Day.CS.Overtrade(Volume = Volume, Returns = Returns,
                      t = t, H = H,
-                     NrPC.V = NrPC.V, NrPC = NrPC,
+                     nr_pc.V = nr_pc.V, nr_pc = nr_pc,
                      alpha = alpha)
   }) 
   

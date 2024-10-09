@@ -11,9 +11,9 @@ library(kernlab)
 # L: NR OF DAYS TO USE FOR REGRESSION ON EIGENRETURNS
 # NRC.R: HOW MANY FEAURES OF RETURN EMBEDDINGS TO USE
 # NRC.V: HOW MANY FEAURES OF VOLUME EMBEDDINGS TO USE
-# bSensativity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
+# b_sensitivity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
 
-DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, bSensativity) {
+DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, b_sensitivity) {
   
   #EXTRACT LAST H DAYS OF RETURN HISTORY, GIVING X
   X = as.matrix(Returns[, (t-H):(t-1)])
@@ -53,7 +53,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, bSensat
   
   
   #ESTIMATE COEFFICIENTS FROM ABOVE MODELS
-  Coefficients = estimateCoefficeients(Models, bSensativity = bSensativity)
+  Coefficients = estimateCoefficeients(Models, b_sensitivity = b_sensitivity)
   
   #GET S-SCORE
   S = numeric(nrow(Returns))
@@ -68,7 +68,7 @@ DayCrossTemporal.KCCA = function(Returns, Volume,t,H,HV,L, NrC.R, NrC.V, bSensat
 
 #PERFORMS CT KCCA ON [START, END]
 #D: HOW MANY DAYS TO STANDARDISE VOLUME OVER
-CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, bSensativity) {
+CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, b_sensitivity) {
 
   #STANDRDISE VOLUME
   #HERE, WE DIVIDE VOLUME BY THE AVERAGE VOLUME DURING THE LAST D DAYS (INCLUDING TODAY)
@@ -80,7 +80,7 @@ CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d,
   Globalvarlist = c("DayCrossTemporal.KCCA", "estimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","bSensativity", "StandardisedVolume")
+  Localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -94,7 +94,7 @@ CTRegression.KCCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d,
     S = DayCrossTemporal.KCCA(Returns = Returns, Volume = StandardisedVolume,
                              t=t,H=H, HV = HV,
                              L=L, NrC.R = NrC.R, NrC.V = NrC.V,
-                             bSensativity = bSensativity) #S-score for the day (accross stocks)
+                             b_sensitivity = b_sensitivity) #S-score for the day (accross stocks)
     P = -S$S #prediction is negative s-score
     return(P)
   })

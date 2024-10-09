@@ -5,7 +5,7 @@ import(ggplot2)
 import(gridExtra)
 import(RColorBrewer)
 import(roll)
-
+import(parallel)
 
 
 

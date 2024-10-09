@@ -1,6 +1,6 @@
 #RETURNS THE SCORES (IN A LIST) FOR EACH VALUE OF L IN L.CANDIDATES
-# L.CANDIDATES: ARRAY WITH CANDIDATES OF L, NEED L > NRPC
-OptimiseL = function(Returns, Start, End, NrPC,H, L.Candidates, bSensativity,Q, r) {
+# L.CANDIDATES: ARRAY WITH CANDIDATES OF L, NEED L > nr_pc
+OptimiseL = function(Returns, Start, End, nr_pc,H, L.Candidates, b_sensitivity,Q, r) {
   
   #CREATE LIST FOR STORING SCORES
   Scores = list()
@@ -8,7 +8,7 @@ OptimiseL = function(Returns, Start, End, NrPC,H, L.Candidates, bSensativity,Q, 
   
   #LOOP THROUGH EACH CANDIDATE OF L, CAN CALCULATE CORRESPONDING SCORE
   for (Lcand in L.Candidates) {
-    Pred = CTRegression(Returns, Start, End, NrPC,H, L = Lcand, bSensativity)
+    Pred = CTRegression(Returns, Start, End, nr_pc,H, L = Lcand, b_sensitivity)
     Score = performFullAnalysis(Returns = Returns, Predictions = Pred, Q, r)
     Scores = append(Scores, list(Score))
   }
@@ -22,8 +22,8 @@ OptimiseL = function(Returns, Start, End, NrPC,H, L.Candidates, bSensativity,Q, 
 
 # CT.Scores.OverL = OptimiseL(Returns = Returns, 
 #                             Start = 500, End = ncol(Returns), 
-#                             NrPC=20, H = 252,
-#                             L.Candidates=seq(25,60, by = 5), bSensativity = 0.01,
+#                             nr_pc=20, H = 252,
+#                             L.Candidates=seq(25,60, by = 5), b_sensitivity = 0.01,
 #                             Q=(1:4)/4, r = 30)
 # 
 # write.csv(CT.Scores.OverL, "./Results/Predictions/Base/CT.Scores.OverL.csv")

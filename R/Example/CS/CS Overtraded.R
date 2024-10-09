@@ -1,8 +1,8 @@
 library(parallel)
 # Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(Start = 500, End = ncol(Returns),
 #                                                             Volume, Returns,
-#                                                             H = 252, NrPC.V = 25,
-#                                                             alpha = 175, NrPC = 20)
+#                                                             H = 252, nr_pc.V = 25,
+#                                                             alpha = 175, nr_pc = 20)
 # 
 # write.csv(Prediction.CS.Overtraded, "./Results/Predictions/CS OverTrading/Prediction.CS.Overtraded.csv")
 

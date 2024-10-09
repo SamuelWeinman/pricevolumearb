@@ -10,7 +10,7 @@
                                                #Start = 500, 
                                                #End = ncol(Returns), 
                                                #H = 252,
-                                               #NrPC = 20)
+                                               #nr_pc = 20)
 #write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
 
 Prediction.CS = read.csv("./Results/Predictions/Base/Prediction.CS.csv")
@@ -33,10 +33,10 @@ Scores.CS= performFullAnalysis(Returns = Returns,
 # Prediction.CT = CTRegression(Returns = Returns,
 #                             Start = 500,
 #                             End = ncol(Returns),
-#                             NrPC = 20,
+#                             nr_pc = 20,
 #                             H = 252,
 #                             L = 45,
-#                             bSensativity = 0.01)
+#                             b_sensitivity = 0.01)
 # 
 # write.csv(Prediction.CT, "./Results/Predictions/Base/Prediction.CT.csv")
 

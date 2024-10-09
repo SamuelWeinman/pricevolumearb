@@ -26,7 +26,7 @@ Kpar.List = list(list(sigma = 0.2), #rbfdor
 #   kpar = Kpar.List[[i]]
 #   
 #   Preds = CrossSectionRegression.KPCA(Returns = Returns, Start=500, End = ncol(Returns), 
-#                                       H=252, NrPC = 20,
+#                                       H=252, nr_pc = 20,
 #                                       kernel = kernel, kpar = kpar)
 #   
 #   

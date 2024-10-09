@@ -3,19 +3,19 @@
 #RESIDUALS ARE THEN MAPPED BY RESIDUAL -> EXP(ALPHA * RESIDUALS), AND RETURNS ARE THEN DIVIDED BY THIS AMOUNT.
 #THEN PROCEEDS AS NORMAL WITH CROSS TEMPORA; REGRESSION.
 
-#NrPC.V: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS", 
+#nr_pc.V: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS", 
 #I.E. WHENS STUDYING IF (STOCK, DAY) IS OVERTRADED.
 # ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
 
 #NOTE: VOLUMES ARE DECOMPOSED USING CS REGRESSION, ONLY RETURNS ARE DECOMPOSED WITH CROSS-TEMPORAL REGRESSION
-Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L, bSensativity) {
+Day.CT.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha,L, b_sensitivity) {
   
   #STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE! 
   #FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.  
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = ExtractEigenPortfolio(StandardVolume, NrPC.V)
+  E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -37,10 +37,10 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L, bSensa
   Models=decompose(Returns = WeightedReturn,
                        H = H,
                        L = L,
-                       NrPC = NrPC)
+                       nr_pc = nr_pc)
   
   #ESTIMATE PARAMETERS
-  Coefficients = estimateCoefficeients(Models, bSensativity)
+  Coefficients = estimateCoefficeients(Models, b_sensitivity)
   
   
   #CALCULATE S-SCORE (NEGATIVE PREDICTION)
@@ -59,7 +59,7 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, NrPC.V, NrPC, alpha,L, bSensa
 #START: FIRST DAY OF TRADING
 #END: LAST DAY OF TRADING
 #ALL ELSE AS BEFORE
-CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, NrPC.V, NrPC, alpha,L, bSensativity) {
+CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_pc, alpha,L, b_sensitivity) {
   
   #PREPARE CORES#
   
@@ -70,8 +70,8 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, NrPC.V, NrPC,
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   Localvarlist = c("Returns", "Volume",
-                   "H", "L", "bSensativity",
-                   "NrPC.V", "NrPC", "alpha","L", "bSensativity")
+                   "H", "L", "b_sensitivity",
+                   "nr_pc.V", "nr_pc", "alpha","L", "b_sensitivity")
   
   
   #OPEN CORES AND TRANSFER
@@ -85,8 +85,8 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, NrPC.V, NrPC,
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   Predictions = snow::parSapply(cl, Start:End, function(t) {
     S = Day.CT.Overtrade(Volume = Volume, Returns = Returns, t = t,
-                         H = H, NrPC.V = NrPC.V, NrPC = NrPC,
-                         alpha=alpha,L=L, bSensativity = bSensativity) # S-SCORE
+                         H = H, nr_pc.V = nr_pc.V, nr_pc = nr_pc,
+                         alpha=alpha,L=L, b_sensitivity = b_sensitivity) # S-SCORE
     
     P = -S$S #PREDICTION IS NEGATIVE S-SCORE
     return(P)

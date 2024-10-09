@@ -45,11 +45,11 @@ ConstructClusters = function(rho, k, MinSize) {
 
 #PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
 # ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES) 
-DayCrossRegression.Cluster <- function(Returns, Volume, t,H,NrPC,k,MinSize, alpha) {
+DayCrossRegression.Cluster <- function(Returns, Volume, t,H,nr_pc,k,MinSize, alpha) {
   
   #EXTRACT EIGENPORTFOLIO
   E = ExtractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
-                            NrPC = NrPC) 
+                            nr_pc = nr_pc) 
   
   #CONSTRUCT WRIGHTED CORRELATION MATRIX
   rho = alpha* ConstructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[, (t-H):(t-1)])
@@ -88,7 +88,7 @@ DayCrossRegression.Cluster <- function(Returns, Volume, t,H,NrPC,k,MinSize, alph
               k = k))
 }
 
-CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,k,MinSize, alpha) {
+CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc,k,MinSize, alpha) {
   
   #PREPARE CORES#
   
@@ -98,7 +98,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","Volume","H","NrPC","k", "MinSize", "alpha")
+  Localvarlist = c("Returns","Volume","H","nr_pc","k", "MinSize", "alpha")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -112,7 +112,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, NrPC,
     DayCrossRegression.Cluster(Returns = Returns,
                                Volume = Volume,
                                t=t, H = H,
-                               NrPC = NrPC,
+                               nr_pc = nr_pc,
                                k = k, MinSize = MinSize,
                                alpha = alpha)
     

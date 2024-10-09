@@ -33,7 +33,7 @@ decompose <- function(returns, nr_pc, h, L) {
 #MODELS: MODELS OF THE FORM (RETURNS ~ FACTORS)
 #FOLLOWS SAME ALGORITHM AS APPENDIX A OF Marco Avellaneda & Jeong-Hyun Lee (2010)
 #IF B CLOSE TOO ONE, THERE IS NO MEAN REVERSION
-#HENCE, REJECT MEAN REVERSION IF b > 1-bSensativity
+#HENCE, REJECT MEAN REVERSION IF b > 1-b_sensitivity
 estimateCoefficeients <- function(models, b_sensitivity) {
   
   #DIMENSIONS

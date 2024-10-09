@@ -15,7 +15,7 @@ MAP.list = list(f = function(x) x,
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20, d = 20,
+#                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
 # 
@@ -96,7 +96,7 @@ ggsave(filename = "SharpePPT.CS.VW.Divide.png",
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns, 
 #                                                               Volume, 
 #                                                               Start = 500, End = ncol(Returns),
-#                                                               H = 252, NrPC=20, d = 20,
+#                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)
 

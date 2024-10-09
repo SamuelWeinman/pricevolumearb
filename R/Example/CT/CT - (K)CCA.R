@@ -3,7 +3,7 @@
 #                                    Start = 500, End = ncol(Returns),
 #                                    H=100, HV = 100, L = 45,
 #                                    NrC.R = 15, NrC.V = 5,
-#                                    d=20, bSensativity = 0.01)
+#                                    d=20, b_sensitivity = 0.01)
 # 
 #write.csv(Predictions.CT.CCA, "./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
 
@@ -20,7 +20,7 @@ Scores.CT.CCA = performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4)/4, r 
 #                                       Start = 500, End = ncol(Returns),
 #                                       H=100, HV = 100, L = 45,
 #                                       NrC.R = 15, NrC.V = 5,
-#                                       d=20, bSensativity = 0.01)
+#                                       d=20, b_sensitivity = 0.01)
 # 
 # write.csv(Predictions.CT.KCCA, "./Results/Predictions/CT CCA/Predictions.CT.KCCA.csv")
 

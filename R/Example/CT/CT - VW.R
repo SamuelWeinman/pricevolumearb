@@ -12,8 +12,8 @@ MAP.list = list(f = function(x) x,
 # Predictions.CT.VW.Divide <- Outside_CTRegression.VW(Returns = Returns,
 #                                                     Volume = Volume,
 #                                                     Start = 500, End = ncol(Returns),
-#                                                     H = 252, NrPC = 20, L = 45,
-#                                                     bSensativity = 0.01, d = 20,
+#                                                     H = 252, nr_pc = 20, L = 45,
+#                                                     b_sensitivity = 0.01, d = 20,
 #                                                     divide = TRUE, MAP.list = MAP.list)
 # 
 # write.csv(Predictions.CT.VW.Divide, "./Results/Predictions/CT VW/Predictions.CT.VW.Divide.csv")
@@ -90,8 +90,8 @@ ggsave(filename = "SharpePPT.CT.VW.Divide.png",
 # Predictions.CT.VW.Multiply <- Outside_CTRegression.VW(Returns = Returns,
 #                                                       Volume = Volume,
 #                                                       Start = 500, End = ncol(Returns),
-#                                                       H = 252, NrPC = 20, L = 45,
-#                                                       bSensativity = 0.01, d = 20,
+#                                                       H = 252, nr_pc = 20, L = 45,
+#                                                       b_sensitivity = 0.01, d = 20,
 #                                                       divide = FALSE, MAP.list = MAP.list)
 
 #write.csv(Predictions.CT.VW.Multiply, "./Results/Predictions/CT VW/Predictions.CT.VW.Multiply.csv")

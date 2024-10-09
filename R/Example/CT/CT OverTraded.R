@@ -1,7 +1,7 @@
 # Predictions.CT.OverTraded = CTRegression.Overtrade(Volume, Returns,
 #                              Start = 500, End = ncol(Returns),
-#                              H = 252, NrPC.V = 25, NrPC = 20,
-#                              alpha=100,L=45, bSensativity = 0.01)
+#                              H = 252, nr_pc.V = 25, nr_pc = 20,
+#                              alpha=100,L=45, b_sensitivity = 0.01)
 # 
 # write.csv(Predictions.CT.OverTraded, "./Results/Predictions/CT OverTrading/Predictions.CT.OverTraded.csv")
 

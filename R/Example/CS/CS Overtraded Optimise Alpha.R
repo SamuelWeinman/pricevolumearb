@@ -5,8 +5,8 @@ Alpha.Candidates = seq(40,250, by = 15)
 #   A = Alpha.Candidates[i]
 #   Preds = CrossSectionRegression.OverTrade(Start = 500, End = ncol(Returns),
 #                                                               Volume, Returns,
-#                                                               H = 252, NrPC.V = 25,
-#                                                               alpha = A, NrPC = 20)
+#                                                               H = 252, nr_pc.V = 25,
+#                                                               alpha = A, nr_pc = 20)
 #   S = Analysis(Returns, Preds, r = 30, Q = (1:4)/4)
 #   return(S)
 # })

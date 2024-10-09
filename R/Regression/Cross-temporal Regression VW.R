@@ -5,7 +5,7 @@
 #L: NR OF DAYS TO USE FOR REGRESSION
 #D: HOW MANY DAYS TO USE FOR ROLLING MEAN VOLUME
 #ALL ELSE AS BEFORE
-CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H, L, bSensativity, d, divide){
+CTRegression.VW <- function(Returns, Volume, Start, End, nr_pc,H, L, b_sensitivity, d, divide){
   
   #CONSTRUCT WEIGHTED RETURN
   WeightedReturns = ConstructWeightedReturn(Returns = Returns, Volume=Volume,H=H, d = d,
@@ -19,7 +19,7 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H, L, bSensativity
                     "ConstructEigenPortfolios", "ConstructRho", "ConstructWeightedReturn")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns", "H", "L", "bSensativity", "WeightedReturns")
+  Localvarlist = c("Returns", "H", "L", "b_sensitivity", "WeightedReturns")
 
   
   #OPEN CORES AND TRANSFER
@@ -32,9 +32,9 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H, L, bSensativity
   #FOR EACH DAY, FIRST STANDARDISE THE RETURNS AND THEN CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   S.Scores = snow::parSapply(cl, Start:End, function(t) {
     S = calculateSScore(Returns = WeightedReturns[, 1:(t-1)], 
-                           NrPC = NrPC,
+                           nr_pc = nr_pc,
                            H = H, L = L,
-                           bSensativity = bSensativity)
+                           b_sensitivity = b_sensitivity)
     
     #RETURN THE S-SCORE
     return(S$S)
@@ -56,7 +56,7 @@ CTRegression.VW <- function(Returns, Volume, Start, End, NrPC,H, L, bSensativity
 
 #DOES CrossSectionRegression.VW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING. 
 # MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H, L, bSensativity, d, divide, MAP.list) {
+Outside_CTRegression.VW = function(Returns, Volume, Start, End, nr_pc,H, L, b_sensitivity, d, divide, MAP.list) {
   
   #NR OF MAPS
   K = length(MAP.list)
@@ -71,8 +71,8 @@ Outside_CTRegression.VW = function(Returns, Volume, Start, End, NrPC,H, L, bSens
     preds=CTRegression.VW(Returns = Returns, #perform calculations with mapped volume
                           Volume = MappedVolume,
                           Start = Start, End = End, 
-                          NrPC=NrPC,H=H, L = L,
-                          bSensativity = bSensativity,
+                          nr_pc=nr_pc,H=H, L = L,
+                          b_sensitivity = b_sensitivity,
                           d = d, divide = divide)
     PredictionsList[[k]] = preds #add to list
   }
