@@ -34,7 +34,7 @@ singleCrossSectoralRegressionWithKCCA  <- function(returns, volume, t, h, hv, nr
 
 #PERFORMS KCCA CS ON INTERVAL [START, END]
 #D: NR OF DAYS TO STANDARDISE OVER
-CrossSectionRegression.KCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
+crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
   
   standardisedVolume = volume / t(roll_mean(t(as.matrix(volume)), width = d))
 
