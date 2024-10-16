@@ -13,7 +13,7 @@ library(kernlab)
 # NRC.V: HOW MANY FEAURES OF VOLUME EMBEDDINGS TO USE
 # b_sensitivity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
 
-crossTemporalRegressionWithKCCA_SingleDay = function(returns, volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity) {
+singleCrossTemporalRegressionWithKCCA = function(returns, volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity) {
   
   x = as.matrix(returns[, (t-h):(t-1)])
   y = as.matrix(volume[, (t-hv):(t-1)])
@@ -55,7 +55,7 @@ crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, 
   standardised_volume  =  volume / t(rolling_mean(t(as.matrix(volume)), width = d))
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("crossTemporalRegressionWithKCCA_SingleDay", "estimateCoefficeients")
+  globalvarlist = c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("returns", "h", "hv","l", "nr_c_r", "nr_c_v","b_sensitivity", "standardised_volume" )
@@ -69,7 +69,7 @@ crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, 
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   predictions = snow::parSapply(cl, start:end, function(t) {
-    s = crossTemporalRegressionWithKCCA_SingleDay(returns = returns, volume = standardised_volume, 
+    s = singleCrossTemporalRegressionWithKCCA(returns = returns, volume = standardised_volume, 
                             t = t, h = h, hv = hv,
                             L=L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
                             b_sensitivity = b_sensitivity) #S-score for the day (accross stocks)
