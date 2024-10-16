@@ -72,7 +72,7 @@ CTRegression.CCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, 
 
   #STANDRDISE VOLUME
   #HERE, WE DIVIDE VOLUME BY THE AVERAGE VOLUME DURING THE LAST D DAYS (INCLUDING TODAY)
-  StandardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
+  standardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
   #PREPARE CORES#
   
@@ -80,7 +80,7 @@ CTRegression.CCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, 
   globalvarlist = c("DayCrossTemporal.CCA", "estimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "StandardisedVolume")
+  localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "standardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -91,7 +91,7 @@ CTRegression.CCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, 
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   predictions = snow::parSapply(cl, Start:End, function(t) {
-    s = DayCrossTemporal.CCA(Returns = Returns, StandardVolume = StandardisedVolume,
+    s = DayCrossTemporal.CCA(Returns = Returns, StandardVolume = standardisedVolume,
                               t=t,H=H, HV = HV,
                               L=L, NrC.R = NrC.R, NrC.V = NrC.V,
                               b_sensitivity = b_sensitivity)#s-score for the day (accross stocks)

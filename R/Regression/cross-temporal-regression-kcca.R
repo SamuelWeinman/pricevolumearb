@@ -50,41 +50,31 @@ singleCrossTemporalRegressionWithKCCA = function(returns, volume, t, h, hv, l, n
 #D: HOW MANY DAYS TO STANDARDISE VOLUME OVER
 crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
 
-  #STANDRDISE VOLUME
-  #HERE, WE DIVIDE VOLUME BY THE AVERAGE VOLUME DURING THE LAST D DAYS (INCLUDING TODAY)
-  standardised_volume  =  volume / t(rolling_mean(t(as.matrix(volume)), width = d))
+  standardisedVolume  =  volume / t(rolling_mean(t(as.matrix(volume)), width = d))
   
-  #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
-  
-  #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist = c("returns", "h", "hv","l", "nr_c_r", "nr_c_v","b_sensitivity", "standardised_volume" )
+  globalvarlist = c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")  
+  localvarlist = c("returns", "h", "hv","l", "nr_c_r", "nr_c_v","b_sensitivity", "standardisedVolume" )
     
-   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
   clusterCall(cl, function() library("kernlab"))
   clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, Globalvarlist) 
   snow::clusterExport(cl, Localvarlist, envir = environment())
   
-  #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   predictions = snow::parSapply(cl, start:end, function(t) {
-    s = singleCrossTemporalRegressionWithKCCA(returns = returns, volume = standardised_volume, 
+    s = singleCrossTemporalRegressionWithKCCA(returns = returns, volume = standardisedVolume, 
                             t = t, h = h, hv = hv,
                             L=L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
-                            b_sensitivity = b_sensitivity) #S-score for the day (accross stocks)
-    p = -s_scores #prediction is negative s-score
+                            b_sensitivity = b_sensitivity)
+    p = -s_scores
     return(p)
   })
   
-  #STOP CLUSTERS
   snow::stopCluster(cl)
   
-  #CHANGE COL AND ROWNAMES AS APPROPRIATE.
   rownames(predictions) = rownames(returns)
   colnames(predictions) = start:end
   
-  #RETURN
   return(predictions)
 }
 

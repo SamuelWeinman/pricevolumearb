@@ -5,11 +5,11 @@ library(latex2exp)
 t = 4096 +252
 H = 100
 HV =100
-StandardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
+standardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
 #ORIGINAL VARIABLES
 X = Returns[, (t-H):(t-1)]
-Y = StandardisedVolume[, (t-HV):(t-1)]
+Y = standardisedVolume[, (t-HV):(t-1)]
 
 dataXY=data.frame(X = X[, 1], Y = Y[, 1])
 
