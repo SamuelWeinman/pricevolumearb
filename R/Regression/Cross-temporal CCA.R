@@ -12,100 +12,69 @@ library(CCA)
 # NRC.R: HOW MANy FEAURES OF RETURN EMBEDDINGS TO USE
 # NRC.V: HOW MANy FEAURES OF VOLUME EMBEDDINGS TO USE
 # b_sensitivity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
+singleCrossTemporalRegressionCCA <- function(returns, standardisedVolume,t,h, hv,L, nr_c_r, nr_c_v, b_sensitivity) {
 
-DayCrossTemporal.CCA = function(returns, StandardVolume,t,H,HV,L, NrC.R, NrC.V, b_sensitivity) {
+  x <- returns[, (t-h):(t-1)]
+  y <- standardisedVolume[, (t-hv):(t-1)]
+  
+  c <- cc(x, y)
+  
+  x <- as.matrix(x) %*% as.matrix(c$xcoef)
+  y <- as.matrix(y) %*% as.matrix(c$ycoef)
+  
+  x <- x[, 1:nr_c_r]
+  y <- y[, 1:nr_c_r]
 
-  #ExTRACT LAST H DAyS OF RETURN HISTORy, GIVING x
-  x <- returns[, (t-H):(t-1)]
+  x <- x / apply(as.matrix(returns[,(t-h):(t-1)]),1, sd)
+  y <- y / apply(as.matrix(returns[,(t-h):(t-1)]),1, sd)
 
-  #ExTEACT VOLUME
-  y <- StandardVolume[, (t-HV):(t-1)]
+  portfolios <- cbind(x, y)
+  portfolioReturns <- t(returns[(t-L):(t-1)]) %*% portfolios
   
-  #PERFORM CCA
-  c = cc(x, y)
-  
-  #EMBEDDING OF x AND y IN NEW SPACE
-  x <- as.matrix(x) %*% as.matrix(C$xcoef)
-  y <- as.matrix(y) %*% as.matrix(C$ycoef)
-  
-  #ExTRACT MOST IMPORTANT COMPONENTS
-  x <- x[, 1:NrC.R]
-  y <- y[, 1:NrC.V]
-
-  #DIVIDE EACH COLUMN By THE STANDARD DEVIATION OF THE ROW 
-  x <- x / apply(as.matrix(returns[,(t-H):(t-1)]),1, sd)
-  y <- y / apply(as.matrix(returns[,(t-H):(t-1)]),1, sd)
-
-  #CONSTRUCT "EIGEN"-PORTFOLIO
-  portfolios = cbind(x, y)
-  
-  #CALCULATE RETURN ON EACH OF THE PORTFOLIOS
-  portfolioReturns = t(returns[(t-L):(t-1)]) %*% portfolios
-  
-  #PERFORM REGRESSION
-  #THE i:TH ENTRy IN MODELS IS THE REGRESSION OF THE i:TH STOCK ON THE RETURNS OF THE "EIGEN"-PORTFOLIO
-  N = nrow(returns)
-  models <- lapply(1:N, function(i) { #loop through all stocks
-    y <- unlist(returns[i, (t-L):(t-1)]) #returns last L days
-    model = lm(as.numeric(y)~portfolioReturns) #get lm
+  n <- nrow(returns)
+  models <- lapply(1:n, function(i) {
+    z <- unlist(returns[i, (t-L):(t-1)])
+    model <- lm(as.numeric(z)~portfolioReturns)
     return(model)
   })
   
-  #ESTIMATE COEFFICIENTS FROM ABOVE MODELS
-  coefficients = estimateCoefficeients(models, b_sensitivity = b_sensitivity)
+  coefficients <- estimateCoefficeients(models, b_sensitivity = b_sensitivity)
   
-  #GET S-SCORE
-  s = numeric(nrow(returns))
-  index <- coefficients$MeanReversion == 1 #mean reversion 
-  s[index] = -coefficients$m[index]/sqrt(coefficients$SigmaEq.Squared[index])
+  s <- numeric(nrow(returns))
+  index <- coefficients$is_mean_reverting == 1 
+  s[index] <- -coefficients$m[index]/sqrt(coefficients$sigma_eq_squared[index])
   
-  #RETURN
   return(list(
     s = s,
-    MeanReversion = coefficients$MeanReversion))
+    is_mean_reverting = coefficients$is_mean_reverting))
 }
 
 
-#PERFORMS CT CCA ON [START, END]
-#D: HOW MANy DAyS TO STANDARDISE VOLUME OVER!!!
-CTRegression.CCA = function(returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, b_sensitivity) {
+crossTemporalRegressionCCA <- function(returns, Volume, Start, End,H,HV,L, nr_c_r, nr_c_v,d, b_sensitivity) {
 
-  #STANDRDISE VOLUME
-  #HERE, WE DIVIDE VOLUME By THE AVERAGE VOLUME DURING THE LAST D DAyS (INCLUDING TODAy)
-  standardisedVolume = Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
+  standardisedVolume <- Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
-  #PREPARE CORES#
+  globalvarlist <- c("DayCrossTemporal.CCA", "estimateCoefficeients")
+  localvarlist <- c("returns","H","HV","L", "nr_c_r", "nr_c_v","b_sensitivity", "standardisedVolume")
   
-  #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("DayCrossTemporal.CCA", "estimateCoefficeients")
-  
-  #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist = c("returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "standardisedVolume")
-  
-  #OPEN CORES AND TRANSFER
-  cl = snow::makeCluster(detectCores()-1)
+  cl <- snow::makeCluster(detectCores()-1)
   clusterCall(cl, function() library("CCA"))
   clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, Globalvarlist) 
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, Localvarlist, envir <- environment())
   
-  #FOR EACH DAy, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-  predictions = snow::parSapply(cl, Start:End, function(t) {
-    s = DayCrossTemporal.CCA(returns = returns, StandardVolume = standardisedVolume,
+  predictions <- snow::parSapply(cl, Start:End, function(t) {
+    s <- DayCrossTemporal.CCA(returns = returns, standardisedVolume = standardisedVolume,
                               t=t,H=H, HV = HV,
-                              L=L, NrC.R = NrC.R, NrC.V = NrC.V,
-                              b_sensitivity <- b_sensitivity)#s-score for the day (accross stocks)
-    p = -s_scores #predictions is negative s-score
+                              L=L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
+                              b_sensitivity = b_sensitivity)
+    p <- -s_scores
     return(p)
   })
-  
-  #STOP CLUSTERS
   snow::stopCluster(cl)
   
-  #CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  rownames(Predictions) = rownames(returns)
-  colnames(Predictions) = Start:End
+  rownames(Predictions) <- rownames(returns)
+  colnames(Predictions) <- Start:End
   
-  #RETURN
   return(Predictions)
 }

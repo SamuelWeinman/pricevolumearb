@@ -96,7 +96,7 @@ calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
   #IF THERE IS NO MEAN-REVERSION, GIVE ZERO.
   #FIRST CREATE ARRAY, THEN GET S-SCORE FOR THOSE STOCKS WHERE THERE IS MEAN REVERSION
   s = numeric(nrow(Returns))
-  index = coefficients$MeanReversion == 1 #mean reversion 
+  index = coefficients$is_mean_reverting == 1 #mean reversion 
   s[index] = -coefficients$m[index]/sqrt(coefficients$sigma_eq_squared[index]) #CORRESPONDING S-SCORE
   
   #RETURN

@@ -14,7 +14,7 @@ Coeff = estimateCoefficeients(list(model), b_sensitivity = 0.01)
 kappa = Coeff$K
 m = Coeff$m
 sigma2 = Coeff$Sigma.Squared
-sigma2.eq = Coeff$SigmaEq.Squared
+sigma2.eq = Coeff$sigma_eq_squared
 
 Pred = m/sqrt(sigma2.eq)
 

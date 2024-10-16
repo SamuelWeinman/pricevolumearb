@@ -1,8 +1,8 @@
 
-# Predictions.CT.CCA=CTRegression.CCA(Returns = Returns, Volume = Volume,
+# Predictions.CT.CCA=crossTemporalRegressionCCA(Returns = Returns, Volume = Volume,
 #                                    Start = 500, End = ncol(Returns),
 #                                    H=100, HV = 100, L = 45,
-#                                    NrC.R = 15, NrC.V = 5,
+#                                    nr_c_r = 15, nr_c_v = 5,
 #                                    d=20, b_sensitivity = 0.01)
 # 
 #write.csv(Predictions.CT.CCA, "./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
@@ -19,7 +19,7 @@ Scores.CT.CCA = performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4)/4, r 
 # Predictions.CT.KCCA=CTRegression.KCCA(Returns = Returns, Volume = Volume,
 #                                       Start = 500, End = ncol(Returns),
 #                                       H=100, HV = 100, L = 45,
-#                                       NrC.R = 15, NrC.V = 5,
+#                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d=20, b_sensitivity = 0.01)
 # 
 # write.csv(Predictions.CT.KCCA, "./Results/Predictions/CT CCA/Predictions.CT.KCCA.csv")

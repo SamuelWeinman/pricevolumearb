@@ -9,9 +9,9 @@ Pred.VW.CS = unlist(Predictions.CS.VW.Divide[[1]][, col])
 Pred.VW.CT = unlist(Predictions.CT.VW.Divide[[1]][, col])
 
 
-StandardVolume = unlist(Volume[, t-1] / apply(Volume[,(t-d):(t-1)],1, mean))
+standardisedVolume = unlist(Volume[, t-1] / apply(Volume[,(t-d):(t-1)],1, mean))
 
-Group = as.factor(ceiling(order(StandardVolume) / ceiling(659/NrGroups)))
+Group = as.factor(ceiling(order(standardisedVolume) / ceiling(659/NrGroups)))
 
 
 data = data.frame(Group = 1:7,

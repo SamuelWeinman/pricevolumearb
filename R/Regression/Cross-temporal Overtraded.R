@@ -12,15 +12,15 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha,L, b_se
   
   #STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE! 
   #FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.  
-  StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
+  standardisedVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
+  E.V = extractEigenPortfolio(standardisedVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
   Overtraded = sapply(1:H, function(i) {
-    y = StandardVolume[, i] #standardise volume on the day
+    y = standardisedVolume[, i] #standardise volume on the day
     model = lm(y~E.V$EigenPortfolio) #regress on eigenportfolios
     return(model$residuals) #extract residuals
   })
@@ -45,13 +45,13 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha,L, b_se
   
   #CALCULATE S-SCORE (NEGATIVE PREDICTION)
   s = numeric(nrow(Returns))
-  index = Coefficients$MeanReversion == 1 #mean reversion 
-  S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index])  
+  index = Coefficients$is_mean_reverting == 1 #mean reversion 
+  S[index] = -Coefficients$m[index]/sqrt(Coefficients$sigma_eq_squared[index])  
   
   #RETURN
   return(list(
     S= S,
-    MeanReversion = Coefficients$MeanReversion))
+    MeanReversion = Coefficients$is_mean_reverting))
 }
 
 

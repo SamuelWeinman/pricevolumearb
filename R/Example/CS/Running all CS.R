@@ -60,7 +60,7 @@
 # Predictions.CS.CCA=CrossSectionRegression.CCA(Returns = Returns, Volume = Volume,
 #                                    Start = 500, End = ncol(Returns),
 #                                    H=100, HV = 100,
-#                                    NrC.R = 15, NrC.V = 5,
+#                                    nr_c_r = 15, nr_c_v = 5,
 #                                    d = 20)
 # 
 # 
@@ -70,7 +70,7 @@
 # Predictions.CS.KCCA=CrossSectionRegression.KCCA(Returns = Returns, Volume = Volume,
 #                                       Start = 500, End = ncol(Returns),
 #                                       H=100, HV = 100,
-#                                       NrC.R = 15, NrC.V = 5,
+#                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d = 20)
 # 
 # write.csv(Predictions.CS.KCCA, "./Results/Predictions/CS CCA/Predictions.CS.KCCA.csv")

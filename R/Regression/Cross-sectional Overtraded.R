@@ -11,15 +11,15 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
 
   #STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE! 
   #FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.
-  StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
+  standardisedVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
+  E.V = extractEigenPortfolio(standardisedVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
   Overtraded = sapply(1:H, function(i) {
-    y = StandardVolume[, i] #standardise volume on the day
+    y = standardisedVolume[, i] #standardise volume on the day
     model = lm(y~E.V$EigenPortfolio) #regress on eigenportfolios
     return(model$residuals) #extract residuals
   })
