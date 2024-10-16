@@ -93,12 +93,12 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossRegression.Cluster", "ConstructClusters",
+  globalvarlist = c("DayCrossRegression.Cluster", "ConstructClusters",
                     "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","Volume","H","nr_pc","k", "MinSize", "alpha")
+  localvarlist = c("Returns","Volume","H","nr_pc","k", "MinSize", "alpha")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -108,7 +108,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
+  predictions = snow::parSapply(cl, Start:End, function(t) {
     DayCrossRegression.Cluster(Returns = Returns,
                                Volume = Volume,
                                t=t, H = H,

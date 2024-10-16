@@ -78,7 +78,7 @@ for (i in 1:5) {
                     Standard = StandardList)
   
   
-  S = append(S, list(MethodList))
+  s = append(S, list(MethodList))
 }
 
 

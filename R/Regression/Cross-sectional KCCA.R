@@ -54,12 +54,12 @@ CrossSectionRegression.KCCA <- function(Returns, Volume, Start, End, H,d,HV, NrC
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossRegression.KCCA",
+  globalvarlist = c("DayCrossRegression.KCCA",
                     "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H","NrC.R","NrC.V","HV", "StandardisedVolume")
+  localvarlist = c("Returns","H","NrC.R","NrC.V","HV", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -70,7 +70,7 @@ CrossSectionRegression.KCCA <- function(Returns, Volume, Start, End, H,d,HV, NrC
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
+  predictions = snow::parSapply(cl, Start:End, function(t) {
     DayCrossRegression.KCCA(Returns = Returns,
                            Volume = StandardisedVolume, 
                            t = t,

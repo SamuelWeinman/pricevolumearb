@@ -55,13 +55,13 @@ DayCrossTemporal.CCA = function(Returns, StandardVolume,t,H,HV,L, NrC.R, NrC.V, 
   Coefficients = estimateCoefficeients(Models, b_sensitivity = b_sensitivity)
   
   #GET S-SCORE
-  S = numeric(nrow(Returns))
+  s = numeric(nrow(Returns))
   index = Coefficients$MeanReversion == 1 #mean reversion 
   S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index])
   
   #RETURN
   return(list(
-    S = S,
+    s = S,
     MeanReversion = Coefficients$MeanReversion))
 }
 
@@ -77,10 +77,10 @@ CTRegression.CCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, 
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("DayCrossTemporal.CCA", "estimateCoefficeients")
+  globalvarlist = c("DayCrossTemporal.CCA", "estimateCoefficeients")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "StandardisedVolume")
+  localvarlist = c("Returns","H","HV","L", "NrC.R", "NrC.V","b_sensitivity", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -90,13 +90,13 @@ CTRegression.CCA = function(Returns, Volume, Start, End,H,HV,L, NrC.R, NrC.V,d, 
   snow::clusterExport(cl, Localvarlist, envir = environment())
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
-    S = DayCrossTemporal.CCA(Returns = Returns, StandardVolume = StandardisedVolume,
+  predictions = snow::parSapply(cl, Start:End, function(t) {
+    s = DayCrossTemporal.CCA(Returns = Returns, StandardVolume = StandardisedVolume,
                               t=t,H=H, HV = HV,
                               L=L, NrC.R = NrC.R, NrC.V = NrC.V,
                               b_sensitivity = b_sensitivity)#s-score for the day (accross stocks)
-    P = -S$S #predictions is negative s-score
-    return(P)
+    p = -s_scores #predictions is negative s-score
+    return(p)
   })
   
   #STOP CLUSTERS

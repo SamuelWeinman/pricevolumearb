@@ -7,7 +7,7 @@ Alpha.Candidates = seq(40,250, by = 15)
 #                                                               Volume, Returns,
 #                                                               H = 252, nr_pc.V = 25,
 #                                                               alpha = A, nr_pc = 20)
-#   S = Analysis(Returns, Preds, r = 30, Q = (1:4)/4)
+#   s = Analysis(Returns, Preds, r = 30, Q = (1:4)/4)
 #   return(S)
 # })
 # 
@@ -109,7 +109,7 @@ for (i in 1:15) {
                     Standard = StandardList)
   
   
-  S = append(S, list(MethodList))
+  s = append(S, list(MethodList))
 }
 
 S.small = S[seq(1,15, by = 2)]

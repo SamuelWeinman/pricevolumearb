@@ -39,10 +39,10 @@ VarExplained.TS = function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
   
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("VarExplianed.Day", "ConstructRho")
+  globalvarlist = c("VarExplianed.Day", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H", "nr_pc.cand", "StandardisedVolume")
+  localvarlist = c("Returns","H", "nr_pc.cand", "StandardisedVolume")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)

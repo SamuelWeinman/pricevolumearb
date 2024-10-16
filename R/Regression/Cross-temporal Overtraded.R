@@ -44,7 +44,7 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha,L, b_se
   
   
   #CALCULATE S-SCORE (NEGATIVE PREDICTION)
-  S = numeric(nrow(Returns))
+  s = numeric(nrow(Returns))
   index = Coefficients$MeanReversion == 1 #mean reversion 
   S[index] = -Coefficients$m[index]/sqrt(Coefficients$SigmaEq.Squared[index])  
   
@@ -64,12 +64,12 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("Day.CT.Overtrade",
+  globalvarlist = c("Day.CT.Overtrade",
                     "estimateCoefficeients","decompose", "ExtractEigenPortfolio",  
                     "ConstructEigenPortfolios", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns", "Volume",
+  localvarlist = c("Returns", "Volume",
                    "H", "L", "b_sensitivity",
                    "nr_pc.V", "nr_pc", "alpha","L", "b_sensitivity")
   
@@ -83,13 +83,13 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
-    S = Day.CT.Overtrade(Volume = Volume, Returns = Returns, t = t,
+  predictions = snow::parSapply(cl, Start:End, function(t) {
+    s = Day.CT.Overtrade(Volume = Volume, Returns = Returns, t = t,
                          H = H, nr_pc.V = nr_pc.V, nr_pc = nr_pc,
                          alpha=alpha,L=L, b_sensitivity = b_sensitivity) # S-SCORE
     
-    P = -S$S #PREDICTION IS NEGATIVE S-SCORE
-    return(P)
+    p = -s_scores #PREDICTION IS NEGATIVE S-SCORE
+    return(p)
   })
   
   #STOP CLUSTERS

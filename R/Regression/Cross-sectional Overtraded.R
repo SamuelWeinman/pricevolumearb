@@ -50,12 +50,12 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, nr_p
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("Day.CS.Overtrade", "ExtractEigenPortfolio",
+  globalvarlist = c("Day.CS.Overtrade", "ExtractEigenPortfolio",
                     "ConstructEigenPortfolios", 
                     "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Volume", "Returns", "H", "nr_pc.V", "alpha", "nr_pc")
+  localvarlist = c("Volume", "Returns", "H", "nr_pc.V", "alpha", "nr_pc")
   
   
   #OPEN CORES AND TRANSFER
@@ -67,7 +67,7 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, nr_p
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
+  predictions = snow::parSapply(cl, Start:End, function(t) {
     Day.CS.Overtrade(Volume = Volume, Returns = Returns,
                      t = t, H = H,
                      nr_pc.V = nr_pc.V, nr_pc = nr_pc,

@@ -15,7 +15,7 @@ CrossSectional.KPCA.day = function(Returns, t, H, nr_pc, kernel, kpar) {
   Returns = apply(Returns,2, scale)
 
   #PERFORM KPCA
-  S = kpca(Returns, features = nr_pc, 
+  s = kpca(Returns, features = nr_pc, 
          kernel = kernel, kpar = kpar)
   
   #EXTRACT PROJECTED DATA
@@ -40,10 +40,10 @@ CrossSectional.KPCA.day = function(Returns, t, H, nr_pc, kernel, kpar) {
 CrossSectionRegression.KPCA = function(Returns, Start, End, H, nr_pc, kernel, kpar) {
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  Globalvarlist = c("CrossSectional.KPCA.day", "ConstructRho")
+  globalvarlist = c("CrossSectional.KPCA.day", "ConstructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  Localvarlist = c("Returns","H", "nr_pc", "kernel", "kpar")
+  localvarlist = c("Returns","H", "nr_pc", "kernel", "kpar")
   
   #OPEN CORES AND TRANSFER
   cl = snow::makeCluster(detectCores()-1)
@@ -56,7 +56,7 @@ CrossSectionRegression.KPCA = function(Returns, Start, End, H, nr_pc, kernel, kp
   #GET PREDICTION OVER THE WHOLE TIME PERIOD
   #ROWS CORRESPOND TO STOCKS
   #THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  Predictions = snow::parSapply(cl, Start:End, function(t) {
+  predictions = snow::parSapply(cl, Start:End, function(t) {
     CrossSectional.KPCA.day (Returns = Returns,
                              t = t,
                              H=H, nr_pc = nr_pc,

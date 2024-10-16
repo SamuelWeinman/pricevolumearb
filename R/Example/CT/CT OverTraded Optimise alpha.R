@@ -10,7 +10,7 @@ for (i in 1:length(Alpha.Candidates)){
                                H = 252, nr_pc.V = 25, nr_pc = 20,
                                alpha = A,
                                L=45, b_sensitivity = 0.01)
-  S = performFullAnalysis(Returns, Preds, r = 30, Q = (1:4)/4)
+  s = performFullAnalysis(Returns, Preds, r = 30, Q = (1:4)/4)
   Scores = append(Scores, list(S))
   Sys.time()
 }
@@ -22,12 +22,12 @@ write.csv(x = Scores, file= "./Results/Predictions/CT OverTrading/Scores.CT.Over
 
 
 Mean = sapply(1:length(Scores), function(i) {
-  S = Scores[[i]]
+  s = Scores[[i]]
   mean(S$Regular$PnL)
 })
 
 sd = sapply(1:length(Scores), function(i) {
-  S = Scores[[i]]
+  s = Scores[[i]]
   sd(S$Regular$PnL)
 })
 

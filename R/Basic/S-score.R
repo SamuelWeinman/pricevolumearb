@@ -77,7 +77,7 @@ estimateCoefficeientsNumberI <- <- function(models, i, b_sensitivity) {
 
 ###CALCULATE S-SCORE FOR ALL STOCKS AS IN Marco Avellaneda & Jeong-Hyun Lee (2010)
 ###THAT IS, THE AMOUNT BY WHICH THE STOCKS HAVE HAD TOO MUCH RETURNS
-###IF MEAN-REVERSION == 0, WE GIVE S = 0 AS THERE IS NO MEAN REVERSION.
+###IF MEAN-REVERSION == 0, WE GIVE s = 0 AS THERE IS NO MEAN REVERSION.
 #RETURNS MUST BE HISTORY ONLY!
 calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
 
