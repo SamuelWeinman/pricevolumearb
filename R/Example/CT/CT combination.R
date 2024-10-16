@@ -1,5 +1,5 @@
-Predictions.CT.Combined = CombinePrediction(PredictionStrong= Prediction.CT.KPCA,
-                                            PredictionsWeak = Predictions.CT.OverTraded,
+Predictions.CT.Combined = combinePrediction(strongPredictions= Prediction.CT.KPCA,
+                                            weakPredictions = Predictions.CT.OverTraded,
                                             alpha = 0.4)
 
 

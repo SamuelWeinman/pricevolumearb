@@ -6,27 +6,27 @@
 ## AND THE OTHER ONE'S FROM PREDICTIONS2. BOTH VECTORS MUST CORRESPOND TO THE SAME DAY 
 ## AND BE OF SAME LENGTH.
 ## IN THE COMBINED VECTOR, THE ONE'S EXTRACTED FROM PREDICTIONS1 WILL CORRESPOND TO THE ALPHA STRONGEST PREDICTIONS.
-CombinePrediction.Day = function(Prediction1, Prediction2, alpha) {
+combineDailyPredictions <- function(prediction1, prediction2, alpha) {
   
   #DEFINE WHAT STOCKS TO USE FROM PREDICTIONS1
-  Stocks1 = abs(Prediction1) > quantile(abs(Prediction1), 1-alpha)
+  stocks1 <- abs(prediction1) > quantile(abs(prediction1), 1-alpha)
   
   
   #DEFINE WHAT STOCKS TO USE FROM PREDICTIONS2
-  Stocks2 = !Stocks1
+  stocks2 <- !stocks1
   
   #CREATE A NEW VECTOR AND TAKE THE STRONGEST PREDICTIONS FROM PREDICTION1
-  Prediction = numeric(length(Prediction1))
-  Prediction[Stocks1] = Prediction1[Stocks1]
-  Prediction[Stocks2] = Prediction2[Stocks2]
+  prediction <- numeric(length(prediction1))
+  prediction[stocks1] <- prediction1[stocks1]
+  prediction[stocks2] <- prediction2[stocks2]
   
   
   #SCALE THE PREDICTIONS FROM FIRST PREDICTIONS SO THAT THE DECILE PORTFOLIOS ARE CONSTRUCTED FROM THESE
   #THE FOLLOWING ENSURES THAT THE MINIMUM ABSOLUTE VALUE FROM PREDICTIONS1 IS GREATER THAN THE MAXIMUM ABSOLUTE VALUE FROM PREDICTIONS2
-  Prediction[Stocks1] = Prediction[Stocks1] * max(abs(Prediction[Stocks2])) / min(abs(Prediction[Stocks1])) * 1.1
+  prediction[stocks1] <- prediction[stocks1] * max(abs(prediction[stocks2])) / min(abs(prediction[stocks1])) * 1.1
   
   #RETURN
-  return(Prediction)
+  return(prediction)
 }
 
 
@@ -37,19 +37,19 @@ CombinePrediction.Day = function(Prediction1, Prediction2, alpha) {
 #PREDICTIONSSTRONG: THE PREDICTIONS TO EXTRACT THE STRONGEST ALPHA PROPORTION FROM
 #PREDICTIONSWEAK: WHAT TO BASE THE OTHER (1-ALPHA) PREDICTIONS ON
 
-CombinePrediction <- function(PredictionStrong, PredictionsWeak, alpha) {
+combinePrediction <- function(strongPredictions, weakPredictions, alpha) {
   
   #LOOP THROUGH EACH COLUMN (DAY)
-  #FOR EACH DAY, PERFORM CombinePrediction.Day
-  CombinedPrediction = sapply(1:ncol(PredictionStrong), function(i) {
-    CombinePrediction.Day(Prediction1 = PredictionStrong[, i],
-                          Prediction2 = PredictionsWeak[, i], 
+  #FOR EACH DAY, PERFORM combinePrediction.Day
+  combinedPrediction <- sapply(1:ncol(strongPredictions), function(i) {
+    combineDailyPredictionsy(prediction1 = strongPredictions[, i],
+                          prediction2 = weakPredictions[, i], 
                           alpha = alpha) 
   })
   
   #CHANGE COLNAMES 
-  colnames(CombinedPrediction) = colnames(PredictionStrong)
+  colnames(combinedPrediction) <- colnames(strongPredictions)
   
   #RETURN
-  return(CombinedPrediction)
+  return(combinedPrediction)
 }

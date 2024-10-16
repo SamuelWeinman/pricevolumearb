@@ -1,5 +1,5 @@
-Predictions.CS.Combined = CombinePrediction(PredictionStrong= Predictions.CS.Cluster.Weighted$Predictions,
-                                            PredictionsWeak = Predictions.CS.VW.Divide[[1]], 
+Predictions.CS.Combined = combinePrediction(strongPredictions= Predictions.CS.Cluster.Weighted$Predictions,
+                                            weakPredictions = Predictions.CS.VW.Divide[[1]], 
                                             alpha = 0.75)
 
 
