@@ -39,8 +39,8 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc,d, d
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   globalvarlist = c("DayCrossRegression", "constructWeightedReturn",
-                    "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
-                    "ConstructRho")
+                    "extractEigenPortfolio", "constructEigenPortfolios", 
+                    "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("WeightedReturns","H", "nr_pc")

@@ -10,8 +10,8 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
   weighted_returns = constructWeightedReturn(returns = returns, volume = volume, h = h, d = d, divide = divide)
   
   globalvarlist = c("calculateSScore",
-                    "estimateCoefficeients","decompose", "ExtractEigenPortfolio",                      
-                    "ConstructEigenPortfolios", "ConstructRho", "constructWeightedReturn")
+                    "estimateCoefficeients","decompose", "extractEigenPortfolio",                      
+                    "constructEigenPortfolios", "constructRho", "constructWeightedReturn")
   
   localvarlist = c("returns", "H", "L", "b_sensitivity", "w")
 

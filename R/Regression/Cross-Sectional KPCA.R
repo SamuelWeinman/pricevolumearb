@@ -40,7 +40,7 @@ CrossSectional.KPCA.day = function(Returns, t, H, nr_pc, kernel, kpar) {
 CrossSectionRegression.KPCA = function(Returns, Start, End, H, nr_pc, kernel, kpar) {
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("CrossSectional.KPCA.day", "ConstructRho")
+  globalvarlist = c("CrossSectional.KPCA.day", "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns","H", "nr_pc", "kernel", "kpar")

@@ -10,16 +10,16 @@ crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitiv
   #PREPARE CORES#
 
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("calculateSScore",
-                    "estimateCoefficeients","decompose", "ExtractEigenPortfolio",
-                    "ConstructEigenPortfolios", "ConstructRho")
+  globalvarlist <- c("calculateSScore",
+                    "estimateCoefficeients","decompose", "extractEigenPortfolio",
+                    "constructEigenPortfolios", "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist = c("returns", "h", "l", "b_sensitivity", "nr_pc")
+  localvarlist <- c("returns", "h", "l", "b_sensitivity", "nr_pc")
 
   
   #OPEN CORES AND TRANSFER
-  cl = snow::makeCluster(detectCores()-1)
+  cl <- snow::makeCluster(detectCores()-1)
   clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, globalvarlist) 
   snow::clusterExport(cl, localvarlist, envir = environment()) 
@@ -27,8 +27,8 @@ crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitiv
   
   
   #FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-s_scores = snow::parSapply(cl, start:end, function(t) {
-    scores = calculateSScore(returns = returns[, 1:(t-1)], #using only historical data
+s_scores  <- snow::parSapply(cl, start:end, function(t) {
+    scores <- calculateSScore(returns = returns[, 1:(t-1)], #using only historical data
                            nr_pc = nr_pc,
                            h = h, l = l,
                            b_sensitivity = b_sensitivity)
@@ -43,9 +43,9 @@ s_scores = snow::parSapply(cl, start:end, function(t) {
   #GET FORECASTS (BASED ON HISTORICAL DATA)
   #THE ROW NAMES WILL THE STOCK TICKERS
   #THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
-  p = -s_scores
-  rownames(p) = rownames(returns)
-  colnames(p) = start:end
+  p  <- -s_scores
+  rownames(p) <- rownames(returns)
+  colnames(p) <- start:end
   
   #RETURN
   return(p)

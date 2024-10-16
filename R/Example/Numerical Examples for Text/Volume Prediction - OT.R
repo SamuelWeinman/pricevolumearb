@@ -11,7 +11,7 @@ Pred.OT.CT = unlist(Predictions.CT.OverTraded[, col])
 
 
 #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
+E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
 
 #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
 #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T

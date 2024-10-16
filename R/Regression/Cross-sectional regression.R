@@ -12,7 +12,7 @@ DayCrossRegression <- function(Returns,t,H, nr_pc) {
   
   #EXTRACT EIGENPORTFOLIO USING STANDARD PCS
   #USE H DAYS OF HISTORY UP TO TIME t
-  E = ExtractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
+  E = extractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
                               nr_pc = nr_pc) 
   
   #PERFORM REGRESSION AND EXTRACT PREDICTION
@@ -36,8 +36,8 @@ CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   globalvarlist = c("DayCrossRegression",
-                    "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
-                    "ConstructRho")
+                    "extractEigenPortfolio", "constructEigenPortfolios", 
+                    "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns","H", "nr_pc")

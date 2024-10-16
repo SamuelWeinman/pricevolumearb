@@ -48,11 +48,11 @@ ConstructClusters = function(rho, k, MinSize) {
 DayCrossRegression.Cluster <- function(Returns, Volume, t,H,nr_pc,k,MinSize, alpha) {
   
   #EXTRACT EIGENPORTFOLIO
-  E = ExtractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
+  E = extractEigenPortfolio(Returns = Returns[, (t-H):(t-1)], 
                             nr_pc = nr_pc) 
   
   #CONSTRUCT WRIGHTED CORRELATION MATRIX
-  rho = alpha* ConstructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[, (t-H):(t-1)])
+  rho = alpha* constructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*constructRho(Volume[, (t-H):(t-1)])
   
   
   #EXTRACT CLUSTERS
@@ -94,8 +94,8 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   globalvarlist = c("DayCrossRegression.Cluster", "ConstructClusters",
-                    "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
-                    "ConstructRho")
+                    "extractEigenPortfolio", "constructEigenPortfolios", 
+                    "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns","Volume","H","nr_pc","k", "MinSize", "alpha")

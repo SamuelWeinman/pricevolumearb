@@ -14,7 +14,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
+  E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -33,7 +33,7 @@ Day.CS.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
   #NOW, PROCEED AS BEFORE (CS)#
   
   #CONSTRUCT EIGENPORTFOLIOS
-  E = ExtractEigenPortfolio(WeightedReturn, nr_pc = nr_pc)
+  E = extractEigenPortfolio(WeightedReturn, nr_pc = nr_pc)
   
   #REGRESS WEIGHTED RETURNS ON EIGENPORTFOLIOS
   y = WeightedReturn[, H]
@@ -50,9 +50,9 @@ CrossSectionRegression.OverTrade = function(Start, End, Volume, Returns, H, nr_p
   #PREPARE CORES#
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("Day.CS.Overtrade", "ExtractEigenPortfolio",
-                    "ConstructEigenPortfolios", 
-                    "ConstructRho")
+  globalvarlist = c("Day.CS.Overtrade", "extractEigenPortfolio",
+                    "constructEigenPortfolios", 
+                    "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Volume", "Returns", "H", "nr_pc.V", "alpha", "nr_pc")

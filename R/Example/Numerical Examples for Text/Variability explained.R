@@ -5,7 +5,7 @@ nr_pc.cand = c(15,20, 25)
 
 VarExplianed.Day = function(Returns, StandardisedVolume, t, H, nr_pc.cand) {
   R = Returns[, (t-H):(t-1)]
-  rho.R = ConstructRho(R)
+  rho.R = constructRho(R)
   E.R = eigen(rho.R)
 
   Prop.Explained.R = sapply(1:length(nr_pc.cand), function(i){
@@ -14,7 +14,7 @@ VarExplianed.Day = function(Returns, StandardisedVolume, t, H, nr_pc.cand) {
  
   
   V = StandardisedVolume[, (t-H):(t-1)]
-  rho.V = ConstructRho(V)
+  rho.V = constructRho(V)
   E.V = eigen(rho.V)
   
   
@@ -39,7 +39,7 @@ VarExplained.TS = function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
   
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist = c("VarExplianed.Day", "ConstructRho")
+  globalvarlist = c("VarExplianed.Day", "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns","H", "nr_pc.cand", "StandardisedVolume")

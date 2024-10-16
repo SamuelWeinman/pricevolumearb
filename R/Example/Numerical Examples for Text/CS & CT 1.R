@@ -13,7 +13,7 @@ L = 45
 ReturnsShort = Returns[, (t-H):(t-1)]
 
 #CONSTRUCT CORRELATION MATRIX
-Rho = ConstructRho(ReturnsShort)
+Rho = constructRho(ReturnsShort)
 
 #EXTRACT EIGEN
 E = eigen(Rho)

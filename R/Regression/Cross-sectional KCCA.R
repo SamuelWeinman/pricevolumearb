@@ -55,8 +55,8 @@ CrossSectionRegression.KCCA <- function(Returns, Volume, Start, End, H,d,HV, NrC
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   globalvarlist = c("DayCrossRegression.KCCA",
-                    "ExtractEigenPortfolio", "ConstructEigenPortfolios", 
-                    "ConstructRho")
+                    "extractEigenPortfolio", "constructEigenPortfolios", 
+                    "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns","H","NrC.R","NrC.V","HV", "StandardisedVolume")

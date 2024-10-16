@@ -15,7 +15,7 @@ Day.CT.Overtrade = function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha,L, b_se
   StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
   
   #CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
+  E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
   
   #CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   #HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
@@ -65,8 +65,8 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   
   #VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   globalvarlist = c("Day.CT.Overtrade",
-                    "estimateCoefficeients","decompose", "ExtractEigenPortfolio",  
-                    "ConstructEigenPortfolios", "ConstructRho")
+                    "estimateCoefficeients","decompose", "extractEigenPortfolio",  
+                    "constructEigenPortfolios", "constructRho")
   
   #VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   localvarlist = c("Returns", "Volume",

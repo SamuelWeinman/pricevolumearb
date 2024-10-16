@@ -15,7 +15,7 @@ preds = Prediction.CS.Overtraded[, col]
 
 
 StandardVolume = Volume[,(t-H):(t-1)]/apply(Volume[,(t-H):(t-1)],1, sum)
-E.V = ExtractEigenPortfolio(StandardVolume, nr_pc.V)
+E.V = extractEigenPortfolio(StandardVolume, nr_pc.V)
 Model = lm(StandardVolume[, H] ~ E.V$EigenPortfolio)
 Overtraded = Model$residuals
 

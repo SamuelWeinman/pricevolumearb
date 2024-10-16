@@ -7,7 +7,7 @@ k = 4
 MinSize = 50
 
 #CONSTRUCT WRIGHTED CORRELATION MATRIX
-rho = alpha* ConstructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*ConstructRho(Volume[, (t-H):(t-1)])
+rho = alpha* constructRho(Returns[, (t-H):(t-1)]) + (1-alpha)*constructRho(Volume[, (t-H):(t-1)])
 
 #CREATE CLUSTERS
 Clusters = ConstructClusters(rho = rho, k = k, MinSize = MinSize)
