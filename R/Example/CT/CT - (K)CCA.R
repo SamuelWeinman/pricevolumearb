@@ -1,19 +1,18 @@
-
 # Predictions.CT.CCA=crossTemporalRegressionCCA(Returns = Returns, Volume = Volume,
 #                                    Start = 500, End = ncol(Returns),
 #                                    H=100, HV = 100, L = 45,
 #                                    nr_c_r = 15, nr_c_v = 5,
 #                                    d=20, b_sensitivity = 0.01)
-# 
-#write.csv(Predictions.CT.CCA, "./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
+#
+# write.csv(Predictions.CT.CCA, "./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
 
 
-Predictions.CT.CCA = read.csv("./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
-rownames(Predictions.CT.CCA) = Predictions.CT.CCA[, 1]
-Predictions.CT.CCA = Predictions.CT.CCA[, -1]
-colnames(Predictions.CT.CCA) = 500:(ncol(Predictions.CT.CCA)+499)
+Predictions.CT.CCA <- read.csv("./Results/Predictions/CT CCA/Predictions.CT.CCA.csv")
+rownames(Predictions.CT.CCA) <- Predictions.CT.CCA[, 1]
+Predictions.CT.CCA <- Predictions.CT.CCA[, -1]
+colnames(Predictions.CT.CCA) <- 500:(ncol(Predictions.CT.CCA) + 499)
 
-Scores.CT.CCA = performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4)/4, r = 30)
+Scores.CT.CCA <- performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4) / 4, r = 30)
 
 
 # Predictions.CT.KCCA=CTRegression.KCCA(Returns = Returns, Volume = Volume,
@@ -21,16 +20,16 @@ Scores.CT.CCA = performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4)/4, r 
 #                                       H=100, HV = 100, L = 45,
 #                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d=20, b_sensitivity = 0.01)
-# 
+#
 # write.csv(Predictions.CT.KCCA, "./Results/Predictions/CT CCA/Predictions.CT.KCCA.csv")
 
 
-Predictions.CT.KCCA = read.csv("./Results/Predictions/CT CCA/Predictions.CT.KCCA.csv")
-rownames(Predictions.CT.KCCA) = Predictions.CT.KCCA[, 1]
-Predictions.CT.KCCA = Predictions.CT.KCCA[, -1]
-colnames(Predictions.CT.KCCA) = 500:(ncol(Predictions.CT.KCCA)+499)
+Predictions.CT.KCCA <- read.csv("./Results/Predictions/CT CCA/Predictions.CT.KCCA.csv")
+rownames(Predictions.CT.KCCA) <- Predictions.CT.KCCA[, 1]
+Predictions.CT.KCCA <- Predictions.CT.KCCA[, -1]
+colnames(Predictions.CT.KCCA) <- 500:(ncol(Predictions.CT.KCCA) + 499)
 
-Scores.CT.KCCA = performFullAnalysis(Returns, Predictions.CT.KCCA, Q = (1:4)/4, r = 30)
+Scores.CT.KCCA <- performFullAnalysis(Returns, Predictions.CT.KCCA, Q = (1:4) / 4, r = 30)
 
 
 
@@ -38,37 +37,36 @@ Scores.CT.KCCA = performFullAnalysis(Returns, Predictions.CT.KCCA, Q = (1:4)/4, 
 
 ##########################################################################
 
-CumSum.CT.KCCA= createCumSumPnLPlot(Scores = list(Scores.CT, Scores.CT.CCA, Scores.CT.KCCA),
-                                     Labels = c("CT", "CT CCA", "CT KCCA"),
-                                     BaseModels = 1,
-                                     Type = "CT")
+CumSum.CT.KCCA <- createCumSumPnLPlot(
+  Scores = list(Scores.CT, Scores.CT.CCA, Scores.CT.KCCA),
+  Labels = c("CT", "CT CCA", "CT KCCA"),
+  BaseModels = 1,
+  Type = "CT"
+)
 
 
-SharpePPT.CT.KCCA = createSharpePPTPlot(Scores = list(Scores.CT, Scores.CT.CCA, Scores.CT.KCCA),
-                                         Labels = c("CT", "CT CCA", "CT KCCA"),
-                                         BaseModels = 1,
-                                         Type = "CT")
-
-
-
-ggsave(filename = "CumSum.CT.KCCA.png", 
-       path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
-       plot = CumSum.CT.KCCA,
-       width = 5, height = 6)
+SharpePPT.CT.KCCA <- createSharpePPTPlot(
+  Scores = list(Scores.CT, Scores.CT.CCA, Scores.CT.KCCA),
+  Labels = c("CT", "CT CCA", "CT KCCA"),
+  BaseModels = 1,
+  Type = "CT"
+)
 
 
 
-
-ggsave(filename = "SharpePPT.CT.KCCA.png", 
-       path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
-       plot = SharpePPT.CT.KCCA,
-       width = 5, height = 5)
-
+ggsave(
+  filename = "CumSum.CT.KCCA.png",
+  path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
+  plot = CumSum.CT.KCCA,
+  width = 5, height = 6
+)
 
 
 
 
-
-
-
-
+ggsave(
+  filename = "SharpePPT.CT.KCCA.png",
+  path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
+  plot = SharpePPT.CT.KCCA,
+  width = 5, height = 5
+)
