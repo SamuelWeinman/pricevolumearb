@@ -40,7 +40,7 @@ combinePrediction <- function(strongPredictions, weakPredictions, alpha) {
   # LOOP THROUGH EACH COLUMN (DAY)
   # FOR EACH DAY, PERFORM combinePrediction.Day
   combinedPrediction <- sapply(1:ncol(strongPredictions), function(i) {
-    combineDailyPredictionsy(
+    combineDailyPredictions(
       prediction1 = strongPredictions[, i],
       prediction2 = weakPredictions[, i],
       alpha = alpha

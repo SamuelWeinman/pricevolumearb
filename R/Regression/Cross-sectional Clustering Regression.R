@@ -6,7 +6,7 @@ library(parallel)
 # RHO: CORRELATION MATRIX
 # K: NR OF CLUSTERS
 # MinSize: MINUMUM NR OF MEMBERS PER CLUSTER, OR ELSE WILL USE FEWER CLUSTERS
-ConstructClusters <- function(rho, k, MinSize) {
+constructClusters <- function(rho, k, MinSize) {
   # CONSTRUCT DISTANCE MATRIX
   d <- as.dist(1 - rho)
 
@@ -55,7 +55,7 @@ DayCrossRegression.Cluster <- function(Returns, Volume, t, H, nr_pc, k, MinSize,
 
 
   # EXTRACT CLUSTERS
-  Clusters <- ConstructClusters(rho = rho, k = k, MinSize = MinSize)
+  Clusters <- constructClusters(rho = rho, k = k, MinSize = MinSize)
 
   # TRUE NR OF CLUSTERS, WHICH MIGHT BE DIFFERENT FROM ORIGINAL K IF CLUSTERS TOO SMALL
   k <- length(Clusters)
@@ -94,7 +94,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, H, nr_pc
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   global_var_list <- c(
-    "DayCrossRegression.Cluster", "ConstructClusters",
+    "DayCrossRegression.Cluster", "constructClusters",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )

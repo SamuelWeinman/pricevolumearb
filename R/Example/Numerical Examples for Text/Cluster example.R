@@ -10,7 +10,7 @@ MinSize <- 50
 rho <- alpha * constructRho(Returns[, (t - H):(t - 1)]) + (1 - alpha) * constructRho(Volume[, (t - H):(t - 1)])
 
 # CREATE CLUSTERS
-Clusters <- ConstructClusters(rho = rho, k = k, MinSize = MinSize)
+Clusters <- constructClusters(rho = rho, k = k, MinSize = MinSize)
 
 
 # CALCULATE SIZE OF EACH CLUSTER
