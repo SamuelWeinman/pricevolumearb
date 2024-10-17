@@ -64,7 +64,7 @@ crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, 
     s <- singleCrossTemporalRegressionWithKCCA(
       returns = returns, volume = standardised_volume,
       t = t, h = h, hv = hv,
-      L = L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
+      l = l, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
       b_sensitivity = b_sensitivity
     )
     p <- -s_scores

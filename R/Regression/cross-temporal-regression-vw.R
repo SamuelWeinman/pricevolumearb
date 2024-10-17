@@ -6,15 +6,15 @@
 # D: HOW MANY DAYS TO USE FOR ROLLING MEAN VOLUME
 # ALL ELSE AS BEFORE
 crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide) {
-  weighted_returns <- constructWeightedReturn(returns = returns, volume = volume, h = h, d = d, divide = divide)
+  weighted_returns <- constructWeightedReturns(returns = returns, volume = volume, h = h, d = d, divide = divide)
 
   global_var_list <- c(
     "calculateSScore",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
-    "constructEigenPortfolios", "constructRho", "constructWeightedReturn"
+    "constructEigenPortfolios", "constructRho", "constructWeightedReturns"
   )
 
-  local_var_list <- c("returns", "H", "L", "b_sensitivity", "w")
+  local_var_list <- c("returns", "h", "l", "b_sensitivity", "w")
 
 
   # OPEN CORES AND TRANSFER
@@ -51,9 +51,9 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
   return(p)
 }
 
-# DOES CrossSectionRegression.VW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
+# DOES crossSectionRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
 # MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-mappedCrossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, H, L, b_sensitivity, d, divide, maps) {
+mappedCrossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide, maps) {
   k <- length(maps)
   predictions <- list()
 

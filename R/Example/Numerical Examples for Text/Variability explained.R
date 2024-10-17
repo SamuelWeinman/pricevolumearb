@@ -3,7 +3,7 @@ library(snow)
 nr_pc.cand <- c(15, 20, 25)
 
 
-VarExplianed.Day <- function(Returns, standardised_volume, t, H, nr_pc.cand) {
+VarExplianed.Day <- function(Returns, standardised_volume, t, h, nr_pc.cand) {
   R <- Returns[, (t - H):(t - 1)]
   rho.R <- constructRho(R)
   E.R <- eigen(rho.R)
@@ -33,7 +33,7 @@ VarExplianed.Day <- function(Returns, standardised_volume, t, H, nr_pc.cand) {
 
 
 
-VarExplained.TS <- function(Returns, Volume, start, end, H, nr_pc.cand, d) {
+VarExplained.TS <- function(Returns, Volume, start, end, h, nr_pc.cand, d) {
   standardised_volume <- Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
 
@@ -42,7 +42,7 @@ VarExplained.TS <- function(Returns, Volume, start, end, H, nr_pc.cand, d) {
   global_var_list <- c("VarExplianed.Day", "constructRho")
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  local_var_list <- c("Returns", "H", "nr_pc.cand", "standardised_volume")
+  local_var_list <- c("Returns", "h", "nr_pc.cand", "standardised_volume")
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
@@ -54,7 +54,7 @@ VarExplained.TS <- function(Returns, Volume, start, end, H, nr_pc.cand, d) {
   Prop <- snow::parSapply(cl, start:end, function(t) {
     VarExplianed.Day(
       Returns = Returns, standardised_volume = standardised_volume,
-      t = t, H = H, nr_pc.cand = nr_pc.cand
+      t = t, h = h, nr_pc.cand = nr_pc.cand
     )
   })
 

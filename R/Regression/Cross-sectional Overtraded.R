@@ -6,7 +6,7 @@
 # I.E. WHENS STUDYING IF (STOCK, DAY) IS OVERTRADED.
 # ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
 
-Day.CS.Overtrade <- function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
+Day.CS.Overtrade <- function(Volume, Returns, t, h, nr_pc.V, nr_pc, alpha) {
   # STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE!
   # FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.
   standardised_volume <- Volume[, (t - H):(t - 1)] / apply(Volume[, (t - H):(t - 1)], 1, sum)
@@ -43,7 +43,7 @@ Day.CS.Overtrade <- function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
 }
 
 # PERFORMS CS OVERTRADED ON INTERVAL [START, END]
-CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, H, nr_pc.V, alpha, nr_pc) {
+CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, h, nr_pc.V, alpha, nr_pc) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -54,7 +54,7 @@ CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, H, nr_
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  local_var_list <- c("Volume", "Returns", "H", "nr_pc.V", "alpha", "nr_pc")
+  local_var_list <- c("Volume", "Returns", "h", "nr_pc.V", "alpha", "nr_pc")
 
 
   # OPEN CORES AND TRANSFER
@@ -69,7 +69,7 @@ CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, H, nr_
   predictions <- snow::parSapply(cl, start:end, function(t) {
     Day.CS.Overtrade(
       Volume = Volume, Returns = Returns,
-      t = t, H = H,
+      t = t, h = h,
       nr_pc.V = nr_pc.V, nr_pc = nr_pc,
       alpha = alpha
     )

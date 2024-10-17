@@ -77,7 +77,7 @@
 
 
 
-Predictions.CT.OverTraded <- CTRegression.Overtrade(Volume, Returns,
+Predictions.CT.OverTraded <- crossTemporalRegressionOvertrade(Volume, Returns,
   start = 500, end = ncol(Returns),
   H = 252, nr_pc.V = 25, nr_pc = 20,
   alpha = 10, L = 45, b_sensitivity = 0.01

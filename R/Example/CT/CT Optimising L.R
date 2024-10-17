@@ -1,13 +1,13 @@
 # RETURNS THE SCORES (IN A LIST) FOR EACH VALUE OF L IN L.CANDIDATES
 # L.CANDIDATES: ARRAY WITH CANDIDATES OF L, NEED L > nr_pc
-OptimiseL <- function(Returns, start, end, nr_pc, H, L.Candidates, b_sensitivity, Q, r) {
+OptimiseL <- function(Returns, start, end, nr_pc, h, L.Candidates, b_sensitivity, Q, r) {
   # CREATE LIST FOR STORING SCORES
   Scores <- list()
 
 
   # LOOP THROUGH EACH CANDIDATE OF L, CAN CALCULATE CORRESPONDING SCORE
   for (Lcand in L.Candidates) {
-    Pred <- CTRegression(Returns, start, end, nr_pc, H, L = Lcand, b_sensitivity)
+    Pred <- CTRegression(Returns, start, end, nr_pc, h, l = lcand, b_sensitivity)
     Score <- performFullAnalysis(Returns = Returns, Predictions = Pred, Q, r)
     Scores <- append(Scores, list(Score))
   }

@@ -5,7 +5,7 @@ Scores <- list()
 for (i in 1:length(Alpha.Candidates)) {
   print(i)
   A <- Alpha.Candidates[i]
-  Preds <- CTRegression.Overtrade(Volume, Returns,
+  Preds <- crossTemporalRegressionOvertrade(Volume, Returns,
     start = 500, end = ncol(Returns),
     H = 252, nr_pc.V = 25, nr_pc = 20,
     alpha = A,

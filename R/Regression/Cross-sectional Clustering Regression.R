@@ -43,7 +43,7 @@ constructClusters <- function(rho, k, MinSize) {
 
 # PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
 # ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES)
-DayCrossRegression.Cluster <- function(Returns, Volume, t, H, nr_pc, k, MinSize, alpha) {
+DayCrossRegression.Cluster <- function(Returns, Volume, t, h, nr_pc, k, MinSize, alpha) {
   # EXTRACT EIGENPORTFOLIO
   E <- extractEigenPortfolio(
     Returns = Returns[, (t - H):(t - 1)],
@@ -89,7 +89,7 @@ DayCrossRegression.Cluster <- function(Returns, Volume, t, H, nr_pc, k, MinSize,
   ))
 }
 
-CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, H, nr_pc, k, MinSize, alpha) {
+CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, h, nr_pc, k, MinSize, alpha) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -100,7 +100,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, H, nr_pc
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  local_var_list <- c("Returns", "Volume", "H", "nr_pc", "k", "MinSize", "alpha")
+  local_var_list <- c("Returns", "Volume", "h", "nr_pc", "k", "MinSize", "alpha")
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
@@ -114,7 +114,7 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, H, nr_pc
     DayCrossRegression.Cluster(
       Returns = Returns,
       Volume = Volume,
-      t = t, H = H,
+      t = t, h = h,
       nr_pc = nr_pc,
       k = k, MinSize = MinSize,
       alpha = alpha
