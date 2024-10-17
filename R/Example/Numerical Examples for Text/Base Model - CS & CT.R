@@ -7,8 +7,8 @@
 
 # PREDICTION
 # Prediction.CS= CrossSectionRegression(Returns = Returns,
-# Start = 500,
-# End = ncol(Returns),
+# start = 500,
+# end = ncol(Returns),
 # H = 252,
 # nr_pc = 20)
 # write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
@@ -33,8 +33,8 @@ Scores.CS <- performFullAnalysis(
 
 # PREDICTION
 # Prediction.CT = CTRegression(Returns = Returns,
-#                             Start = 500,
-#                             End = ncol(Returns),
+#                             start = 500,
+#                             end = ncol(Returns),
 #                             nr_pc = 20,
 #                             H = 252,
 #                             L = 45,

@@ -6,7 +6,7 @@
 
 
 # Predictions.CS.Cluster.Return <- CrossSectionRegression.Cluster(Returns = Returns,
-#                                                         Start = 500, End = ncol(Returns),
+#                                                         start = 500, end = ncol(Returns),
 #                                                         H = 252, nr_pc = 20,
 #                                                         k = 4,
 #                                                         MinSize = 50,
@@ -51,8 +51,8 @@ Scores.CS.Cluster.Return <- performFullAnalysis(
 
 # Predictions.CS.Cluster.Weighted <- CrossSectionRegression.Cluster(Returns = Returns,
 #                                                                  Volume = Volume,
-# Start = 500,
-# End = ncol(Returns),
+# start = 500,
+# end = ncol(Returns),
 # H = 252, nr_pc = 20,
 # k = 4,
 # MinSize = 50,
@@ -89,8 +89,8 @@ Scores.CS.Cluster.Weighted <- performFullAnalysis(
 
 # Predictions.CS.Cluster.Volume <- CrossSectionRegression.Cluster(Returns = Returns,
 #                                                                   Volume = Volume,
-#                                                                   Start = 500,
-#                                                                   End = ncol(Returns),
+#                                                                   start = 500,
+#                                                                   end = ncol(Returns),
 #                                                                   H = 252, nr_pc = 20,
 #                                                                   k = 4,
 #                                                                   MinSize = 50,

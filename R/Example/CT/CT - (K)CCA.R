@@ -1,5 +1,5 @@
 # Predictions.CT.CCA=crossTemporalRegressionCCA(Returns = Returns, Volume = Volume,
-#                                    Start = 500, End = ncol(Returns),
+#                                    start = 500, end = ncol(Returns),
 #                                    H=100, HV = 100, L = 45,
 #                                    nr_c_r = 15, nr_c_v = 5,
 #                                    d=20, b_sensitivity = 0.01)
@@ -16,7 +16,7 @@ Scores.CT.CCA <- performFullAnalysis(Returns, Predictions.CT.CCA, Q = (1:4) / 4,
 
 
 # Predictions.CT.KCCA=CTRegression.KCCA(Returns = Returns, Volume = Volume,
-#                                       Start = 500, End = ncol(Returns),
+#                                       start = 500, end = ncol(Returns),
 #                                       H=100, HV = 100, L = 45,
 #                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d=20, b_sensitivity = 0.01)

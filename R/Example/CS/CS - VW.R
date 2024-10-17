@@ -16,7 +16,7 @@ MAP.list <- list(
 
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
-#                                                               Start = 500, End = ncol(Returns),
+#                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
@@ -115,7 +115,7 @@ ggsave(
 
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
-#                                                               Start = 500, End = ncol(Returns),
+#                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)

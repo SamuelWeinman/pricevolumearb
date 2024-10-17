@@ -43,7 +43,7 @@ Day.CS.Overtrade <- function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha) {
 }
 
 # PERFORMS CS OVERTRADED ON INTERVAL [START, END]
-CrossSectionRegression.OverTrade <- function(Start, End, Volume, Returns, H, nr_pc.V, alpha, nr_pc) {
+CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, H, nr_pc.V, alpha, nr_pc) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -59,14 +59,14 @@ CrossSectionRegression.OverTrade <- function(Start, End, Volume, Returns, H, nr_
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
 
   # GET PREDICTION OVER THE WHOLE TIME PERIOD
   # ROWS CORRESPOND TO STOCKS
   # THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     Day.CS.Overtrade(
       Volume = Volume, Returns = Returns,
       t = t, H = H,
@@ -79,7 +79,7 @@ CrossSectionRegression.OverTrade <- function(Start, End, Volume, Returns, H, nr_
   snow::stopCluster(cl)
 
   # CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  colnames(Predictions) <- Start:End
+  colnames(Predictions) <- start:end
   rownames(Predictions) <- rownames(Returns)
 
   # RETURNS

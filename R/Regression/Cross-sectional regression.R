@@ -31,7 +31,7 @@ DayCrossRegression <- function(Returns, t, H, nr_pc) {
 # CALCULATE PREDICTION OF ALL DAYS IN [START, END], USING HISTORICAL DATA
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
-CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
+CrossSectionRegression <- function(Returns, start, end, H, nr_pc) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -46,13 +46,13 @@ CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
   # GET PREDICTION OVER THE WHOLE TIME PERIOD
   # ROWS CORRESPOND TO STOCKS
   # THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     DayCrossRegression(
       Returns = Returns,
       t = t, H = H,
@@ -64,7 +64,7 @@ CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
   snow::stopCluster(cl)
 
   # CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  colnames(Predictions) <- Start:End
+  colnames(Predictions) <- start:end
   rownames(Predictions) <- rownames(Returns)
 
   # RETURN

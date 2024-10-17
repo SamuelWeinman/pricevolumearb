@@ -33,7 +33,7 @@ VarExplianed.Day <- function(Returns, standardised_volume, t, H, nr_pc.cand) {
 
 
 
-VarExplained.TS <- function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
+VarExplained.TS <- function(Returns, Volume, start, end, H, nr_pc.cand, d) {
   standardised_volume <- Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
 
@@ -46,12 +46,12 @@ VarExplained.TS <- function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
 
 
-  Prop <- snow::parSapply(cl, Start:End, function(t) {
+  Prop <- snow::parSapply(cl, start:end, function(t) {
     VarExplianed.Day(
       Returns = Returns, standardised_volume = standardised_volume,
       t = t, H = H, nr_pc.cand = nr_pc.cand
@@ -70,14 +70,14 @@ VarExplained.TS <- function(Returns, Volume, Start, End, H, nr_pc.cand, d) {
 }
 
 
-Start <- 500
-End <- ncol(Returns)
+start <- 500
+end <- ncol(Returns)
 
 
 
 #
 # P = VarExplained.TS(Returns, Volume,
-#                  Start = 500, End = ncol(Returns), H = 252,
+#                  start = 500, end = ncol(Returns), H = 252,
 #                  nr_pc.cand=c(15,20,25), d = 20)
 
 #
@@ -89,7 +89,7 @@ P <- read.csv("./Results/Predictions/VarExplained.csv")
 
 P <- list(Prop.R = P[, 2:4], Prop.V = P[5:7])
 
-dates <- colnames(Returns)[Start:End]
+dates <- colnames(Returns)[start:end]
 dates <- as.Date(dates, format = "%Y%m%d")
 dates <- rep(dates, 3)
 

@@ -1,5 +1,5 @@
 library(parallel)
-# Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(Start = 500, End = ncol(Returns),
+# Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(start = 500, end = ncol(Returns),
 #                                                             Volume, Returns,
 #                                                             H = 252, nr_pc.V = 25,
 #                                                             alpha = 175, nr_pc = 20)

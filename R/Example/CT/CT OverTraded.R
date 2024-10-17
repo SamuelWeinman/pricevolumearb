@@ -1,5 +1,5 @@
 # Predictions.CT.OverTraded = CTRegression.Overtrade(Volume, Returns,
-#                              Start = 500, End = ncol(Returns),
+#                              start = 500, end = ncol(Returns),
 #                              H = 252, nr_pc.V = 25, nr_pc = 20,
 #                              alpha=100,L=45, b_sensitivity = 0.01)
 #

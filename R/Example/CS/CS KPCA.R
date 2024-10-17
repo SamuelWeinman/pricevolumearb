@@ -18,13 +18,13 @@ Kpar.List <- list(
 #
 # Scores.CS.KPCA = list()
 # for (i in 1:length(Kernel.List)) {
-#   print("Loop 1, Start kernel number:")
+#   print("Loop 1, start kernel number:")
 #   print(i)
 #   Sys.time()
 #   kernel = Kernel.List[i]
 #   kpar = Kpar.List[[i]]
 #
-#   Preds = CrossSectionRegression.KPCA(Returns = Returns, Start=500, End = ncol(Returns),
+#   Preds = CrossSectionRegression.KPCA(Returns = Returns, start=500, end = ncol(Returns),
 #                                       H=252, nr_pc = 20,
 #                                       kernel = kernel, kpar = kpar)
 #

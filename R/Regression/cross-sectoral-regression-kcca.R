@@ -42,8 +42,8 @@ crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r
 
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
     singleCrossSectoralRegressionWithKCCA(

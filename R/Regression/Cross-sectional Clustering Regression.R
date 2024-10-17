@@ -89,7 +89,7 @@ DayCrossRegression.Cluster <- function(Returns, Volume, t, H, nr_pc, k, MinSize,
   ))
 }
 
-CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc, k, MinSize, alpha) {
+CrossSectionRegression.Cluster <- function(Returns, Volume, start, end, H, nr_pc, k, MinSize, alpha) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -104,13 +104,13 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
   # GET PREDICTION OVER THE WHOLE TIME PERIOD
   # ROWS CORRESPOND TO STOCKS
   # THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     DayCrossRegression.Cluster(
       Returns = Returns,
       Volume = Volume,
@@ -126,10 +126,10 @@ CrossSectionRegression.Cluster <- function(Returns, Volume, Start, End, H, nr_pc
 
   # EXTRACT PREDICTIONS AND NR OF CLUSTERS
   k <- unlist(Predictions[2, ]) # NR OF CLUSTERS
-  Predictions <- matrix(unlist(Predictions[1, ]), ncol = End - Start + 1)
+  Predictions <- matrix(unlist(Predictions[1, ]), ncol = end - start + 1)
 
   # CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  colnames(Predictions) <- Start:End
+  colnames(Predictions) <- start:end
   rownames(Predictions) <- rownames(Returns)
 
   # RETURN

@@ -1,7 +1,7 @@
 #################### OPTIMISE L###################
 
 # CT.Scores.OverL = OptimiseL(Returns = Returns,
-#                             Start = 500, End = ncol(Returns),
+#                             start = 500, end = ncol(Returns),
 #                             nr_pc=20, H = 252,
 #                             L.Candidates=seq(25,60, by = 5), b_sensitivity = 0.01,
 #                             Q=(1:4)/4, r = 30)
@@ -15,8 +15,8 @@
 
 
 # Prediction.CT = CTRegression(Returns = Returns,
-#                             Start = 500,
-#                             End = ncol(Returns),
+#                             start = 500,
+#                             end = ncol(Returns),
 #                             nr_pc = 20,
 #                             H = 252,
 #                             L = 45,
@@ -31,7 +31,7 @@
 
 # Predictions.CT.VW.Divide <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                     Volume = Volume,
-#                                                     Start = 500, End = ncol(Returns),
+#                                                     start = 500, end = ncol(Returns),
 #                                                     H = 252, nr_pc = 20, L = 45,
 #                                                     b_sensitivity = 0.01, d = 20,
 #                                                     divide = TRUE, MAP.list = MAP.list)
@@ -42,7 +42,7 @@
 #
 # Predictions.CT.VW.Multiply <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                       Volume = Volume,
-#                                                       Start = 500, End = ncol(Returns),
+#                                                       start = 500, end = ncol(Returns),
 #                                                       H = 252, nr_pc = 20, L = 45,
 #                                                       b_sensitivity = 0.01, d = 20,
 #                                                       divide = FALSE, MAP.list = MAP.list)
@@ -55,7 +55,7 @@
 #################### K(CCA) ####################
 
 # Predictions.CT.CCA=crossTemporalRegressionCCA(Returns = Returns, Volume = Volume,
-#                                     Start = 500, End = ncol(Returns),
+#                                     start = 500, end = ncol(Returns),
 #                                     H=100, HV = 100, L = 45,
 #                                     nr_c_r = 15, nr_c_v = 5,
 #                                     d=20, b_sensitivity = 0.01)
@@ -64,7 +64,7 @@
 #
 #
 # Predictions.CT.KCCA=CTRegression.KCCA(Returns = Returns, Volume = Volume,
-#                                       Start = 500, End = ncol(Returns),
+#                                       start = 500, end = ncol(Returns),
 #                                       H=100, HV = 100, L = 45,
 #                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d=20, b_sensitivity = 0.01)
@@ -78,7 +78,7 @@
 
 
 Predictions.CT.OverTraded <- CTRegression.Overtrade(Volume, Returns,
-  Start = 500, End = ncol(Returns),
+  start = 500, end = ncol(Returns),
   H = 252, nr_pc.V = 25, nr_pc = 20,
   alpha = 10, L = 45, b_sensitivity = 0.01
 )

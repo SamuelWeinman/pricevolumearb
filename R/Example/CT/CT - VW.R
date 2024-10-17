@@ -13,7 +13,7 @@ MAP.list <- list(
 
 # Predictions.CT.VW.Divide <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                     Volume = Volume,
-#                                                     Start = 500, End = ncol(Returns),
+#                                                     start = 500, end = ncol(Returns),
 #                                                     H = 252, nr_pc = 20, L = 45,
 #                                                     b_sensitivity = 0.01, d = 20,
 #                                                     divide = TRUE, MAP.list = MAP.list)
@@ -109,7 +109,7 @@ ggsave(
 
 # Predictions.CT.VW.Multiply <- Outside_crossTemporalRegressionWithVW(Returns = Returns,
 #                                                       Volume = Volume,
-#                                                       Start = 500, End = ncol(Returns),
+#                                                       start = 500, end = ncol(Returns),
 #                                                       H = 252, nr_pc = 20, L = 45,
 #                                                       b_sensitivity = 0.01, d = 20,
 #                                                       divide = FALSE, MAP.list = MAP.list)

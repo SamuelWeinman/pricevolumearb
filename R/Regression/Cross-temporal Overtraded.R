@@ -60,7 +60,7 @@ Day.CT.Overtrade <- function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha, L, b_
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
 # ALL ELSE AS BEFORE
-CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_pc, alpha, L, b_sensitivity) {
+CTRegression.Overtrade <- function(Volume, Returns, start, end, H, nr_pc.V, nr_pc, alpha, L, b_sensitivity) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
@@ -81,13 +81,13 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
 
 
   # FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     s <- Day.CT.Overtrade(
       Volume = Volume, Returns = Returns, t = t,
       H = H, nr_pc.V = nr_pc.V, nr_pc = nr_pc,
@@ -105,7 +105,7 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   # THE ROW NAMES WILL THE STOCK TICKERS
   # THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
   rownames(Predictions) <- rownames(Returns)
-  colnames(Predictions) <- Start:End
+  colnames(Predictions) <- start:end
 
   # RETURN
   return(Predictions)

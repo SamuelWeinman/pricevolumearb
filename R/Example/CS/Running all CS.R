@@ -1,8 +1,8 @@
 ##################### BASE#############################
 
 # Prediction.CS= CrossSectionRegression(Returns = Returns,
-# Start = 500,
-# End = ncol(Returns),
+# start = 500,
+# end = ncol(Returns),
 # H = 252,
 # nr_pc = 20)
 # write.csv(Prediction.CS, "./Results/Predictions/Base/Prediction.CS.csv")
@@ -32,7 +32,7 @@
 #
 # Predictions.CS.VW.Divide <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
-#                                                               Start = 500, End = ncol(Returns),
+#                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
 #                                                               MAP.list)
@@ -43,7 +43,7 @@
 #
 # Predictions.CS.VW.Multiply <- Outside_CrossSectionRegression.VW(Returns,
 #                                                               Volume,
-#                                                               Start = 500, End = ncol(Returns),
+#                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
 #                                                               MAP.list)
@@ -58,7 +58,7 @@
 
 
 # Predictions.CS.CCA=CrossSectionRegression.CCA(Returns = Returns, Volume = Volume,
-#                                    Start = 500, End = ncol(Returns),
+#                                    start = 500, end = ncol(Returns),
 #                                    H=100, HV = 100,
 #                                    nr_c_r = 15, nr_c_v = 5,
 #                                    d = 20)
@@ -68,7 +68,7 @@
 
 
 # Predictions.CS.KCCA=CrossSectionRegression.KCCA(Returns = Returns, Volume = Volume,
-#                                       Start = 500, End = ncol(Returns),
+#                                       start = 500, end = ncol(Returns),
 #                                       H=100, HV = 100,
 #                                       nr_c_r = 15, nr_c_v = 5,
 #                                       d = 20)
@@ -80,7 +80,7 @@
 #################### OVERTRADED ######################################
 
 
-# Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(Start = 500, End = ncol(Returns),
+# Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(start = 500, end = ncol(Returns),
 #                                                             Volume, Returns,
 #                                                             H = 252, nr_pc.V = 25,
 #                                                             alpha = 175, nr_pc = 20)

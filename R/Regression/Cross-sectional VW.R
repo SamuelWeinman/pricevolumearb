@@ -28,7 +28,7 @@ constructWeightedReturn <- function(Returns, Volume, H, d, divide) {
 # PERFORMS CS VOLUME WEIGHTED IN INTERVAL [START, END], USING HISTORICAL DATA
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
-CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc, d, divide) {
+CrossSectionRegression.VW <- function(Returns, Volume, start, end, H, nr_pc, d, divide) {
   # CONSTRUCT WEIGHTED RETURN
   WeightedReturns <- constructWeightedReturn(
     Returns = Returns, Volume = Volume, H = H, d = d,
@@ -50,13 +50,13 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc, d, 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("roll"))
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
   # GET PREDICTION OVER THE WHOLE TIME PERIOD
   # ROWS CORRESPOND TO STOCKS
   # THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     DayCrossRegression(
       Returns = WeightedReturns,
       t = t, H = H,
@@ -68,7 +68,7 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc, d, 
   snow::stopCluster(cl)
 
   # CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  colnames(Predictions) <- Start:End
+  colnames(Predictions) <- start:end
   rownames(Predictions) <- rownames(Returns)
 
   # RETURN
@@ -79,7 +79,7 @@ CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc, d, 
 
 # DOES CrossSectionRegression.VW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
 # MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr_pc, d, divide, MAP.list) {
+Outside_CrossSectionRegression.VW <- function(Returns, Volume, start, end, H, nr_pc, d, divide, MAP.list) {
   # NR OF MAPS
   K <- length(MAP.list)
 
@@ -93,7 +93,7 @@ Outside_CrossSectionRegression.VW <- function(Returns, Volume, Start, End, H, nr
     preds <- CrossSectionRegression.VW(
       Returns = Returns, # perform calculations with mapped volume
       Volume = MappedVolume,
-      Start = Start, End = End,
+      start = start, end = end,
       H = H,
       nr_pc = nr_pc,
       d = d,

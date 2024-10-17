@@ -30,7 +30,7 @@ CrossSectional.KPCA.day <- function(Returns, t, H, nr_pc, kernel, kpar) {
   model <- lm(y ~ X)
 
   # EXTRACT RESIDUALS AND FORM PREDICTIONS
-  Pred <- -model$residuals
+  red <- -model$residuals
 
   # RETURN
   return(Pred)
@@ -38,38 +38,32 @@ CrossSectional.KPCA.day <- function(Returns, t, H, nr_pc, kernel, kpar) {
 
 
 # PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
-CrossSectionRegression.KPCA <- function(Returns, Start, End, H, nr_pc, kernel, kpar) {
+CrossSectionRegression.KPCA <- function(Returns, start, end, h, nr_pc, kernel, kpar) {
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   global_var_list <- c("CrossSectional.KPCA.day", "constructRho")
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  local_var_list <- c("Returns", "H", "nr_pc", "kernel", "kpar")
+  local_var_list <- c("Returns", "h", "nr_pc", "kernel", "kpar")
 
-  # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
 
-
-  # GET PREDICTION OVER THE WHOLE TIME PERIOD
-  # ROWS CORRESPOND TO STOCKS
-  # THE COLUMNS CORRESPOND TO DAYS IN [START:END]
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
+  predictions <- snow::parSapply(cl, start:end, function(t) {
     CrossSectional.KPCA.day(
       Returns = Returns,
       t = t,
-      H = H, nr_pc = nr_pc,
+      h = H, nr_pc = nr_pc,
       kernel = kernel, kpar = kpar
     )
   })
-  # CLOSE CLUSTERS
+
   snow::stopCluster(cl)
 
-  # CHANGE COL AND ROWNAMES AS APPROPRIATE.
-  colnames(Predictions) <- Start:End
-  rownames(Predictions) <- rownames(Returns)
+  colnames(predictions) <- start:end
+  rownames(predictions) <- rownames(Returns)
 
-  return(Predictions)
+  return(predictions)
 }
