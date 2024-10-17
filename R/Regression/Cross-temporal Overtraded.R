@@ -10,15 +10,15 @@
 Day.CT.Overtrade <- function(Volume, Returns, t, H, nr_pc.V, nr_pc, alpha, L, b_sensitivity) {
   # STANDARDISE VOLUME: DISTRIBUTION OF VOLUME ON THE PRVIOUS H DAYS. I.E. NOT A ROLLING WINDOW APPROACH AS BEFORE!
   # FOR ANY T, WILL COMPARE ALL THE HISTORY TO THE H DAYS BEFORE T.
-  standardisedVolume <- Volume[, (t - H):(t - 1)] / apply(Volume[, (t - H):(t - 1)], 1, sum)
+  standardised_volume <- Volume[, (t - H):(t - 1)] / apply(Volume[, (t - H):(t - 1)], 1, sum)
 
   # CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-  E.V <- extractEigenPortfolio(standardisedVolume, nr_pc.V)
+  E.V <- extractEigenPortfolio(standardised_volume, nr_pc.V)
 
   # CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
   # HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
   Overtraded <- sapply(1:H, function(i) {
-    y <- standardisedVolume[, i] # standardise volume on the day
+    y <- standardised_volume[, i] # standardise volume on the day
     model <- lm(y ~ E.V$EigenPortfolio) # regress on eigenportfolios
     return(model$residuals) # extract residuals
   })
@@ -64,14 +64,14 @@ CTRegression.Overtrade <- function(Volume, Returns, Start, End, H, nr_pc.V, nr_p
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist <- c(
+  global_var_list <- c(
     "Day.CT.Overtrade",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
     "constructEigenPortfolios", "constructRho"
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist <- c(
+  local_var_list <- c(
     "Returns", "Volume",
     "H", "L", "b_sensitivity",
     "nr_pc.V", "nr_pc", "alpha", "L", "b_sensitivity"

@@ -35,14 +35,14 @@ CrossSectionRegression <- function(Returns, Start, End, H, nr_pc) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist <- c(
+  global_var_list <- c(
     "DayCrossRegression",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist <- c("Returns", "H", "nr_pc")
+  local_var_list <- c("Returns", "H", "nr_pc")
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)

@@ -34,10 +34,10 @@ singleCrossSectoralRegressionWithKCCA <- function(returns, volume, t, h, hv, nr_
 # PERFORMS KCCA CS ON INTERVAL [START, END]
 # D: NR OF DAYS TO STANDARDISE OVER
 crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
-  standardisedVolume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
+  standardised_volume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
 
-  globalvarlist <- c("singleCrossSectoralRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
-  localvarlist <- c("returns", "h", "hv", "nr_c_r", "nr_c_v", "standardisedVolume")
+  global_var_list <- c("singleCrossSectoralRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
+  local_var_list <- c("returns", "h", "hv", "nr_c_r", "nr_c_v", "standardised_volume")
 
 
   cl <- snow::makeCluster(detectCores() - 1)
@@ -48,7 +48,7 @@ crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r
   predictions <- snow::parSapply(cl, start:end, function(t) {
     singleCrossSectoralRegressionWithKCCA(
       returns = returns,
-      volume = standardisedVolume,
+      volume = standardised_volume,
       t = t,
       h = h, hv = hv,
       nr_c_r = nr_c_r, nr_c_v = nr_c_v

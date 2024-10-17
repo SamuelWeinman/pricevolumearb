@@ -2,11 +2,11 @@ t <- 4348
 d <- 20
 
 
-standardisedVolume <- unlist(Volume[, t - 1] / apply(Volume[(t - d):(t - 1)], 1, mean))
+standardised_volume <- unlist(Volume[, t - 1] / apply(Volume[(t - d):(t - 1)], 1, mean))
 
-data <- data.frame(standardisedVolume = standardisedVolume)
+data <- data.frame(standardised_volume = standardised_volume)
 
-standardisedVolume.Distr <- ggplot(data = data, aes(standardisedVolume)) +
+standardised_volume.Distr <- ggplot(data = data, aes(standardised_volume)) +
   geom_histogram(bins = 30, fill = "red", col = "black") +
   xlab("Standardised volume") +
   ylab("Frequency") +
@@ -18,8 +18,8 @@ standardisedVolume.Distr <- ggplot(data = data, aes(standardisedVolume)) +
 
 
 ggsave(
-  filename = "standardisedVolume.Distr.png",
+  filename = "standardised_volume.Distr.png",
   path = "C:\\Users\\Samuel Weinman\\OneDrive - Nexus365\\Documents\\MSc Statistical Science\\Dissertation\\Results\\Plots",
-  plot = standardisedVolume.Distr,
+  plot = standardised_volume.Distr,
   height = 4, width = 5
 )

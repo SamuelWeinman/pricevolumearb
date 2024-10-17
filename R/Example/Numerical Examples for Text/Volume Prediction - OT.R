@@ -11,12 +11,12 @@ Pred.OT.CT <- unlist(Predictions.CT.OverTraded[, col])
 
 
 # CONSTRUCT "EIGENPORTFOLIO" OF VOLUME
-E.V <- extractEigenPortfolio(standardisedVolume, nr_pc.V)
+E.V <- extractEigenPortfolio(standardised_volume, nr_pc.V)
 
 # CALCULATE BY HOW MUCH IT'S STOCK IS OVERTRADED OVERTRADING
 # HERE Overtraded_{I, T} IS THE AMOUNT THAT STOCK I WAS OVERTRADED ON DAY T
 
-model <- lm(standardisedVolume[, H] ~ E.V$EigenPortfolio)
+model <- lm(standardised_volume[, H] ~ E.V$EigenPortfolio)
 Overtraded <- model$residuals
 
 

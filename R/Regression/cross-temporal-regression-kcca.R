@@ -49,10 +49,10 @@ singleCrossTemporalRegressionWithKCCA <- function(returns, volume, t, h, hv, l, 
 # PERFORMS CT KCCA ON [START, END]
 # D: HOW MANY DAYS TO STANDARDISE VOLUME OVER
 crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
-  standardisedVolume <- volume / t(rolling_mean(t(as.matrix(volume)), width = d))
+  standardised_volume <- volume / t(rolling_mean(t(as.matrix(volume)), width = d))
 
-  globalvarlist <- c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
-  localvarlist <- c("returns", "h", "hv", "l", "nr_c_r", "nr_c_v", "b_sensitivity", "standardisedVolume")
+  global_var_list <- c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
+  local_var_list <- c("returns", "h", "hv", "l", "nr_c_r", "nr_c_v", "b_sensitivity", "standardised_volume")
 
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
@@ -62,7 +62,7 @@ crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
     s <- singleCrossTemporalRegressionWithKCCA(
-      returns = returns, volume = standardisedVolume,
+      returns = returns, volume = standardised_volume,
       t = t, h = h, hv = hv,
       L = L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
       b_sensitivity = b_sensitivity

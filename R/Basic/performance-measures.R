@@ -34,7 +34,6 @@ calculateRollingStandardDeviation <- function(predictions, r) {
 # THAT IS, CALCULATE PNL, SHARPE, AND PPT.
 calculatePerformanceMeasures <- function(returns, predictions, q) {
   start <- as.numeric(colnames(predictions)[1])
-  End <- as.numeric(colnames(predictions)[ncol(predictions)])
   pnl <- sapply(1:ncol(predictions), function(i) {
     return(calculatePnL(
       returns = returns[, start + i - 1],
@@ -73,7 +72,7 @@ performFullAnalysis <- function(returns, predictions, q, r, subtract_spy = FALSE
   }
 
   regular <- calculatePerformanceMeasures(returns, predictions[, -(1:(r - 1))], q)
-  pred_standard <- calculateRollingStandardDeviation[, -(1:(r - 1))] / RollingSD(predictions, r)
+  pred_standard <- calculateRollingStandardDeviation[, -(1:(r - 1))] / calculateRollingStandardDeviation(predictions, r)
   standard <- calculatePerformanceMeasures(returns, pred_standard, Q)
 
   return(list(

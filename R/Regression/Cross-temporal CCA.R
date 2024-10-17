@@ -12,9 +12,9 @@ library(CCA)
 # NRC.R: HOW MANy FEAURES OF RETURN EMBEDDINGS TO USE
 # NRC.V: HOW MANy FEAURES OF VOLUME EMBEDDINGS TO USE
 # b_sensitivity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
-singleCrossTemporalRegressionCCA <- function(returns, standardisedVolume, t, h, hv, L, nr_c_r, nr_c_v, b_sensitivity) {
+singleCrossTemporalRegressionCCA <- function(returns, standardised_volume, t, h, hv, L, nr_c_r, nr_c_v, b_sensitivity) {
   x <- returns[, (t - h):(t - 1)]
-  y <- standardisedVolume[, (t - hv):(t - 1)]
+  y <- standardised_volume[, (t - hv):(t - 1)]
 
   c <- cc(x, y)
 
@@ -28,12 +28,12 @@ singleCrossTemporalRegressionCCA <- function(returns, standardisedVolume, t, h, 
   y <- y / apply(as.matrix(returns[, (t - h):(t - 1)]), 1, sd)
 
   portfolios <- cbind(x, y)
-  portfolioReturns <- t(returns[(t - L):(t - 1)]) %*% portfolios
+  portfolio_returns <- t(returns[(t - L):(t - 1)]) %*% portfolios
 
   n <- nrow(returns)
   models <- lapply(1:n, function(i) {
     z <- unlist(returns[i, (t - L):(t - 1)])
-    model <- lm(as.numeric(z) ~ portfolioReturns)
+    model <- lm(as.numeric(z) ~ portfolio_returns)
     return(model)
   })
 
@@ -50,21 +50,21 @@ singleCrossTemporalRegressionCCA <- function(returns, standardisedVolume, t, h, 
 }
 
 
-crossTemporalRegressionCCA <- function(returns, Volume, Start, End, H, HV, L, nr_c_r, nr_c_v, d, b_sensitivity) {
-  standardisedVolume <- Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
+crossTemporalRegressionCCA <- function(returns, Volume, start, end, H, HV, L, nr_c_r, nr_c_v, d, b_sensitivity) {
+  standardised_volume <- Volume / t(roll_mean(t(as.matrix(Volume)), width = d))
 
-  globalvarlist <- c("DayCrossTemporal.CCA", "estimateCoefficeients")
-  localvarlist <- c("returns", "H", "HV", "L", "nr_c_r", "nr_c_v", "b_sensitivity", "standardisedVolume")
+  global_var_list <- c("singleCrossTemporalRegressionCCA", "estimateCoefficeients")
+  local_var_list <- c("returns", "H", "HV", "L", "nr_c_r", "nr_c_v", "b_sensitivity", "standardised_volume")
 
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("CCA"))
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, Globalvarlist)
-  snow::clusterExport(cl, Localvarlist, envir <- environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir <- environment())
 
-  predictions <- snow::parSapply(cl, Start:End, function(t) {
-    s <- DayCrossTemporal.CCA(
-      returns = returns, standardisedVolume = standardisedVolume,
+  predictions <- snow::parSapply(cl, start:end, function(t) {
+    s <- singleCrossTemporalRegressionCCA(
+      returns = returns, standardised_volume = standardised_volume,
       t = t, H = H, HV = HV,
       L = L, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
       b_sensitivity = b_sensitivity
@@ -74,8 +74,8 @@ crossTemporalRegressionCCA <- function(returns, Volume, Start, End, H, HV, L, nr
   })
   snow::stopCluster(cl)
 
-  rownames(Predictions) <- rownames(returns)
-  colnames(Predictions) <- Start:End
+  rownames(predictions) <- rownames(returns)
+  colnames(predictions) <- start:end
 
-  return(Predictions)
+  return(predictions)
 }

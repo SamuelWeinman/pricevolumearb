@@ -40,10 +40,10 @@ CrossSectional.KPCA.day <- function(Returns, t, H, nr_pc, kernel, kpar) {
 # PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
 CrossSectionRegression.KPCA <- function(Returns, Start, End, H, nr_pc, kernel, kpar) {
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist <- c("CrossSectional.KPCA.day", "constructRho")
+  global_var_list <- c("CrossSectional.KPCA.day", "constructRho")
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist <- c("Returns", "H", "nr_pc", "kernel", "kpar")
+  local_var_list <- c("Returns", "H", "nr_pc", "kernel", "kpar")
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)

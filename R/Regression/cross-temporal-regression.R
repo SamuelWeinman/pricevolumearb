@@ -9,21 +9,21 @@ crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitiv
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  globalvarlist <- c(
+  global_var_list <- c(
     "calculateSScore",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
     "constructEigenPortfolios", "constructRho"
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  localvarlist <- c("returns", "h", "l", "b_sensitivity", "nr_pc")
+  local_var_list <- c("returns", "h", "l", "b_sensitivity", "nr_pc")
 
 
   # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(detectCores() - 1)
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, globalvarlist)
-  snow::clusterExport(cl, localvarlist, envir = environment())
+  snow::clusterExport(cl, global_var_list)
+  snow::clusterExport(cl, local_var_list, envir = environment())
 
 
 

@@ -14,11 +14,11 @@ Pred.CT <- unlist(Prediction.CT[, col])
 
 
 
-standardisedVolume <- unlist(Volume[, t - 1] / apply(Volume[, (t - d):(t - 1)], 1, mean))
+standardised_volume <- unlist(Volume[, t - 1] / apply(Volume[, (t - d):(t - 1)], 1, mean))
 
 
 
-Group <- as.factor(ceiling(order(standardisedVolume) / ceiling(659 / NrGroups)))
+Group <- as.factor(ceiling(order(standardised_volume) / ceiling(659 / NrGroups)))
 
 
 

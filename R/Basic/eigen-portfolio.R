@@ -16,7 +16,7 @@ constructEigenPortfolios <- function(returns) {
   eigen_returns <- t(eigen_portfolios) %*% as.matrix(returns)
   return(list(
     rho = rho,
-    portfolios = eigen_portfoliosq,
+    portfolios = eigen_portfolios,
     returns = eigen_returns,
     values = e$values
   ))
