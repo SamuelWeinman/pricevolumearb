@@ -25,7 +25,7 @@ constructClusters <- function(rho, k, min_size) {
 
 # PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
 # ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES)
-singleCrossSectionRegressionClustering  <- function(returns, volume, t, h, nr_pc, k, min_size, alpha) {
+singleCrossSectionalRegressionClustering  <- function(returns, volume, t, h, nr_pc, k, min_size, alpha) {
 
   e <- extractEigenPortfolio(
     returns = returns[, (t - h):(t - 1)],
@@ -56,10 +56,10 @@ singleCrossSectionRegressionClustering  <- function(returns, volume, t, h, nr_pc
   ))
 }
 
-crossSectionRegressionClustering <- function(returns, volume, start, end, h, nr_pc, k, min_size, alpha) {
+crossSectionalRegressionClustering <- function(returns, volume, start, end, h, nr_pc, k, min_size, alpha) {
 
   global_var_list <- c(
-    "singleCrossSectionRegressionClustering ", "constructClusters",
+    "singleCrossSectionalRegressionClustering ", "constructClusters",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
@@ -72,7 +72,7 @@ crossSectionRegressionClustering <- function(returns, volume, start, end, h, nr_
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
-    singleCrossSectionRegressionClustering(
+    singleCrossSectionalRegressionClustering(
       returns = returns,
       volume = volume,
       t = t, h = h,

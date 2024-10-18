@@ -15,7 +15,7 @@ constructWeightedReturns <- function(returns, volume, d, divide) {
 # PERFORMS CS VOLUME WEIGHTED IN INTERVAL [START, END], USING HISTORICAL DATA
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
-crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide) {
+crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide) {
 
   weighted_returns <- constructWeightedReturns(
     returns = returns, volume = volume, d = d,
@@ -23,7 +23,7 @@ crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, d
   )
 
   global_var_list <- c(
-    "DayCrossRegression", "constructWeightedReturns",
+    "singleCrossSectionalRegression", "constructWeightedReturns",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
@@ -37,7 +37,7 @@ crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, d
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
-    DayCrossRegression(
+    singleCrossSectionalRegression(
       returns = weighted_returns,
       t = t, h = h,
       nr_pc = nr_pc
@@ -54,9 +54,9 @@ crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, d
 
 
 
-# DOES crossSectionRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
+# DOES crossSectionalRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
 # MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide, MAP.list) {
+Outside_crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide, MAP.list) {
   # NR OF MAPS
   K <- length(MAP.list)
 
@@ -67,7 +67,7 @@ Outside_crossSectionRegressionVW <- function(returns, volume, start, end, h, nr_
   for (k in 1:K) {
     map <- MAP.list[[k]] # extract map
     transformed_volume <- map(volume) # map volume
-    preds <- crossSectionRegressionVW(
+    preds <- crossSectionalRegressionVW(
       returns = returns, # perform calculations with mapped volume
       volume = transformed_volume,
       start = start, end = end,

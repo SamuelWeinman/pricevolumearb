@@ -6,7 +6,7 @@ library(parallel)
 # PERFORMS STANDARD CROSS SECTIONAL REGRESSION ON ONE DAY, ALTOUGH THE PCA IS THROUGH A KERNEL
 # KERNEL: THE NAME OF THE KERNEL (MUST BE COMPATIBLE WITH KPCA@KERNLAB)
 # KPAR: PARAMETERS FOR KERNEL (MUST BE IN A LIST, MUST BE COMPATIBLE WITH KPCA@KERNLAB)
-singleCrossSectionRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpar) {
+singleCrossSectionalRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpar) {
 
   returns <- returns[, (t - h):(t - 1)]
   returns <- apply(returns, 2, scale)
@@ -26,9 +26,9 @@ singleCrossSectionRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpar)
 
 
 # PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
-crossSectionRegressionKPCA <- function(returns, start, end, h, nr_pc, kernel, kpar) {
+crossSectionalRegressionKPCA <- function(returns, start, end, h, nr_pc, kernel, kpar) {
 
-  global_var_list <- c("singleCrossSectionRegressionKPCA", "constructRho")
+  global_var_list <- c("singleCrossSectionalRegressionKPCA", "constructRho")
   local_var_list <- c("returns", "h", "nr_pc", "kernel", "kpar")
 
   cl <- snow::makeCluster(detectCores() - 1)
@@ -38,7 +38,7 @@ crossSectionRegressionKPCA <- function(returns, start, end, h, nr_pc, kernel, kp
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
-    singleCrossSectionRegressionKPCA(
+    singleCrossSectionalRegressionKPCA(
       returns = returns,
       t = t,
       h = h, nr_pc = nr_pc,

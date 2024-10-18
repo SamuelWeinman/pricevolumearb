@@ -51,7 +51,7 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
   return(p)
 }
 
-# DOES crossSectionRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
+# DOES crossSectionalRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
 # MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
 mappedCrossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide, maps) {
   k <- length(maps)

@@ -43,7 +43,7 @@ Day.CS.Overtrade <- function(Volume, Returns, t, h, nr_pc.V, nr_pc, alpha) {
 }
 
 # PERFORMS CS OVERTRADED ON INTERVAL [START, END]
-CrossSectionRegression.OverTrade <- function(start, end, Volume, Returns, h, nr_pc.V, alpha, nr_pc) {
+CrossSectionalRegression.OverTrade <- function(start, end, Volume, Returns, h, nr_pc.V, alpha, nr_pc) {
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT

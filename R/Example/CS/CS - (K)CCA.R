@@ -1,5 +1,5 @@
 #
-# Predictions.CS.CCA=CrossSectionRegression.CCA(Returns = Returns, Volume = Volume,
+# Predictions.CS.CCA=CrossSectionalRegression.CCA(Returns = Returns, Volume = Volume,
 #                                               start = 500, end = ncol(Returns),
 #                                               H=100, HV = 100,
 #                                               nr_c_r = 15, nr_c_v = 5,

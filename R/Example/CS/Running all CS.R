@@ -1,6 +1,6 @@
 ##################### BASE#############################
 
-# Prediction.CS= CrossSectionRegression(Returns = Returns,
+# Prediction.CS= CrossSectionalRegression(Returns = Returns,
 # start = 500,
 # end = ncol(Returns),
 # H = 252,
@@ -30,7 +30,7 @@
 #
 #
 #
-# Predictions.CS.VW.Divide <- Outside_crossSectionRegressionVW(Returns,
+# Predictions.CS.VW.Divide <- Outside_crossSectionalRegressionVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
@@ -41,7 +41,7 @@
 #
 #
 #
-# Predictions.CS.VW.Multiply <- Outside_crossSectionRegressionVW(Returns,
+# Predictions.CS.VW.Multiply <- Outside_crossSectionalRegressionVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
@@ -57,7 +57,7 @@
 
 
 
-# Predictions.CS.CCA=CrossSectionRegression.CCA(Returns = Returns, Volume = Volume,
+# Predictions.CS.CCA=CrossSectionalRegression.CCA(Returns = Returns, Volume = Volume,
 #                                    start = 500, end = ncol(Returns),
 #                                    H=100, HV = 100,
 #                                    nr_c_r = 15, nr_c_v = 5,
@@ -67,7 +67,7 @@
 # write.csv(Predictions.CS.CCA, "./Results/Predictions/CS CCA/Predictions.CS.CCA.csv")
 
 
-# Predictions.CS.KCCA=CrossSectionRegression.KCCA(Returns = Returns, Volume = Volume,
+# Predictions.CS.KCCA=CrossSectionalRegression.KCCA(Returns = Returns, Volume = Volume,
 #                                       start = 500, end = ncol(Returns),
 #                                       H=100, HV = 100,
 #                                       nr_c_r = 15, nr_c_v = 5,
@@ -80,7 +80,7 @@
 #################### OVERTRADED ######################################
 
 
-# Prediction.CS.Overtraded = CrossSectionRegression.OverTrade(start = 500, end = ncol(Returns),
+# Prediction.CS.Overtraded = CrossSectionalRegression.OverTrade(start = 500, end = ncol(Returns),
 #                                                             Volume, Returns,
 #                                                             H = 252, nr_pc.V = 25,
 #                                                             alpha = 175, nr_pc = 20)

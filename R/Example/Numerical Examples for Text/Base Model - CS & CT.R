@@ -6,7 +6,7 @@
 ###############################
 
 # PREDICTION
-# Prediction.CS= CrossSectionRegression(Returns = Returns,
+# Prediction.CS= CrossSectionalRegression(Returns = Returns,
 # start = 500,
 # end = ncol(Returns),
 # H = 252,

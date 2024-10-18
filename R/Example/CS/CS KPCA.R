@@ -24,7 +24,7 @@ Kpar.List <- list(
 #   kernel = Kernel.List[i]
 #   kpar = Kpar.List[[i]]
 #
-#   Preds = CrossSectionRegression.KPCA(Returns = Returns, start=500, end = ncol(Returns),
+#   Preds = CrossSectionalRegression.KPCA(Returns = Returns, start=500, end = ncol(Returns),
 #                                       H=252, nr_pc = 20,
 #                                       kernel = kernel, kpar = kpar)
 #
