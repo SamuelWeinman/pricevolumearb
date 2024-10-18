@@ -6,16 +6,11 @@
 #  h (history): NR OF DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
 #  l: NR OF DAYS TO USE FOR REGRESSION MODEL (NOT NECESSARILY SAME AS NR OF DAYS FOR CONSTRUCTING RHO, I.E. NCOL(returns_short))
 #  nr_pc: AS ABOVE, FOR EIGENdecompose.
-
 decompose <- function(returns, nr_pc, h, L) {
-  
-  n <- nrow(returns) 
+  n <- nrow(returns)
   returns_short <- returns[ ,(ncol(returns)-h+1) : ncol(returns)] #use last H days
-  eigen <- extractEigenPortfolio(returns_short, nr_pc) 
-  
-  #PERFORM REGRESSION
-  #THE i:TH ENTRY IN MODELS IS THE REGRESSION OF THE i:TH STOCK ON THE EIGENPORTFOLIOS
-  #NOTE THAT returns_short AND eigen$EigenReturn HAVE H COLUMNS
+  eigen <- extractEigenPortfolio(returns_short, nr_pc)
+
   models <- lapply(1:n, function(i) { #loop through all stocks
     y = returns_short[i, (h-l+1):h] #returns last L days
     X = eigen$return[, (h-l+1):h] #eigenreturns last L days
@@ -36,14 +31,7 @@ decompose <- function(returns, nr_pc, h, L) {
 #HENCE, REJECT MEAN REVERSION IF b > 1-b_sensitivity
 estimateCoefficeients <- function(models, b_sensitivity) {
   
-  #DIMENSIONS
-  n <- length(models) #NR STOCKS
-  l <- length(models[[1]]$residuals) #NR DAYS USED FOR MODEL
-  
-  #FOR EACH MODEL, ESTIMATE COEFFICIENTS
-  #IN PARTICULAR, WE LOOP THROUGH EACH MODEL AND WITHIN EACH MODEL REGRESS THE CUMSUM OF THE RESIDUALS
-  #EACH VECTOR X IS OF LENGTH L
-  coefficients <- lapply(1:n, function(i){
+  coefficients <- lapply(1:length(models), function(i){
     return(estimateCoefficeientsNumberI(models, i, b_sensitivity))
   })
   
