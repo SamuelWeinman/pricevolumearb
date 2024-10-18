@@ -12,7 +12,7 @@
 
 
 #
-# MAP.list = list(f = function(x) x,
+# map_list = list(f = function(x) x,
 #                 g = log,
 #                 h= function(x) x^(1/3),
 #                 i = sqrt)
@@ -23,30 +23,30 @@
 #
 # ############################ VW #################################################
 #
-# MAP.list = list(f = function(x) x,
+# map_list = list(f = function(x) x,
 #                 g = log,
 #                 h= function(x) x^(1/3),
 #                 i = sqrt)
 #
 #
 #
-# Predictions.CS.VW.Divide <- Outside_crossSectionalRegressionVW(Returns,
+# Predictions.CS.VW.Divide <- crossSectionalRegressionMappedVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
-#                                                               MAP.list)
+#                                                               map_list)
 #
 # write.csv(Predictions.CS.VW.Divide, "./Results/Predictions/CS VW/Predictions.CS.VW.Divide.csv")
 #
 #
 #
-# Predictions.CS.VW.Multiply <- Outside_crossSectionalRegressionVW(Returns,
+# Predictions.CS.VW.Multiply <- crossSectionalRegressionMappedVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
-#                                                               MAP.list)
+#                                                               map_list)
 #
 # write.csv(Predictions.CS.VW.Multiply, "./Results/Predictions/CS VW/Predictions.CS.VW.Multiply.csv")
 #
@@ -80,7 +80,7 @@
 #################### OVERTRADED ######################################
 
 
-# Prediction.CS.Overtraded = CrossSectionalRegression.OverTrade(start = 500, end = ncol(Returns),
+# Prediction.CS.Overtraded = crossSectionalRegressionOverTraded(start = 500, end = ncol(Returns),
 #                                                             Volume, Returns,
 #                                                             H = 252, nr_pc.V = 25,
 #                                                             alpha = 175, nr_pc = 20)

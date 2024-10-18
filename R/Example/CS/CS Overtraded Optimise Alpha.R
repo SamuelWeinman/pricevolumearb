@@ -3,7 +3,7 @@ Alpha.Candidates <- seq(40, 250, by = 15)
 # Scores = lapply(1:length(Alpha.Candidates), function(i){
 #   print(i)
 #   A = Alpha.Candidates[i]
-#   Preds = CrossSectionalRegression.OverTrade(start = 500, end = ncol(Returns),
+#   Preds = crossSectionalRegressionOverTraded(start = 500, end = ncol(Returns),
 #                                                               Volume, Returns,
 #                                                               H = 252, nr_pc.V = 25,
 #                                                               alpha = A, nr_pc = 20)

@@ -4,12 +4,8 @@
 constructWeightedReturns <- function(returns, volume, d, divide) {
 
   rolling_mean_volume <- t(roll_mean(t(as.matrix(volume)), width = d))
-
-  if (divide) {
-    return(returns * rolling_mean_volume / volume)
-  } 
-
-  return(returns * volume / rolling_mean_volume)
+  res <- ifelse(divide, returns * rolling_mean_volume / volume, returns * volume / rolling_mean_volume)
+  return(res)
 }
 
 # PERFORMS CS VOLUME WEIGHTED IN INTERVAL [START, END], USING HISTORICAL DATA
@@ -55,17 +51,12 @@ crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d,
 
 
 # DOES crossSectionalRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
-# MAP.list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
-Outside_crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide, MAP.list) {
-  # NR OF MAPS
-  K <- length(MAP.list)
+# map_list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
+crossSectionalRegressionMappedVW <- function(returns, volume, start, end, h, nr_pc, d, divide, map_list) {
 
-  # CREATE LIST TO STORE PREDICTIONS
-  PredictionsList <- list()
-
-  # FOR EACH MAP, TRANSFORM VOLUME TO MAPPEDVOLUME AND THEN PROCEED WITH CS VW REGRESSION.
-  for (k in 1:K) {
-    map <- MAP.list[[k]] # extract map
+  predictions <- list()
+  for (k in 1:length(map_list)) {
+    map <- map_list[[k]] # extract map
     transformed_volume <- map(volume) # map volume
     preds <- crossSectionalRegressionVW(
       returns = returns, # perform calculations with mapped volume
@@ -76,9 +67,9 @@ Outside_crossSectionalRegressionVW <- function(returns, volume, start, end, h, n
       d = d,
       divide = divide
     )
-    PredictionsList[[k]] <- preds # add to list
+    predictions[[k]] <- preds # add to list
   }
 
   # RETURN
-  return(PredictionsList)
+  return(predictions)
 }

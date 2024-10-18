@@ -1,7 +1,7 @@
 # PREDICTIONS ALREADY DONE
 # "CLEAN"
 
-MAP.list <- list(
+map_list <- list(
   f = function(x) x,
   g = log,
   h = function(x) x^(1 / 3),
@@ -14,12 +14,12 @@ MAP.list <- list(
 
 ############################ DIVIDE #################################################
 
-# Predictions.CS.VW.Divide <- Outside_crossSectionalRegressionVW(Returns,
+# Predictions.CS.VW.Divide <- crossSectionalRegressionMappedVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = TRUE,
-#                                                               MAP.list)
+#                                                               map_list)
 #
 
 
@@ -113,12 +113,12 @@ ggsave(
 
 ############################ Multiply  #################################################
 
-# Predictions.CS.VW.Multiply <- Outside_crossSectionalRegressionVW(Returns,
+# Predictions.CS.VW.Multiply <- crossSectionalRegressionMappedVW(Returns,
 #                                                               Volume,
 #                                                               start = 500, end = ncol(Returns),
 #                                                               H = 252, nr_pc=20, d = 20,
 #                                                               divide = FALSE,
-#                                                               MAP.list)
+#                                                               map_list)
 
 
 

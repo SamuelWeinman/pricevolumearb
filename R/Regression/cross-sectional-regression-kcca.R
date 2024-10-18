@@ -8,7 +8,7 @@ library(kernlab)
 # H: NR DAYS OF RETURN HISTORY TO USE
 # HV: NR DAYS OF VOLUME HISTORY TO USE
 # NRC.R: HOW MANY COMPONENTS TO EXTRACT FROM THE EMBEDDING OF RETURNS.
-singleCrossSectoralRegressionWithKCCA <- function(returns, volume, t, h, hv, nr_c_r, nr_c_v) {
+singleCrossSectionalRegressionWithKCCA <- function(returns, volume, t, h, hv, nr_c_r, nr_c_v) {
   x <- as.matrix(returns[, (t - h):(t - 1)])
   y <- as.matrix(volume[, (t - hv):(t - 1)])
 
@@ -33,10 +33,10 @@ singleCrossSectoralRegressionWithKCCA <- function(returns, volume, t, h, hv, nr_
 
 # PERFORMS KCCA CS ON INTERVAL [START, END]
 # D: NR OF DAYS TO STANDARDISE OVER
-crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
+crossSectionalRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
   standardised_volume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
 
-  global_var_list <- c("singleCrossSectoralRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
+  global_var_list <- c("singleCrossSectionalRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
   local_var_list <- c("returns", "h", "hv", "nr_c_r", "nr_c_v", "standardised_volume")
 
 
@@ -46,7 +46,7 @@ crossSectoralRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r
   snow::clusterExport(cl, local_var_list, envir = environment())
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
-    singleCrossSectoralRegressionWithKCCA(
+    singleCrossSectionalRegressionWithKCCA(
       returns = returns,
       volume = standardised_volume,
       t = t,

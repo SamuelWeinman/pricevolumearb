@@ -34,7 +34,7 @@
 #                                                     start = 500, end = ncol(Returns),
 #                                                     H = 252, nr_pc = 20, L = 45,
 #                                                     b_sensitivity = 0.01, d = 20,
-#                                                     divide = TRUE, MAP.list = MAP.list)
+#                                                     divide = TRUE, map_list = map_list)
 #
 # write.csv(Predictions.CT.VW.Divide, "./Results/Predictions/CT VW/Predictions.CT.VW.Divide.csv")
 #
@@ -45,7 +45,7 @@
 #                                                       start = 500, end = ncol(Returns),
 #                                                       H = 252, nr_pc = 20, L = 45,
 #                                                       b_sensitivity = 0.01, d = 20,
-#                                                       divide = FALSE, MAP.list = MAP.list)
+#                                                       divide = FALSE, map_list = map_list)
 #
 # write.csv(Predictions.CT.VW.Multiply, "./Results/Predictions/CT VW/Predictions.CT.VW.Multiply.csv")
 
