@@ -1,19 +1,38 @@
-# CALCULATE PREDICTION OF ALL DAYS IN [START, END], USING HISTORICAL DATA
-# START: FIRST DAY OF TRADING
-# END: LAST DAY OF TRADING
-# H: DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
-# L: NR OF DAYS TO USE FOR REGRESSION
-# D: HOW MANY DAYS TO USE FOR ROLLING MEAN VOLUME
-# ALL ELSE AS BEFORE
-
-
-#' Add together two numbers
-#' @param x A number.
-#' @param y A number.
-#' @returns A numeric vector.
+#' Cross-Temporal Regression With Volume Weighting
+#'
+#' This function is a parallelized process that calculates S-Scores for each day in a given date 
+#' range using only the volume weighted historical data up to that date. The S-Score is a measure of 
+#' mean reversion tendency for each stock, and is calculated by the `calculateSScore` function.
+#' The function uses multiple packages to conduct parallel processing for efficiency.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param volume A numeric vector, the volume data.
+#' @param start An integer, the start of the date range for which to calculate S-Scores.
+#' @param end An integer, the end of the date range for which to calculate S-Scores.
+#' @param nr_pc An integer, the number of eigen portfolios to extract.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param l An integer, the number of preceding days used for the model.
+#' @param b_sensitivity A numeric value, sensitivity for checking if model b coefficient is less than 1 minus this value.
+#' @param d An integer, the number of days used for volume weighting.
+#' @param divide A logical value, indicating whether to divide returns by volume score. 
+#'
+#' @return A matrix of S-Scores where each row corresponds to a stock and each column corresponds 
+#' to a date in the given `start:end` range. 
+#'
 #' @examples
-#' add(1, 1)
-#' add(10, 1)
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' vol <- rnorm(5)
+#' num_pc <- 2
+#' historical <- 4
+#' preceding <- 1
+#' sensitivity <- 0.1
+#' start_range <- 2
+#' end_range <- 5
+#' volume_days <- 2
+#' divide_returns <- TRUE
+#' #Use the function
+#' crossTemporalRegressionWithVW(ret, vol, start_range, end_range, num_pc, historical, preceding, sensitivity, volume_days, divide_returns)
 crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide) {
   weighted_returns <- constructWeightedReturns(returns = returns, volume = volume, h = h, d = d, divide = divide)
 
@@ -25,15 +44,11 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
 
   local_vars <- c("returns", "h", "l", "b_sensitivity", "w")
 
-
-  # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, global_vars)
   snow::clusterExport(cl, local_vars, envir = environment())
 
-
-  # FOR EACH DAY, FIRST STANDARDISE THE RETURNS AND THEN CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   s_scores <- snow::parSapply(cl, start:end, function(t) {
     scores <- calculateSScore(
       returns = w[, 1:(t_ - 1)],
@@ -42,26 +57,53 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
       b_sensitivity = b_sensitivity
     )
 
-    # RETURN THE S-SCORE
     return(scores$s)
   })
 
-  # STOP CLUSTERS
   snow::stopCluster(cl)
 
-  # GET FORECASTS (BASED ON HISTORICAL DATA)
-  # THE ROW NAMES WILL THE STOCK TICKERS
-  # THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
   p <- -s_scores
   rownames(p) <- rownames(returns)
   colnames(p) <- start:end
 
-  # RETURN
   return(p)
 }
 
-# DOES crossSectionalRegressionVW, BUT AFTER A TRANSFORMATION OF VOLUME THROUGH MAPPING.
-# map_list: A LIST OF FUNCTIONS (F1,F2,..., FJ) S.T. VOLUME TRANSFORMED BY VOLUME -> F(VOLUME) BEFORE WEIGHTING.
+#' Mapped Cross-Temporal Regression With Volume Weighting
+#'
+#' This function maps the volume data using given maps before performing cross-temporal 
+#' regression with volume weighting. It calculates S-Scores for each day using volume weighted 
+#' historical data for each map.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param volume A numeric vector, the volume data.
+#' @param start An integer, the start of the date range for which to calculate S-Scores.
+#' @param end An integer, the end of the date range for which to calculate S-Scores.
+#' @param nr_pc An integer, the number of eigen portfolios to extract.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param l An integer, the number of preceding days used for the model.
+#' @param b_sensitivity A numeric value, sensitivity for checking if model b coefficient is less than 1 minus this value.
+#' @param d An integer, the number of days used for volume weighting.
+#' @param divide A logical value, indicating whether to divide returns by volume score.
+#' @param maps A list of functions, each function is used to map the volume data.
+#'
+#' @return A list of S-Score matrices (from `crossTemporalRegressionWithVW`), one for each mapping function.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' vol <- rnorm(5)
+#' num_pc <- 2
+#' historical <- 4
+#' preceding <- 1
+#' sensitivity <- 0.1
+#' start_range <- 2
+#' end_range <- 5
+#' volume_days <- 2
+#' divide_returns <- TRUE
+#' map_funcs <- list(sqrt, log)
+#' #Use the function
+#' mappedCrossTemporalRegressionWithVW(ret, vol, start_range, end_range, num_pc, historical, preceding, sensitivity, volume_days, divide_returns, map_funcs
 mappedCrossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide, maps) {
   k <- length(maps)
   predictions <- list()

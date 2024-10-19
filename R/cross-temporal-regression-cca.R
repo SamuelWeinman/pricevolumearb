@@ -1,14 +1,37 @@
-### PERFORM CCA ON THE SPACE OF VOLUMES & RETURNS
-### THEN PERFORMS CROSS-TEMPORAL REGRESSION USING THE EMBEDDINGS OF RETURNS AND VOLUMES
-# VOLUME SHOULD ALREADy BE STANDARDISED!!
-# PARAMETERS AS FOLLOWS:
-# T: WHAT DAy WE ARE FORECASTING
-# H: NR OF DAyS OF RETURN TO USE FOR EMBEDDING
-# HV: NR OF DAyS OF VOLUME TO USE FOR EMBEDDING
-# L: NR OF DAyS TO USE FOR REGRESSION ON EIGENRETURNS
-# NRC.R: HOW MANy FEAURES OF RETURN EMBEDDINGS TO USE
-# NRC.V: HOW MANy FEAURES OF VOLUME EMBEDDINGS TO USE
-# b_sensitivity: HOW CLOSE REGRESSION HAS TO BE TO ONE IN ORDER TO REJECT MEAN-REVERSION
+#' Single Cross-Temporal Regression With Canonical Correlation Analysis (CCA)
+#'
+#' This function applies Canonical Correlation Analysis (CCA) to determine 
+#' the correlation between returns and standardised volume. Then, it performs cross-temporal regression 
+#' on the given day and returns an S-Score, which measures the mean reversion tendency for each stock.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param standardised_volume A numeric matrix, the standardised_volume data.
+#' @param t An integer, the current day for which to calculate S-Scores.
+#' @param h An integer, the number of recent historical days to be used for returns.
+#' @param hv An integer, the number of recent historical days to be used for standardised volume.
+#' @param l An integer, the number of preceding days used for the model.
+#' @param nr_c_r An integer, the number of components used for returns in CCA.
+#' @param nr_c_v An integer, the number of components used for standardised volume in CCA.
+#' @param b_sensitivity A numeric value, sensitivity for checking if model b coefficient is less than 1 minus this value.
+#'
+#' @return A list containing:
+#' * `s`: The computed S-Score for each stock.
+#' * `is_mean_reverting`: A logical vector indicating whether each stock is mean reverting.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' vol <- matrix(rnorm(25), 5, 5)
+#' standardised_vol <- vol / rowMeans(vol)
+#' t_val <- 6
+#' historical_ret <- 4
+#' historical_vol <- 4
+#' preceding <- 1
+#' nr_c_r <- 2
+#' nr_c_v <- 2
+#' sensitivity <- 0.1
+#' #Use the function
+#' singleCrossTemporalRegressionCCA(ret, standardised_vol, t_val, historical_ret, historical_vol, preceding, nr_c_r, nr_c_v, sensitivity)
 singleCrossTemporalRegressionCCA <- function(returns, standardised_volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity) {
   x <- returns[, (t - h):(t - 1)]
   y <- standardised_volume[, (t - hv):(t - 1)]
@@ -44,7 +67,41 @@ singleCrossTemporalRegressionCCA <- function(returns, standardised_volume, t, h,
   ))
 }
 
-
+#' Cross-Temporal Regression With Canonical Correlation Analysis (CCA)
+#'
+#' This function performs cross-temporal regression on a range of days using CCA analysis.
+#' It is a parallelized process that calculates S-Scores for each day based on volume-standardised 
+#' historical returns. CCA is applied to determine the correlation between returns and standardised volume.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param volume A numeric matrix, the volume data.
+#' @param start An integer, the start of the date range for which to calculate S-Scores.
+#' @param end An integer, the end of the date range for which to calculate S-Scores.
+#' @param h An integer, the number of recent historical days to be used for returns.
+#' @param hv An integer, the number of recent historical days to be used for standardised volume.
+#' @param l An integer, the number of preceding days used for the model.
+#' @param nr_c_r An integer, the number of components used for returns in CCA.
+#' @param nr_c_v An integer, the number of components used for standardised volume in CCA.
+#' @param d An integer, the width for calculating the rolling mean of the volume.
+#' @param b_sensitivity A numeric value, sensitivity for checking if model b coefficient is less than 1 minus this value.
+#'
+#' @return A matrix of S-Scores where each row corresponds to a stock and each column corresponds to a date in the given `start:end` range.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' vol <- matrix(rnorm(25), 5, 5)
+#' start_range <- 2
+#' end_range <- 5
+#' historical_ret <- 4
+#' historical_vol <- 4
+#' preceding <- 1
+#' nr_c_r <- 2
+#' nr_c_v <- 2
+#' rolling_mean_width <- 2
+#' sensitivity <- 0.1
+#' #Use the function
+#' crossTemporalRegressionCCA(ret, vol, start_range, end_range, historical_ret, historical_vol, preceding, nr_c_r, nr_c_v, rolling_mean_width, sensitivity)
 crossTemporalRegressionCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
   standardised_volume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
 

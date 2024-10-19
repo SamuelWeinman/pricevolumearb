@@ -1,22 +1,41 @@
-### PERFORMS CT REGRESSION ON ALL DAYS IN INTERVAL [START, END]
-# START: FIRST DAY OF TRADING
-# END: LAST DAY OF TRADING
-# ALL ELSE AS BEFORE
+#' Cross-Temporal Regression
+#'
+#' This function is a parallelized process that calculates S-Scores for each day in a given date 
+#' range using only the historical data upto that date. The S-Score is a measure of mean reversion
+#' tendency for each stock, and is calculated by `calculateSScore` function. Multiple packages 
+#' are used to conduct parallel processing for efficiency.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param start An integer, the start of the date range for which to calculate S-Scores.
+#' @param end An integer, the end of the date range for which to calculate S-Scores.
+#' @param nr_pc An integer, the number of eigen portfolios to extract.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param l An integer, the number of preceding days used for the model.
+#' @param b_sensitivity A numeric value, sensitivity for checking if model b coefficient is less than 1 minus this value.
+#'
+#' @return A matrix of S-Scores where each row corresponds to a stock and each column corresponds 
+#' to a date in the given `start:end` range.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' num_pc <- 2
+#' historical <- 4
+#' preceding <- 1
+#' sensitivity <- 0.1
+#' start_range <- 2
+#' end_range <- 5
+#' #Use the function
+#' crossTemporalRegression(ret, start_range, end_range, num_pc, historical, preceding, sensitivity)
 crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitivity) {
-  # PREPARE CORES#
-
-  # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
   global_vars <- c(
     "calculateSScore",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
     "constructEigenPortfolios", "constructRho"
   )
 
-  # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
   local_vars <- c("returns", "h", "l", "b_sensitivity", "nr_pc")
 
-
-  # OPEN CORES AND TRANSFER
   cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, global_vars)
@@ -27,26 +46,19 @@ crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitiv
   # FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   s_scores <- snow::parSapply(cl, start:end, function(t) {
     scores <- calculateSScore(
-      returns = returns[, 1:(t - 1)], # using only historical data
+      returns = returns[, 1:(t - 1)],
       nr_pc = nr_pc,
       h = h, l = l,
       b_sensitivity = b_sensitivity
     )
-
-    # RETURN THE S-SCORE
     return(scores$s)
   })
 
-  # STOP CLUSTERS
   snow::stopCluster(cl)
 
-  # GET FORECASTS (BASED ON HISTORICAL DATA)
-  # THE ROW NAMES WILL THE STOCK TICKERS
-  # THE COLUMN NAMES WILL BE THE CORRESPONDING COLUMN NUMBERS IN RETURN
   p <- -s_scores
   rownames(p) <- rownames(returns)
   colnames(p) <- start:end
 
-  # RETURN
   return(p)
 }
