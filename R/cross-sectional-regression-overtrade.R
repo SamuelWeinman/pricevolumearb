@@ -25,16 +25,16 @@ singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_p
 
 # PERFORMS CS OVERTRADED ON INTERVAL [START, END]
 crossSectionalRegressionOvertraded <- function(start, end, volume, returns, h, nr_pc_v, alpha, nr_pc) {
-  global_var_list <- c(
+  global_vars <- c(
     "singleCrossSectionalRegressionOvertraded", "extractEigenPortfolio",
     "constructEigenPortfolios",
     "constructRho"
   )
-  local_var_list <- c("volume", "returns", "h", "nr_pc_v", "alpha", "nr_pc")
+  local_vars <- c("volume", "returns", "h", "nr_pc_v", "alpha", "nr_pc")
 
-  cl <- snow::makeCluster(parallel::detectCores() - 1)
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {

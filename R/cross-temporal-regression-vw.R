@@ -8,20 +8,20 @@
 crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide) {
   weighted_returns <- constructWeightedReturns(returns = returns, volume = volume, h = h, d = d, divide = divide)
 
-  global_var_list <- c(
+  global_vars <- c(
     "calculateSScore",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
     "constructEigenPortfolios", "constructRho", "constructWeightedReturns"
   )
 
-  local_var_list <- c("returns", "h", "l", "b_sensitivity", "w")
+  local_vars <- c("returns", "h", "l", "b_sensitivity", "w")
 
 
   # OPEN CORES AND TRANSFER
-  cl <- snow::makeCluster(detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
   # FOR EACH DAY, FIRST STANDARDISE THE RETURNS AND THEN CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)

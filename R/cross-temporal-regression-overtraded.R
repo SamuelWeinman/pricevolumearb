@@ -52,14 +52,14 @@ crossTemporalRegressionOvertrade <- function(volume, returns, start, end, h, nr_
   # PREPARE CORES#
 
   # VARIABLES TO SEND TO CORES FROM GLOBAL ENVIRONMENT
-  global_var_list <- c(
+  global_vars <- c(
     "singleCrossTemporalRegressionOvertrade",
     "estimateCoefficeients", "decompose", "extractEigenPortfolio",
     "constructEigenPortfolios", "constructRho"
   )
 
   # VARIABLES TO SEND TO CORES FROM FUNCTION ENVIRONMENT
-  local_var_list <- c(
+  local_vars <- c(
     "returns", "volume",
     "h", "l", "b_sensitivity",
     "nr_pc.V", "nr_pc", "alpha", "b_sensitivity"
@@ -67,10 +67,10 @@ crossTemporalRegressionOvertrade <- function(volume, returns, start, end, h, nr_
 
 
   # OPEN CORES AND TRANSFER
-  cl <- snow::makeCluster(parallel::detectCores() - 1)
+  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
   parallel::clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
 

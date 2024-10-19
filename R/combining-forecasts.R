@@ -12,7 +12,7 @@ combineDailyPredictions <- function(prediction1, prediction2, alpha) {
 
   prediction <- numeric(length(prediction1))
   prediction[stocks2] <- prediction2[stocks2]
-  prediction[stocks1] <- prediction1[stocks1] * max(abs(prediction2[stocks2])) / min(abs(prediction1[stocks1])) * 1.1
+  prediction[stocks1] <- prediction1[stocks1] * max(abs(prediction2[stocks2])) / min(abs(prediction1[stocks1]))
 
   return(prediction)
 }

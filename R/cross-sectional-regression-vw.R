@@ -16,18 +16,18 @@ crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d,
     divide = divide
   )
 
-  global_var_list <- c(
+  global_vars <- c(
     "singleCrossSectionalRegression", "constructWeightedReturns",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
 
-  local_var_list <- c("weighted_returns", "h", "nr_pc")
+  local_vars <- c("weighted_returns", "h", "nr_pc")
 
-  cl <- snow::makeCluster(parallel::detectCores() - 1)
+  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
   parallel::clusterCall(cl, function() library("roll"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {

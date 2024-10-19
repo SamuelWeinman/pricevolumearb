@@ -19,17 +19,17 @@ singleCrossSectionalRegression <- function(returns, t, h, nr_pc) {
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
 crossSectionalRegression <- function(returns, start, end, h, nr_pc) {
-  global_var_list <- c(
+  global_vars <- c(
     "singleCrossSectionalRegression",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
 
-  local_var_list <- c("returns", "h", "nr_pc")
+  local_vars <- c("returns", "h", "nr_pc")
 
-  cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
     singleCrossSectionalRegression(

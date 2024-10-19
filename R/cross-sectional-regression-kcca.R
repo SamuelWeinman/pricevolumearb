@@ -36,14 +36,14 @@ singleCrossSectionalRegressionWithKCCA <- function(returns, volume, t, h, hv, nr
 crossSectionalRegressionWithKCCA <- function(returns, volume, t, h, d, hv, nr_c_r, nr_c_v) {
   standardised_volume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
 
-  global_var_list <- c("singleCrossSectionalRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
-  local_var_list <- c("returns", "h", "hv", "nr_c_r", "nr_c_v", "standardised_volume")
+  global_vars <- c("singleCrossSectionalRegressionWithKCCA ", "extractEigenPortfolio", "constructEigenPortfolios", "constructRho")
+  local_vars <- c("returns", "h", "hv", "nr_c_r", "nr_c_v", "standardised_volume")
 
 
-  cl <- snow::makeCluster(detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
     singleCrossSectionalRegressionWithKCCA(

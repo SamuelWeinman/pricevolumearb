@@ -57,17 +57,17 @@ singleCrossSectionalRegressionClustering <- function(returns, volume, t, h, nr_p
 }
 
 crossSectionalRegressionClustering <- function(returns, volume, start, end, h, nr_pc, k, min_size, alpha) {
-  global_var_list <- c(
+  global_vars <- c(
     "singleCrossSectionalRegressionClustering ", "constructClusters",
     "extractEigenPortfolio", "constructEigenPortfolios",
     "constructRho"
   )
 
-  local_var_list <- c("returns", "volume", "h", "nr_pc", "k", "min_size", "alpha")
+  local_vars <- c("returns", "volume", "h", "nr_pc", "k", "min_size", "alpha")
 
-  cl <- snow::makeCluster(detectCores() - 1)
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {

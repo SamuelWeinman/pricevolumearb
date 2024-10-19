@@ -51,14 +51,14 @@ singleCrossTemporalRegressionWithKCCA <- function(returns, volume, t, h, hv, l, 
 crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
   standardised_volume <- volume / t(rolling_mean(t(as.matrix(volume)), width = d))
 
-  global_var_list <- c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
-  local_var_list <- c("returns", "h", "hv", "l", "nr_c_r", "nr_c_v", "b_sensitivity", "standardised_volume")
+  global_vars <- c("singleCrossTemporalRegressionWithKCCA", "estimateCoefficeients")
+  local_vars <- c("returns", "h", "hv", "l", "nr_c_r", "nr_c_v", "b_sensitivity", "standardised_volume")
 
-  cl <- snow::makeCluster(detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
   clusterCall(cl, function() library("plyr"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
     s <- singleCrossTemporalRegressionWithKCCA(

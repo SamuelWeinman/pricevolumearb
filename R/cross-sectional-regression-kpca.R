@@ -26,13 +26,13 @@ singleCrossSectionalRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpa
 
 # PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
 crossSectionalRegressionKPCA <- function(returns, start, end, h, nr_pc, kernel, kpar) {
-  global_var_list <- c("singleCrossSectionalRegressionKPCA", "constructRho")
-  local_var_list <- c("returns", "h", "nr_pc", "kernel", "kpar")
+  global_vars <- c("singleCrossSectionalRegressionKPCA", "constructRho")
+  local_vars <- c("returns", "h", "nr_pc", "kernel", "kpar")
 
-  cl <- snow::makeCluster(detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   clusterCall(cl, function() library("kernlab"))
-  snow::clusterExport(cl, global_var_list)
-  snow::clusterExport(cl, local_var_list, envir = environment())
+  snow::clusterExport(cl, global_vars)
+  snow::clusterExport(cl, local_vars, envir = environment())
 
 
   predictions <- snow::parSapply(cl, start:end, function(t) {
