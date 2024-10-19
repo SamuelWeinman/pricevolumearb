@@ -1,0 +1,16 @@
+import(plyr)
+import(SharpeR)
+import(plyr)
+import(ggplot2)
+import(gridExtra)
+import(RColorBrewer)
+import(roll)
+import(parallel)
+import(kernlab)
+import(testthat)
+import(usethis)
+
+
+
+
+export(add)
