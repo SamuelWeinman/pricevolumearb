@@ -42,24 +42,21 @@ estimateCoefficeients <- function(models, b_sensitivity) {
   return(coefficients)
 }
 
-estimateCoefficeientsNumberI <- <- function(models, i, b_sensitivity) {
-    x <- cumsum(models[[i]]$residuals) #cumsum residuals
-    model <- lm(x[2:l] ~ x[1:(l-1)]) #cumsum model
-    a <- as.numeric(model$coefficients[1]) #intercept 
-    b <- as.numeric(model$coefficients[2]) #coefficient (on X_{t-1})
-    v <- as.numeric(var(model$residuals)) #estimated variance
-    
-    #ESTIMATES
-    k <- -log(b)*252
-    m <- a/(1-b)
-    sigma_squared <- v * 2*k / (1-b^2)
-    sigma_eq_squared <- v/(1-b^2)
-    
-    #DECIDE IF THERE IS MEAN REVERSION
-    is_mean_reverting <- I(b < 1-b_sensitivity)
-    
-    #RETURN COEFFICIENTS FOR MODEL
-    return(c(k, m, sigma_squared, sigma_eq_squared, is_mean_reverting))
+estimateCoefficeientsNumberI <- function(models, i, b_sensitivity) {
+  x <- cumsum(models[[i]]$residuals)
+  model <- lm(x[2:l] ~ x[1:(l-1)])
+  a <- as.numeric(model$coefficients[1]) 
+  b <- as.numeric(model$coefficients[2])
+  v <- as.numeric(var(model$residuals))
+
+  k <- -log(b)*252
+  m <- a/(1-b)
+  sigma_squared <- v * 2*k / (1-b^2)
+  sigma_eq_squared <- v/(1-b^2)
+  
+  is_mean_reverting <- I(b < 1-b_sensitivity)
+  
+  return(c(k, m, sigma_squared, sigma_eq_squared, is_mean_reverting))
 }
 
 
@@ -69,7 +66,6 @@ estimateCoefficeientsNumberI <- <- function(models, i, b_sensitivity) {
 #RETURNS MUST BE HISTORY ONLY!
 calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
 
-  #DECOMPOSE INTO MODELS
   models <- decompose(
     returns = returns,
     h = h,
@@ -77,22 +73,13 @@ calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
     nr_pc = nr_pc
   )
 
-  #OBTAIN COEFFICIENTS FROM ABOVE MODELS
   coefficients = estimateCoefficeients(models, b_sensitivity = b_sensitivity)
   
-  #GET S-SCORE, USING METHODOLOGY IN APPENDIX
-  #IF THERE IS NO MEAN-REVERSION, GIVE ZERO.
-  #FIRST CREATE ARRAY, THEN GET S-SCORE FOR THOSE STOCKS WHERE THERE IS MEAN REVERSION
   s = numeric(nrow(Returns))
   index = coefficients$is_mean_reverting == 1 #mean reversion 
   s[index] = -coefficients$m[index]/sqrt(coefficients$sigma_eq_squared[index]) #CORRESPONDING S-SCORE
   
-  #RETURN
   return(list(
   s = s,
   is_mean_reverting = coefficients$is_mean_reverting))
 }
-
-
-
-

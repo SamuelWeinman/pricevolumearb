@@ -13,12 +13,14 @@ constructClusters <- function(rho, k, min_size) {
   updated_k <- k
 
   while (min(table(labels)) < min_size) {
-      updated_k <- updated_k - 1
-      labels <- as.numeric(cutree(tree, k = updated_k))
+    updated_k <- updated_k - 1
+    labels <- as.numeric(cutree(tree, k = updated_k))
   }
 
 
-  clusters <- lapply(1:updated_k, function(i) {which(labels == i)})
+  clusters <- lapply(1:updated_k, function(i) {
+    which(labels == i)
+  })
   return(clusters)
 }
 
@@ -85,12 +87,9 @@ crossSectionalRegressionClustering <- function(returns, volume, start, end, h, n
   snow::stopCluster(cl)
 
   predictions <- matrix(unlist(predictions[1, ]), ncol = end - start + 1)
-
-  # CHANGE COL AND ROWNAMES AS APPROPRIATE.
   colnames(predictions) <- start:end
   rownames(predictions) <- rownames(returns)
 
-  # RETURN
   return(list(
     predictions = predictions,
     k = k

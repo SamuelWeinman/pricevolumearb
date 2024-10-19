@@ -7,24 +7,14 @@
 ## AND BE OF SAME LENGTH.
 ## IN THE COMBINED VECTOR, THE ONE'S EXTRACTED FROM PREDICTIONS1 WILL CORRESPOND TO THE ALPHA STRONGEST PREDICTIONS.
 combineDailyPredictions <- function(prediction1, prediction2, alpha) {
-  # DEFINE WHAT STOCKS TO USE FROM PREDICTIONS1
+
   stocks1 <- abs(prediction1) > quantile(abs(prediction1), 1 - alpha)
-
-
-  # DEFINE WHAT STOCKS TO USE FROM PREDICTIONS2
   stocks2 <- !stocks1
 
-  # CREATE A NEW VECTOR AND TAKE THE STRONGEST PREDICTIONS FROM PREDICTION1
   prediction <- numeric(length(prediction1))
-  prediction[stocks1] <- prediction1[stocks1]
   prediction[stocks2] <- prediction2[stocks2]
+  prediction[stocks1] <- prediction1[stocks1] * max(abs(prediction2[stocks2])) / min(abs(prediction1[stocks1])) * 1.1
 
-
-  # SCALE THE PREDICTIONS FROM FIRST PREDICTIONS SO THAT THE DECILE PORTFOLIOS ARE CONSTRUCTED FROM THESE
-  # THE FOLLOWING ENSURES THAT THE MINIMUM ABSOLUTE VALUE FROM PREDICTIONS1 IS GREATER THAN THE MAXIMUM ABSOLUTE VALUE FROM PREDICTIONS2
-  prediction[stocks1] <- prediction[stocks1] * max(abs(prediction[stocks2])) / min(abs(prediction[stocks1])) * 1.1
-
-  # RETURN
   return(prediction)
 }
 
@@ -36,20 +26,17 @@ combineDailyPredictions <- function(prediction1, prediction2, alpha) {
 # PREDICTIONSSTRONG: THE PREDICTIONS TO EXTRACT THE STRONGEST ALPHA PROPORTION FROM
 # PREDICTIONSWEAK: WHAT TO BASE THE OTHER (1-ALPHA) PREDICTIONS ON
 
-combinePrediction <- function(strongPredictions, weakPredictions, alpha) {
-  # LOOP THROUGH EACH COLUMN (DAY)
-  # FOR EACH DAY, PERFORM combinePrediction.Day
-  combinedPrediction <- sapply(1:ncol(strongPredictions), function(i) {
+combinePrediction <- function(strong_predictions, weak_predictions, alpha) {
+
+  combined_predictions <- sapply(1:ncol(strong_predictions), function(i) {
     combineDailyPredictions(
-      prediction1 = strongPredictions[, i],
-      prediction2 = weakPredictions[, i],
+      prediction1 = strong_predictions[, i],
+      prediction2 = weak_predictions[, i],
       alpha = alpha
     )
   })
 
-  # CHANGE COLNAMES
-  colnames(combinedPrediction) <- colnames(strongPredictions)
+  colnames(combined_predictions) <- colnames(strong_predictions)
 
-  # RETURN
-  return(combinedPrediction)
+  return(combined_predictions)
 }
