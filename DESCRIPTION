@@ -6,3 +6,4 @@ Authors@R:
 Description: What the package does (one paragraph).//TODO
 License: MIT + file LICENSE
 Encoding: UTF-8
+RoxygenNote: 7.3.2

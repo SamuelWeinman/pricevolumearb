@@ -67,7 +67,7 @@ crossTemporalRegressionOvertrade <- function(volume, returns, start, end, h, nr_
 
 
   # OPEN CORES AND TRANSFER
-  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   parallel::clusterCall(cl, function() library("plyr"))
   snow::clusterExport(cl, global_vars)
   snow::clusterExport(cl, local_vars, envir = environment())

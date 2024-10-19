@@ -32,7 +32,7 @@ crossSectionalRegressionOvertraded <- function(start, end, volume, returns, h, n
   )
   local_vars <- c("volume", "returns", "h", "nr_pc_v", "alpha", "nr_pc")
 
-  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   snow::clusterExport(cl, global_vars)
   snow::clusterExport(cl, local_vars, envir = environment())
 

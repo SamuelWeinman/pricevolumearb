@@ -24,7 +24,7 @@ crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d,
 
   local_vars <- c("weighted_returns", "h", "nr_pc")
 
-  cl <- snow::makeCluster(parallel::parallel::detectCores() - 1)
+  cl <- snow::makeCluster(parallel::detectCores() - 1)
   parallel::clusterCall(cl, function() library("roll"))
   snow::clusterExport(cl, global_vars)
   snow::clusterExport(cl, local_vars, envir = environment())

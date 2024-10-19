@@ -5,6 +5,15 @@
 # L: NR OF DAYS TO USE FOR REGRESSION
 # D: HOW MANY DAYS TO USE FOR ROLLING MEAN VOLUME
 # ALL ELSE AS BEFORE
+
+
+#' Add together two numbers
+#' @param x A number.
+#' @param y A number.
+#' @returns A numeric vector.
+#' @examples
+#' add(1, 1)
+#' add(10, 1)
 crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide) {
   weighted_returns <- constructWeightedReturns(returns = returns, volume = volume, h = h, d = d, divide = divide)
 

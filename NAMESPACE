@@ -6,6 +6,8 @@ import(gridExtra)
 import(RColorBrewer)
 import(roll)
 import(parallel)
+import(kernlab)
+
 
 
 
