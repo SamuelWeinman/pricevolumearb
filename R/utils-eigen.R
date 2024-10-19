@@ -1,13 +1,44 @@
+#' Construct Correlation Matrix
+#'
+#' This function constructs a correlation matrix (rho) from a matrix of returns.
+#' Each row of the matrix is scaled to have a mean of 0 and standard deviation of 1 
+#' before calculating the correlation matrix.
+#'
+#' @param returns A numeric matrix, the returns data.
+#'
+#' @return A correlation matrix with row-wise scaled data.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' #Use the function
+#' constructRho(ret)
 constructRho <- function(returns) {
   y <- apply(returns, 1, scale)
   rho <- cor(y)
   return(rho)
 }
 
-# CONSTRUCTS EIGENPORTFOLIOS BASED ON RHO
-# THIS FUNCTION WILL GIVE ALL (N) EIGENPORTFOLIOS
-# THE COLUMNS OF Q ARE THE EIGENPORTFOLIOS
-# THE ROWS OF F ARE THE RETURNS OF THE EIGENPORTFOLIOS OVER TIME
+#' Construct Eigen Portfolios
+#'
+#' This function constructs eigen portfolios from a matrix of returns. It first constructs 
+#' a correlation matrix (rho) of the returns. Then it computes the eigenvalues and eigenvectors 
+#' of the correlation matrix. The eigenvectors are then normalized by the standard deviation 
+#' of the returns for each stock. The function also computes the returns for each eigen portfolio.
+#'
+#' @param returns A numeric matrix, the returns data.
+#'
+#' @return A list containing:
+#' * `rho`: The correlation matrix for the returns.
+#' * `portfolios`: The eigen portfolios.
+#' * `returns`: The returns of each eigen portfolio.
+#' * `values`: The eigenvalues of the correlation matrix.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' #Use the function
+#' constructEigenPortfolios(ret)
 constructEigenPortfolios <- function(returns) {
   rho <- constructRho(returns)
   e <- eigen(rho)
@@ -22,10 +53,27 @@ constructEigenPortfolios <- function(returns) {
   ))
 }
 
-
-### GET EIGENPORTFOLIOS, BUT ONLY THE MOST RELEVANT ONES
-#  RETURNS: RETURNS MATRIX
-#  nr_pc: THE NR OF PC TO USE, I.E. NR OF EIGENPORTFOLIOS TO USE FOR ANALYSIS
+#' Extract Eigen Portfolios
+#'
+#' This function extracts a specified number of eigen portfolios from a matrix of returns. 
+#' It uses the `constructEigenPortfolios` function to first create all eigen portfolios, 
+#' then selects the first `nr_pc` portfolios based on the eigenvalues.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param nr_pc An integer, the number of eigen portfolios to extract.
+#'
+#' @return A list containing:
+#' * `rho`: The correlation matrix for the returns.
+#' * `portfolio`: The selected eigen portfolios.
+#' * `return`: The returns of the selected eigen portfolios.
+#' * `prop_explained`: The proportion of variance explained by the selected eigen portfolios.
+#'
+#' @examples
+#' #Example data
+#' ret <- matrix(rnorm(25), 5, 5)
+#' x <- 2
+#' #Use the function
+#' extractEigenPortfolios(ret, x)
 extractEigenPortfolios <- function(returns, nr_pc) {
   full_eigen_portfolios <- constructEigenPortfolios(returns)
   prop_explained <- sum(full_eigen_portfolios$values[1:nr_pc]) / sum(full_eigen_portfolios$values)

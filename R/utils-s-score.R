@@ -10,15 +10,13 @@ decompose <- function(returns, nr_pc, h, L) {
   returns_short <- returns[, (ncol(returns) - h + 1):ncol(returns)] # use last H days
   eigen <- extractEigenPortfolio(returns_short, nr_pc)
 
-  models <- lapply(1:n, function(i) { # loop through all stocks
-    y <- returns_short[i, (h - l + 1):h] # returns last L days
-    X <- eigen$return[, (h - l + 1):h] # eigenreturns last L days
-    model <- lm(as.numeric(y) ~ t(as.matrix(X))) # get lm
+  models <- lapply(1:n, function(i) {
+    y <- returns_short[i, (h - l + 1):h]
+    X <- eigen$return[, (h - l + 1):h]
+    model <- lm(as.numeric(y) ~ t(as.matrix(X)))
     return(model)
   })
 
-  # RETURN MODELS
-  print(paste("Variability explained:", eigen$prop_explained))
   return(models)
 }
 
