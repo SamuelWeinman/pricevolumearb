@@ -1,11 +1,21 @@
-# PREDICTIONS1: VECTOR OF N PREDICTIONS (ONE DAY)
-# PREDICTIONS2: VECTOR OF N PREDICTIONS (SAME DAY)
-# ALPHA: PROPORTION TO TAKE FROM PREDICTIONS1
-
-## GIVEN TWO PREDICTIONS FOR THE SAME DAY, WE TAKE THE PROPRTION ALPHA STRONGEST PREDICTIONS FROM 1,
-## AND THE OTHER ONE'S FROM PREDICTIONS2. BOTH VECTORS MUST CORRESPOND TO THE SAME DAY
-## AND BE OF SAME LENGTH.
-## IN THE COMBINED VECTOR, THE ONE'S EXTRACTED FROM PREDICTIONS1 WILL CORRESPOND TO THE ALPHA STRONGEST PREDICTIONS.
+#' Combine Daily Predictions
+#'
+#' This function combines daily stock predictions. It calculates quantiles based on absolute values 
+#' and updates predictions based on certain conditions for stocks.
+#'
+#' @param prediction1 Numeric vector, the first prediction.
+#' @param prediction2 Numeric vector, the second prediction.
+#' @param alpha Numeric value, the quantile threshold.
+#' 
+#' @return A numeric vector, the combined daily predictions.
+#'
+#' @examples
+#' #Example data
+#' pred1 <- c(0.2, 0.3, 0.1, 0.5, 0.4)
+#' pred2 <- c(0.1, 0.1, 0.2, 0.1, 0.1)
+#' alpha <- 0.8
+#' #Use the function
+#' combineDailyPredictions(pred1, pred2, alpha)
 combineDailyPredictions <- function(prediction1, prediction2, alpha) {
   stocks1 <- abs(prediction1) > quantile(abs(prediction1), 1 - alpha)
   stocks2 <- !stocks1
@@ -18,13 +28,26 @@ combineDailyPredictions <- function(prediction1, prediction2, alpha) {
 }
 
 
-
-### TAKES TWO MATRICES (DATA FRAMES) OF DIMENSIONS NxT WHERE EACH COLUMN CORRESPONDS TO ONE DAY'S PREDICTION.
-### THEN COMBINES THE MATREICES AS PER ABOVE.
-
-# PREDICTIONSSTRONG: THE PREDICTIONS TO EXTRACT THE STRONGEST ALPHA PROPORTION FROM
-# PREDICTIONSWEAK: WHAT TO BASE THE OTHER (1-ALPHA) PREDICTIONS ON
-
+#' Combine Predictions
+#'
+#' This function combines strong and weak stock predictions. It applies the 
+#' `combineDailyPredictions` function for each column of the data.
+#'
+#' @param strong_predictions A numeric matrix, the strong predictions.
+#' @param weak_predictions A numeric matrix, the weak predictions.
+#' @param alpha Numeric value, the quantile threshold used in the 
+#' `combineDailyPredictions` function.
+#'
+#' @return A numeric matrix, the combined predictions. The column names of the
+#' returned matrix will be the same as the column names of the strong predictions.
+#' 
+#' @examples
+#' #Example data
+#' s_pred <- matrix(runif(25), 5, 5)
+#' w_pred <- matrix(runif(25), 5, 5)
+#' alpha <- 0.8
+#' #Use the function
+#' combinePrediction(s_pred, w_pred, alpha)
 combinePrediction <- function(strong_predictions, weak_predictions, alpha) {
   combined_predictions <- sapply(1:ncol(strong_predictions), function(i) {
     combineDailyPredictions(

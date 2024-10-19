@@ -7,6 +7,8 @@ import(RColorBrewer)
 import(roll)
 import(parallel)
 import(kernlab)
+import(testthat)
+import(usethis)
 
 
 
