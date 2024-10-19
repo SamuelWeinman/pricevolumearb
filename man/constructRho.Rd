@@ -19,7 +19,7 @@ before calculating the correlation matrix.
 }
 \examples{
 #Example data
-ret <- matrix(rnorm(25), 5, 5)
+returns <- matrix(rnorm(25), 5, 5)
 #Use the function
 constructRho(ret)
 }

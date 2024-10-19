@@ -12,12 +12,12 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
 #' d <- 2
 #' divide <- TRUE
 #' #Use the function
-#' constructWeightedReturns(ret, vol, d, divide)
+#' constructWeightedReturns(returns, volume, d, divide)
 constructWeightedReturns <- function(returns, volume, d, divide) {
   rolling_mean_volume <- t(roll_mean(t(as.matrix(volume)), width = d))
   res <- ifelse(divide, returns * rolling_mean_volume / volume, returns * volume / rolling_mean_volume)
@@ -45,16 +45,16 @@ constructWeightedReturns <- function(returns, volume, d, divide) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' start_range <- 2
-#' end_range <- 5
-#' historical <- 4
-#' num_pc <- 2
-#' rolling_mean_width <- 2
-#' divide_flag <- TRUE
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' h <- 4
+#' nr_pc <- 2
+#' d <- 2
+#' divide <- TRUE
 #' #Use the function
-#' crossSectionalRegressionVW(ret, vol, start_range, end_range, historical, num_pc, rolling_mean_width, divide_flag)
+#' crossSectionalRegressionVW(returns, volume, start, end, h, nr_pc, d, divide)
 crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d, divide) {
   weighted_returns <- constructWeightedReturns(
     returns = returns, volume = volume, d = d,
@@ -126,7 +126,7 @@ crossSectionalRegressionVW <- function(returns, volume, start, end, h, nr_pc, d,
 #' maps <- list(function(x) x^2, function(x) log2(x+1))
 #' #Use the function
 #' crossSectionalRegressionMappedVW(returns, volume, start, end, h, nr_pc, d, divide, maps)
-#' 
+#'
 crossSectionalRegressionMappedVW <- function(returns, volume, start, end, h, nr_pc, d, divide, maps) {
   predictions <- list()
   for (k in 1:length(maps)) {

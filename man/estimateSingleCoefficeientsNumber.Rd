@@ -24,13 +24,13 @@ equilibrium variance (sigma_eq_squared) and mean-reverting indicator are calcula
 }
 \examples{
 #Example data
-ret <- matrix(rnorm(25), 5, 5)
+returns <- matrix(rnorm(25), 5, 5)
 num_pc <- 2
 historical <- 4
 preceding <- 1
 sensitivity <- 0.1
 #Use the function
-models <- decompose(ret, num_pc, historical, preceding)
+models <- decompose(returns,  num_pc, historical, preceding)
 estimateCoefficeientsNumberI(models, 1, sensitivity)
 
 }

@@ -20,17 +20,17 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
 #' t_val <- 6
-#' historical_ret <- 4
-#' historical_vol <- 4
+#' hurns <- 4
+#' historical_volume <- 4
 #' preceding <- 1
-#' kcca_components_ret <- 2
-#' kcca_components_vol <- 2
+#' kcca_components_returns <- 2
+#' kcca_components_volume <- 2
 #' sensitivity <- 0.1
 #' #Use the function
-#' singleCrossTemporalRegressionWithKCCA(ret, vol, t_val, historical_ret, historical_vol, preceding, kcca_components_ret, kcca_components_vol, sensitivity)
+#' singleCrossTemporalRegressionWithKCCA(returns, volume, t_val, h, historical_volume, preceding, kcca_components_ret, kcca_components_vol, sensitivity)
 singleCrossTemporalRegressionWithKCCA <- function(returns, volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity) {
   x <- as.matrix(returns[, (t - h):(t - 1)])
   y <- as.matrix(volume[, (t - hv):(t - 1)])
@@ -86,19 +86,19 @@ singleCrossTemporalRegressionWithKCCA <- function(returns, volume, t, h, hv, l, 
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' start_range <- 2
-#' end_range <- 5
-#' historical_ret <- 4
-#' historical_vol <- 4
-#' preceding <- 1
-#' kcca_components_ret <- 2
-#' kcca_components_vol <- 2
-#' rolling_mean_width <- 2
-#' sensitivity <- 0.1
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' h <- 4
+#' hb <- 4
+#' l <- 1
+#' nr_c_r <- 2
+#' nr_c_v <- 2
+#' d <- 2
+#' b_sensitivity <- 0.1
 #' #Use the function
-#' crossTemporalRegressionWithKCCA(ret, vol, start_range, end_range, historical_ret, historical_vol, preceding, kcca_components_ret, kcca_components_vol, rolling_mean_width, sensitivity)
+#' crossTemporalRegressionWithKCCA(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity)
 #' 
 crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
   standardised_volume <- volume / t(rolling_mean(t(as.matrix(volume)), width = d))
@@ -119,7 +119,7 @@ crossTemporalRegressionWithKCCA <- function(returns, volume, start, end, h, hv, 
       l = l, nr_c_r = nr_c_r, nr_c_v = nr_c_v,
       b_sensitivity = b_sensitivity
     )
-    p <- -s_scores
+    p <- -1*s$score
     return(p)
   })
 

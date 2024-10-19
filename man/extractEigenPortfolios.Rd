@@ -25,8 +25,8 @@ then selects the first `nr_pc` portfolios based on the eigenvalues.
 }
 \examples{
 #Example data
-ret <- matrix(rnorm(25), 5, 5)
+returns <- matrix(rnorm(25), 5, 5)
 x <- 2
 #Use the function
-extractEigenPortfolios(ret, x)
+extractEigenPortfolios(returns,  x)
 }

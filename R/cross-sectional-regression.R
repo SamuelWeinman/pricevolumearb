@@ -14,12 +14,12 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(20), 4, 5)
-#' t_val <- 5
-#' historical <- 4
-#' num_pc <- 2
+#' returns <- matrix(rnorm(20), 4, 5)
+#' t <- 5
+#' h <- 4
+#' nr_pc <- 2
 #' #Use the function
-#' singleCrossSectionalRegression(ret, t_val, historical, num_pc)
+#' singleCrossSectionalRegression(returns, t, h, nr_pc)
 singleCrossSectionalRegression <- function(returns, t, h, nr_pc) {
   e <- extractEigenPortfolio(
     returns = returns[, (t - h):(t - 1)],
@@ -51,13 +51,13 @@ singleCrossSectionalRegression <- function(returns, t, h, nr_pc) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' start_range <- 2
-#' end_range <- 5
-#' historical <- 4
-#' num_pc <- 2
+#' returns <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' h <- 4
+#' nr_pc <- 2
 #' #Use the function
-#' crossSectionalRegression(ret, start_range, end_range, historical, num_pc)
+#' crossSectionalRegression(returns, start, end, h, nr_pc)
 crossSectionalRegression <- function(returns, start, end, h, nr_pc) {
   global_vars <- c(
     "singleCrossSectionalRegression",

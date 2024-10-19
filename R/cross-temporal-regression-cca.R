@@ -20,18 +20,18 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' standardised_vol <- vol / rowMeans(vol)
-#' t_val <- 6
-#' historical_ret <- 4
-#' historical_vol <- 4
-#' preceding <- 1
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' standardised_volume <- vol / rowMeans(vol)
+#' t <- 6
+#' h <- 4
+#' hv <- 4
+#' l <- 1
 #' nr_c_r <- 2
 #' nr_c_v <- 2
-#' sensitivity <- 0.1
+#' b_sensitivity <- 0.1
 #' #Use the function
-#' singleCrossTemporalRegressionCCA(ret, standardised_vol, t_val, historical_ret, historical_vol, preceding, nr_c_r, nr_c_v, sensitivity)
+#' singleCrossTemporalRegressionCCA(returns, standardised_volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity)
 singleCrossTemporalRegressionCCA <- function(returns, standardised_volume, t, h, hv, l, nr_c_r, nr_c_v, b_sensitivity) {
   x <- returns[, (t - h):(t - 1)]
   y <- standardised_volume[, (t - hv):(t - 1)]
@@ -89,19 +89,19 @@ singleCrossTemporalRegressionCCA <- function(returns, standardised_volume, t, h,
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' start_range <- 2
-#' end_range <- 5
-#' historical_ret <- 4
-#' historical_vol <- 4
-#' preceding <- 1
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' hurns <- 4
+#' hv <- 4
+#' l <- 1
 #' nr_c_r <- 2
 #' nr_c_v <- 2
-#' rolling_mean_width <- 2
-#' sensitivity <- 0.1
+#' d <- 2
+#' b_sensitivity <- 0.1
 #' #Use the function
-#' crossTemporalRegressionCCA(ret, vol, start_range, end_range, historical_ret, historical_vol, preceding, nr_c_r, nr_c_v, rolling_mean_width, sensitivity)
+#' crossTemporalRegressionCCA(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity)
 crossTemporalRegressionCCA <- function(returns, volume, start, end, h, hv, l, nr_c_r, nr_c_v, d, b_sensitivity) {
   standardised_volume <- volume / t(roll_mean(t(as.matrix(volume)), width = d))
 

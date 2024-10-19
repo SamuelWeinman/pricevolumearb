@@ -43,11 +43,11 @@ combineDailyPredictions <- function(prediction1, prediction2, alpha) {
 #' 
 #' @examples
 #' #Example data
-#' s_pred <- matrix(runif(25), 5, 5)
-#' w_pred <- matrix(runif(25), 5, 5)
+#' strong_predictions <- matrix(runif(25), 5, 5)
+#' weak_predictions <- matrix(runif(25), 5, 5)
 #' alpha <- 0.8
 #' #Use the function
-#' combinePrediction(s_pred, w_pred, alpha)
+#' combinePrediction(strong_predictions, w_pred, alpha)
 combinePrediction <- function(strong_predictions, weak_predictions, alpha) {
   combined_predictions <- sapply(1:ncol(strong_predictions), function(i) {
     combineDailyPredictions(

@@ -24,9 +24,9 @@ This function combines strong and weak stock predictions. It applies the
 }
 \examples{
 #Example data
-s_pred <- matrix(runif(25), 5, 5)
-w_pred <- matrix(runif(25), 5, 5)
+strong_predictions <- matrix(runif(25), 5, 5)
+weak_predictions <- matrix(runif(25), 5, 5)
 alpha <- 0.8
 #Use the function
-combinePrediction(s_pred, w_pred, alpha)
+combinePrediction(strong_predictions, w_pred, alpha)
 }

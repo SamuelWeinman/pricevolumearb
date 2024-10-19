@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' #Use the function
 #' constructRho(ret)
 constructRho <- function(returns) {
@@ -36,7 +36,7 @@ constructRho <- function(returns) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' #Use the function
 #' constructEigenPortfolios(ret)
 constructEigenPortfolios <- function(returns) {
@@ -70,10 +70,10 @@ constructEigenPortfolios <- function(returns) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' x <- 2
 #' #Use the function
-#' extractEigenPortfolios(ret, x)
+#' extractEigenPortfolios(returns,  x)
 extractEigenPortfolios <- function(returns, nr_pc) {
   full_eigen_portfolios <- constructEigenPortfolios(returns)
   prop_explained <- sum(full_eigen_portfolios$values[1:nr_pc]) / sum(full_eigen_portfolios$values)

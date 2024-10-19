@@ -24,7 +24,7 @@ of the returns for each stock. The function also computes the returns for each e
 }
 \examples{
 #Example data
-ret <- matrix(rnorm(25), 5, 5)
+returns <- matrix(rnorm(25), 5, 5)
 #Use the function
 constructEigenPortfolios(ret)
 }

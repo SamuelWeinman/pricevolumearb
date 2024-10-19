@@ -18,15 +18,15 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' num_pc <- 2
-#' historical <- 4
-#' preceding <- 1
-#' sensitivity <- 0.1
-#' start_range <- 2
-#' end_range <- 5
+#' returns <- matrix(rnorm(25), 5, 5)
+#' nr_pc <- 2
+#' h <- 4
+#' l <- 1
+#' b_sensitivity <- 0.1
+#' start <- 2
+#' end <- 5
 #' #Use the function
-#' crossTemporalRegression(ret, start_range, end_range, num_pc, historical, preceding, sensitivity)
+#' crossTemporalRegression(returns, start, end, nr_pc, h, l, b_sensitivity)
 crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitivity) {
   global_vars <- c(
     "calculateSScore",

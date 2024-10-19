@@ -21,18 +21,18 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- rnorm(5)
-#' num_pc <- 2
-#' historical <- 4
-#' preceding <- 1
-#' sensitivity <- 0.1
-#' start_range <- 2
-#' end_range <- 5
-#' volume_days <- 2
-#' divide_returns <- TRUE
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- rnorm(5)
+#' nr_pc <- 2
+#' h <- 4
+#' l <- 1
+#' b_sensitivity <- 0.1
+#' start <- 2
+#' end <- 5
+#' d <- 2
+#' divide <- TRUE
 #' #Use the function
-#' crossTemporalRegressionWithVW(ret, vol, start_range, end_range, num_pc, historical, preceding, sensitivity, volume_days, divide_returns)
+#' crossTemporalRegressionWithVW(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide)
 crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide) {
   weighted_returns <- constructWeightedReturns(returns = returns, volume = volume, h = h, d = d, divide = divide)
 
@@ -91,19 +91,19 @@ crossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h,
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- rnorm(5)
-#' num_pc <- 2
-#' historical <- 4
-#' preceding <- 1
-#' sensitivity <- 0.1
-#' start_range <- 2
-#' end_range <- 5
-#' volume_days <- 2
-#' divide_returns <- TRUE
-#' map_funcs <- list(sqrt, log)
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- rnorm(5)
+#' nr_pc <- 2
+#' h <- 4
+#' l <- 1
+#' b_sensitivity <- 0.1
+#' start <- 2
+#' end <- 5
+#' d <- 2
+#' divide <- TRUE
+#' maps <- list(sqrt, log)
 #' #Use the function
-#' mappedCrossTemporalRegressionWithVW(ret, vol, start_range, end_range, num_pc, historical, preceding, sensitivity, volume_days, divide_returns, map_funcs
+#' mappedCrossTemporalRegressionWithVW(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide, maps)
 mappedCrossTemporalRegressionWithVW <- function(returns, volume, start, end, nr_pc, h, l, b_sensitivity, d, divide, maps) {
   k <- length(maps)
   predictions <- list()

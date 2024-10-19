@@ -5,7 +5,7 @@
 #  h (history): NR OF DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
 #  l: NR OF DAYS TO USE FOR REGRESSION MODEL (NOT NECESSARILY SAME AS NR OF DAYS FOR CONSTRUCTING RHO, I.E. NCOL(returns_short))
 #  nr_pc: AS ABOVE, FOR EIGENdecompose.
-decompose <- function(returns, nr_pc, h, L) {
+decompose <- function(returns, nr_pc, h, l) {
   n <- nrow(returns)
   returns_short <- returns[, (ncol(returns) - h + 1):ncol(returns)] # use last H days
   eigen <- extractEigenPortfolio(returns_short, nr_pc)
@@ -36,13 +36,13 @@ decompose <- function(returns, nr_pc, h, L) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' num_pc <- 2
 #' historical <- 4
 #' preceding <- 1
 #' sensitivity <- 0.1
 #' #Use the function
-#' models <- decompose(ret, num_pc, historical, preceding)
+#' models <- decompose(returns,  num_pc, historical, preceding)
 #' estimateCoefficients(models, sensitivity)
 #' 
 #' @export
@@ -71,13 +71,13 @@ estimateCoefficeients <- function(models, b_sensitivity) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' num_pc <- 2
 #' historical <- 4
 #' preceding <- 1
 #' sensitivity <- 0.1
 #' #Use the function
-#' models <- decompose(ret, num_pc, historical, preceding)
+#' models <- decompose(returns,  num_pc, historical, preceding)
 #' estimateCoefficeientsNumberI(models, 1, sensitivity)
 #' 
 #' @export
@@ -117,13 +117,13 @@ estimateSingleCoefficeientsNumber <- function(models, i, b_sensitivity) {
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
 #' num_pc <- 2
 #' historical <- 4
 #' preceding <- 1
 #' sensitivity <- 0.1
 #' #Use the function
-#' calculateSScore(ret, num_pc, historical, preceding, sensitivity)
+#' calculateSScore(returns,  num_pc, historical, preceding, sensitivity)
 calculateSScore <- function(returns, nr_pc, h, l, b_sensitivity) {
   models <- decompose(
     returns = returns,

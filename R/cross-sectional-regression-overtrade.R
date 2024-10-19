@@ -18,15 +18,15 @@
 #'
 #' @examples
 #' #Example data
-#' vol <- matrix(rnorm(25), 5, 5)
-#' ret <- matrix(rnorm(25), 5, 5)
-#' t_val <- 5
-#' historical <- 4
-#' num_pc_vol <- 2
-#' num_pc_ret <- 2
-#' alpha_val <- 0.05
+#' volume <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
+#' t <- 5
+#' h <- 4
+#' nr_pc_v <- 2
+#' nr_pc_r <- 2
+#' alpha <- 0.05
 #' #Use the function
-#' singleCrossSectionalRegressionOvertraded(vol, ret, t_val, historical, num_pc_vol, num_pc_ret, alpha_val)
+#' singleCrossSectionalRegressionOvertraded(volume, returns, t, h, nr_pc_v, nr_pc_v, alpha)
 #' 
 singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_pc_v, nr_pc, alpha) {
   standardised_volume <- volume[, (t - h):(t - 1)] / apply(volume[, (t - h):(t - 1)], 1, sum)

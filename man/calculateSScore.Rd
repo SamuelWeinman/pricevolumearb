@@ -29,11 +29,11 @@ these coefficients and mean reverting condition an S-score is calculated.
 }
 \examples{
 #Example data
-ret <- matrix(rnorm(25), 5, 5)
+returns <- matrix(rnorm(25), 5, 5)
 num_pc <- 2
 historical <- 4
 preceding <- 1
 sensitivity <- 0.1
 #Use the function
-calculateSScore(ret, num_pc, historical, preceding, sensitivity)
+calculateSScore(returns,  num_pc, historical, preceding, sensitivity)
 }

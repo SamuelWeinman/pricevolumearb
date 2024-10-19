@@ -21,17 +21,18 @@
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' t_val <- 6
-#' historical <- 4
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' t <- 6
+#' h <- 4
 #' preceding <- 1
-#' eigen_portfolio_num_vol <- 2
-#' eigen_portfolio_num_ret <- 2
-#' alpha_val <- 0.1
-#' sensitivity <- 0.1
+#' nr_pc.V <- 2
+#' nr_pc <- 2
+#' alpha <- 0.1
+#' l <- 2
+#' b_sensitivity <- 0.1
 #' #Use the function
-#' singleCrossTemporalRegressionOvertrade(vol, ret, t_val, historical, eigen_portfolio_num_vol, eigen_portfolio_num_ret, alpha_val, preceding, sensitivity)
+#' singleCrossTemporalRegressionOvertrade(volume, returns, t, h, nr_pc.V, nr_pc, alpha, preceding, b_sensitivity)
 singleCrossTemporalRegressionOvertrade <- function(volume, returns, t, h, nr_pc.V, nr_pc, alpha, l, b_sensitivity) {
   standardised_volume <- volume[, (t - h):(t - 1)] / apply(volume[, (t - h):(t - 1)], 1, sum)
 
@@ -86,18 +87,20 @@ singleCrossTemporalRegressionOvertrade <- function(volume, returns, t, h, nr_pc.
 #'
 #' @examples
 #' #Example data
-#' ret <- matrix(rnorm(25), 5, 5)
-#' vol <- matrix(rnorm(25), 5, 5)
-#' start_range <- 2
-#' end_range <- 5
-#' historical <- 4
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' t <- 6
+#' h <- 4
 #' preceding <- 1
-#' eigen_portfolio_num_vol <- 2
-#' eigen_portfolio_num_ret <- 2
-#' alpha_val <- 0.1
-#' sensitivity <- 0.1
+#' nr_pc.V <- 2
+#' nr_pc <- 2
+#' alpha <- 0.1
+#' l <- 2
+#' b_sensitivity <- 0.1
 #' #Use the function
-#' crossTemporalRegressionOvertrade(vol, ret, start_range, end_range, historical, eigen_portfolio_num_vol, eigen_portfolio_num_ret, alpha_val, preceding, sensitivity)
+#' crossTemporalRegressionOvertrade(volume, returns, start, end, t, h, nr_pc.V, nr_pc, alpha, preceding, b_sensitivity)
 #' 
 crossTemporalRegressionOvertrade <- function(volume, returns, start, end, h, nr_pc.V, nr_pc, alpha, l, b_sensitivity) {
   global_vars <- c(
