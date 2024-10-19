@@ -7,7 +7,6 @@ library(parallel)
 # KERNEL: THE NAME OF THE KERNEL (MUST BE COMPATIBLE WITH KPCA@KERNLAB)
 # KPAR: PARAMETERS FOR KERNEL (MUST BE IN A LIST, MUST BE COMPATIBLE WITH KPCA@KERNLAB)
 singleCrossSectionalRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpar) {
-
   returns <- returns[, (t - h):(t - 1)]
   returns <- apply(returns, 2, scale)
 
@@ -27,7 +26,6 @@ singleCrossSectionalRegressionKPCA <- function(returns, t, h, nr_pc, kernel, kpa
 
 # PERFORM KPCA CS REGRESSION OVER AN INTERVAL [START, END]
 crossSectionalRegressionKPCA <- function(returns, start, end, h, nr_pc, kernel, kpar) {
-
   global_var_list <- c("singleCrossSectionalRegressionKPCA", "constructRho")
   local_var_list <- c("returns", "h", "nr_pc", "kernel", "kpar")
 

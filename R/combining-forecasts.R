@@ -7,7 +7,6 @@
 ## AND BE OF SAME LENGTH.
 ## IN THE COMBINED VECTOR, THE ONE'S EXTRACTED FROM PREDICTIONS1 WILL CORRESPOND TO THE ALPHA STRONGEST PREDICTIONS.
 combineDailyPredictions <- function(prediction1, prediction2, alpha) {
-
   stocks1 <- abs(prediction1) > quantile(abs(prediction1), 1 - alpha)
   stocks2 <- !stocks1
 
@@ -27,7 +26,6 @@ combineDailyPredictions <- function(prediction1, prediction2, alpha) {
 # PREDICTIONSWEAK: WHAT TO BASE THE OTHER (1-ALPHA) PREDICTIONS ON
 
 combinePrediction <- function(strong_predictions, weak_predictions, alpha) {
-
   combined_predictions <- sapply(1:ncol(strong_predictions), function(i) {
     combineDailyPredictions(
       prediction1 = strong_predictions[, i],

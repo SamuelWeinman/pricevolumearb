@@ -3,13 +3,12 @@
 #  H: NR OF DAYS TO USE TO CONSTRUCT CORRELATION MATRIX
 #  nr_pc: NUMBER OF PC'S TO USE FOR THE REGRESSION
 singleCrossSectionalRegression <- function(returns, t, h, nr_pc) {
-
   e <- extractEigenPortfolio(
     returns = returns[, (t - h):(t - 1)],
     nr_pc = nr_pc
   )
 
-  model <- lm(returns[, t - 1] ~ e$portfolio) 
+  model <- lm(returns[, t - 1] ~ e$portfolio)
   p <- -model$residuals
   return(p)
 }
@@ -20,7 +19,6 @@ singleCrossSectionalRegression <- function(returns, t, h, nr_pc) {
 # START: FIRST DAY OF TRADING
 # END: LAST DAY OF TRADING
 crossSectionalRegression <- function(returns, start, end, h, nr_pc) {
-
   global_var_list <- c(
     "singleCrossSectionalRegression",
     "extractEigenPortfolio", "constructEigenPortfolios",

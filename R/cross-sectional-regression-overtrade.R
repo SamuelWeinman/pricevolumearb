@@ -7,7 +7,6 @@
 # ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
 
 singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_pc_v, nr_pc, alpha) {
-
   standardised_volume <- volume[, (t - h):(t - 1)] / apply(volume[, (t - h):(t - 1)], 1, sum)
   e_volume <- extractEigenPortfolio(standardised_volume, nr_pc_v)
 
@@ -26,7 +25,6 @@ singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_p
 
 # PERFORMS CS OVERTRADED ON INTERVAL [START, END]
 crossSectionalRegressionOvertraded <- function(start, end, volume, returns, h, nr_pc_v, alpha, nr_pc) {
-
   global_var_list <- c(
     "singleCrossSectionalRegressionOvertraded", "extractEigenPortfolio",
     "constructEigenPortfolios",

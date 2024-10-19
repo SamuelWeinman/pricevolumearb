@@ -4,7 +4,6 @@
 # K: NR OF CLUSTERS
 # min_size: MINUMUM NR OF MEMBERS PER CLUSTER, OR ELSE WILL USE FEWER CLUSTERS
 constructClusters <- function(rho, k, min_size) {
-
   d <- as.dist(1 - rho)
   tree <- hclust(d)
   labels <- as.numeric(cutree(tree, k = k))
@@ -27,8 +26,7 @@ constructClusters <- function(rho, k, min_size) {
 
 # PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
 # ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES)
-singleCrossSectionalRegressionClustering  <- function(returns, volume, t, h, nr_pc, k, min_size, alpha) {
-
+singleCrossSectionalRegressionClustering <- function(returns, volume, t, h, nr_pc, k, min_size, alpha) {
   e <- extractEigenPortfolio(
     returns = returns[, (t - h):(t - 1)],
     nr_pc = nr_pc
@@ -59,7 +57,6 @@ singleCrossSectionalRegressionClustering  <- function(returns, volume, t, h, nr_
 }
 
 crossSectionalRegressionClustering <- function(returns, volume, start, end, h, nr_pc, k, min_size, alpha) {
-
   global_var_list <- c(
     "singleCrossSectionalRegressionClustering ", "constructClusters",
     "extractEigenPortfolio", "constructEigenPortfolios",

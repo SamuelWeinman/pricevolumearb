@@ -8,7 +8,6 @@
 
 # NOTE: VOLUMES ARE DECOMPOSED USING CS REGRESSION, ONLY RETURNS ARE DECOMPOSED WITH CROSS-TEMPORAL REGRESSION
 singleCrossTemporalRegressionOvertrade <- function(volume, returns, t, h, nr_pc.V, nr_pc, alpha, l, b_sensitivity) {
-
   standardised_volume <- volume[, (t - h):(t - 1)] / apply(volume[, (t - h):(t - 1)], 1, sum)
 
   eigen <- extractEigenPortfolio(standardised_volume, nr_pc.V)
@@ -34,7 +33,7 @@ singleCrossTemporalRegressionOvertrade <- function(volume, returns, t, h, nr_pc.
 
 
   s <- numeric(nrow(returns))
-  mean_reverting_indices <- coefficients$is_mean_reverting == 1 
+  mean_reverting_indices <- coefficients$is_mean_reverting == 1
   s[mean_reverting_indices] <- -coefficients$m[index] / sqrt(coefficients$sigma_eq_squared[mean_reverting_indices])
 
   # RETURN
@@ -81,7 +80,7 @@ crossTemporalRegressionOvertrade <- function(volume, returns, start, end, h, nr_
       volume = volume, returns = returns, t = t,
       h = h, nr_pc.V = nr_pc.V, nr_pc = nr_pc,
       alpha = alpha, l = l, b_sensitivity = b_sensitivity
-    ) 
+    )
 
     return(-s$score)
   })
