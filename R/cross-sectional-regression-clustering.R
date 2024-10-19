@@ -1,8 +1,22 @@
-# CONSTRUCT CLUSTERS OF TIME SERIES FROM CORRELATION MATRIX
-# I.E. EACH STOCK IS MAPPED TO ONE OF K CLUSTERS
-# RHO: CORRELATION MATRIX
-# K: NR OF CLUSTERS
-# min_size: MINUMUM NR OF MEMBERS PER CLUSTER, OR ELSE WILL USE FEWER CLUSTERS
+#' Construct Clusters Based on Hierarchical Clustering
+#'
+#' This function applies hierarchical clustering to construct k clusters based on a similarity matrix `rho` (e.g. correlation matrix). 
+#' If the minimum size of any cluster is less than a specified `min_size`, the function will reduce the number of clusters (`k`) until this condition is met.
+#'
+#' @param rho A numeric matrix, the similarity matrix. It is often a correlation matrix.
+#' @param k An integer, the desired number of clusters.
+#' @param min_size An integer, the minimum desired size of the clusters.
+#'
+#' @return A list where each element is a vector of indices representing a cluster.
+#'
+#' @examples
+#' #Example data
+#' rho <- matrix(rnorm(16), 4, 4)
+#' k <- 2
+#' min_size <- 2
+#' #Use the function
+#' constructClusters(rho, k, min_size)
+#' 
 constructClusters <- function(rho, k, min_size) {
   d <- as.dist(1 - rho)
   tree <- hclust(d)
@@ -24,8 +38,39 @@ constructClusters <- function(rho, k, min_size) {
 }
 
 
-# PERFORMS CLUSTERING CROSS-SECTIONAL REGRESSION FOR ONE DAY (T)
-# ALPHA: WEIGHTING; COR =  ALPHA * COR(RETURNS) + (1-ALPHA) COR(VOLUMES)
+#' Single Cross-Sectional Regression with Clustering
+#'
+#' This function performs cross-sectional regression on returns on a given day,
+#' using recent historical data. Data points are clustered based on correlation and trading volume.
+#' For each cluster, a linear model is fit between the returns of the previous day and the eigenportfolios. 
+#' The negative residuals from these models are returned as predicted returns.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param volume A numeric matrix, the volume data.
+#' @param t An integer, the day for which to perform regression.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param nr_pc An integer, the number of principal components to extract.
+#' @param k An integer, the desired number of clusters.
+#' @param min_size An integer, the minimum desired size of the clusters.
+#' @param alpha A numeric, the weight given to the correlation matrix in the combined similarity matrix used for clustering.
+#'
+#' @return A list with two elements:
+#'         - A numeric vector of normalized predictions for returns on day `t`.
+#'         - The final number of clusters.
+#'
+#' @examples
+#' #Example data
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' t <- 3
+#' h <- 2
+#' nr_pc <- 2
+#' k <- 2
+#' min_size <- 2
+#' alpha <- 0.5
+#' #Use the function
+#' singleCrossSectionalRegressionClustering(returns, volume, t, h, nr_pc, k, min_size, alpha)
+#' 
 singleCrossSectionalRegressionClustering <- function(returns, volume, t, h, nr_pc, k, min_size, alpha) {
   e <- extractEigenPortfolio(
     returns = returns[, (t - h):(t - 1)],
@@ -56,6 +101,41 @@ singleCrossSectionalRegressionClustering <- function(returns, volume, t, h, nr_p
   ))
 }
 
+#' Cross-Sectional Regression with Clustering
+#'
+#' This function performs cross-sectional regression on a range of days to predict returns, considering the effect of volume. 
+#' Correlation-based distance is computed on the basis of returns and volume, and clustering is performed on this distance.
+#' For each cluster, on each day in the range, a linear model is fit between the returns of the previous day and the eigen portfolios. 
+#' The normalized negative residuals from these models are returned as predicted returns. The function is parallelized for increased speed.
+#'
+#' @param returns A numeric matrix, the returns data.
+#' @param volume A numeric matrix, the volume data.
+#' @param start An integer, the start of the day range for which to perform regression.
+#' @param end An integer, the end of the day range for which to perform regression.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param nr_pc An integer, the number of principal components to extract in eigen portfolios.
+#' @param k An integer, the desired number of clusters.
+#' @param min_size An integer, the minimum desired size of the clusters.
+#' @param alpha A numeric, the weight given to the correlation matrix in the combined similarity matrix used for clustering.
+#'
+#' @return A list with two elements:
+#'         - A numeric matrix of normalized predictions where each row corresponds to a day in the given `start:end` range and each column corresponds to a stock.
+#'         - The final number of clusters.
+#'
+#' @examples
+#' #Example data
+#' returns <- matrix(rnorm(25), 5, 5)
+#' volume <- matrix(rnorm(25), 5, 5)
+#' start <- 1
+#' end <- 4
+#' h <- 2
+#' nr_pc <- 2
+#' k <- 2
+#' min_size <- 1
+#' alpha <- 0.5
+#' #Use the function
+#' crossSectionalRegressionClustering(returns, volume, start, end, h, nr_pc, k, min_size, alpha)
+#' 
 crossSectionalRegressionClustering <- function(returns, volume, start, end, h, nr_pc, k, min_size, alpha) {
   global_vars <- c(
     "singleCrossSectionalRegressionClustering ", "constructClusters",

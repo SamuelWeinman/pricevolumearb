@@ -1,11 +1,33 @@
-# FOR EACH DAY IN THE HISTORY (H), DECOMPOSES THE VOLUMES IN "EIGENVOLUME" PORTFOLIOS, YIELDING RESIDUALS ("OVERTRADED")
-# RESIDUALS ARE THEN MAPPED BY RESIDUAL -> EXP(ALPHA * RESIDUALS), AND RETURNS ARE THEN DIVIDED BY THIS AMOUNT.
-# THEN PROCEEDS AS NORMAL WITH CS REGRESSION.
-
-# nr_pc_v: HOW MANY PC TO USE WHEN CONSTRUCTED "EIGENVOLUME-PORTFOLIOS",
-# I.E. WHENS STUDYING IF (STOCK, DAY) IS OVERTRADED.
-# ALPHA: SCALING OF VOLUME RESIDUALS BEFORE TAKING EXPONENTIAL
-
+#' Single Cross-Sectional Regression for Overtraded Volume
+#'
+#' This function performs cross-sectional regression to predict returns, taking into account overtraded volume. 
+#' It first standardises the volume and extracts an eigenportfolio. Then, it calculates the overtrade amounts 
+#' by fitting a linear model between the standardised volume and the eigenportfolio. Following this, it adjusts 
+#' the returns by the exponential of the overtrade amounts, and fits another linear model between the adjusted 
+#' returns and a new eigenportfolio. The function returns the negative residuals from this model.
+#'
+#' @param volume A numeric matrix, the volume data.
+#' @param returns A numeric matrix, the returns data.
+#' @param t An integer, the day for which to perform regression.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param nr_pc_v An integer, the number of eigen portfolios to extract from the volume data.
+#' @param nr_pc An integer, the number of eigen portfolios to extract from the returns data.
+#' @param alpha A numeric, the factor to be used in the calculation of overtrade amounts.
+#'
+#' @return A numeric vector of residuals from the cross-sectional regression model for the day `t`.
+#'
+#' @examples
+#' #Example data
+#' vol <- matrix(rnorm(25), 5, 5)
+#' ret <- matrix(rnorm(25), 5, 5)
+#' t_val <- 5
+#' historical <- 4
+#' num_pc_vol <- 2
+#' num_pc_ret <- 2
+#' alpha_val <- 0.05
+#' #Use the function
+#' singleCrossSectionalRegressionOvertraded(vol, ret, t_val, historical, num_pc_vol, num_pc_ret, alpha_val)
+#' 
 singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_pc_v, nr_pc, alpha) {
   standardised_volume <- volume[, (t - h):(t - 1)] / apply(volume[, (t - h):(t - 1)], 1, sum)
   e_volume <- extractEigenPortfolio(standardised_volume, nr_pc_v)
@@ -23,7 +45,36 @@ singleCrossSectionalRegressionOvertraded <- function(volume, returns, t, h, nr_p
   return(-model$residuals)
 }
 
-# PERFORMS CS OVERTRADED ON INTERVAL [START, END]
+#' Cross-Sectional Regression for Overtraded Volume
+#'
+#' This function performs cross-sectional regression on a range of days to predict returns, considering overtraded volume. 
+#' For each day in the range, it standardises the volume, calculates overtrade amounts, adjusts the returns by the 
+#' exponential of the overtrade amounts, and fits a linear model. The function utilizes parallel computing to increase speed.
+#'
+#' @param start An integer, the start of the day range for which to perform regression.
+#' @param end An integer, the end of the day range for which to perform regression.
+#' @param volume A numeric matrix, the volume data.
+#' @param returns A numeric matrix, the returns data.
+#' @param h An integer, the number of recent historical days to be used.
+#' @param nr_pc_v An integer, the number of eigen portfolios to extract from the volume data.
+#' @param alpha A numeric, the factor to be used in the calculation of overtrade amounts.
+#' @param nr_pc An integer, the number of eigen portfolios to extract from the returns data.
+#'
+#' @return A numeric matrix of predicted returns where each row corresponds to a day in the given `start:end` range and each column corresponds to a stock.
+#'
+#' @examples
+#' #Example data
+#' volume <- matrix(rnorm(25), 5, 5)
+#' returns <- matrix(rnorm(25), 5, 5)
+#' start <- 2
+#' end <- 5
+#' h <- 4
+#' nr_pc_v <- 2
+#' alpha <- 0.05
+#' nr_pc <- 2
+#' #Use the function
+#' crossSectionalRegressionOvertraded(start, end, volume, returns, h, nr_pc_v, alpha, nr_pc)
+#' 
 crossSectionalRegressionOvertraded <- function(start, end, volume, returns, h, nr_pc_v, alpha, nr_pc) {
   global_vars <- c(
     "singleCrossSectionalRegressionOvertraded", "extractEigenPortfolio",
