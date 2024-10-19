@@ -43,7 +43,6 @@ crossTemporalRegression <- function(returns, start, end, nr_pc, h, l, b_sensitiv
 
 
 
-  # FOR EACH DAY, CALUCLATE THE S-SCORE VECTOR (OVER ALL STOCKS)
   s_scores <- snow::parSapply(cl, start:end, function(t) {
     scores <- calculateSScore(
       returns = returns[, 1:(t - 1)],
